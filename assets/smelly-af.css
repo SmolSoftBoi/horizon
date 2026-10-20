@@ -28,6 +28,7 @@
 .smelly-theme .header {
   --smelly-header-min-height: 88px;
   --smelly-header-drawer-min-height: 76px;
+
   border-bottom: 1px solid var(--smelly-line);
 }
 .smelly-theme .header:not(.header--compact) { --header-padding: 9px; }
@@ -104,6 +105,7 @@
 /* Reserve both action slots when customer accounts add a second control. */
 .smelly-theme #header-component[data-menu-style='drawer'] .header__columns {
   --header-template-columns: 44px 44px minmax(0, 1fr) 44px 44px;
+
   min-height: var(--smelly-header-drawer-min-height);
 }
 .smelly-theme #header-component[data-menu-style='drawer'] header-actions:has(shopify-account) {
@@ -113,6 +115,7 @@
 @media (max-width: 749px) {
   .smelly-theme #header-component .header__columns {
     --header-template-columns: 44px 44px minmax(0, 1fr) 44px 44px;
+
     min-height: var(--smelly-header-drawer-min-height);
   }
   .smelly-theme #header-component header-actions:has(shopify-account) {
@@ -192,7 +195,7 @@
 .smelly-hero { display: grid; grid-template-columns: 0.92fr 1.08fr; align-items: center; gap: 48px; padding-block: 56px 75px; }
 .smelly-hero__copy { position: relative; z-index: 1; padding-block: 20px; }
 .smelly-hero .smelly-hero__note { margin-bottom: 24px; transform: rotate(-3deg); transform-origin: left; }
-.smelly-hero h1 { font-size: clamp(64px, 6.8vw, 100px); letter-spacing: -5.5px; line-height: 0.99; margin-bottom: 28px; }
+.smelly-hero :is(h1, h2) { font-size: clamp(64px, 6.8vw, 100px); letter-spacing: -5.5px; line-height: 0.99; margin-bottom: 28px; }
 .smelly-hero__description { max-width: 340px; font-size: 17px; line-height: 1.65; margin-bottom: 28px; }
 .smelly-hero .smelly-hero__footnote { margin-top: 22px; font-size: 12px; color: #65535a; }
 .smelly-hero__visual { position: relative; padding: 12px 40px 18px 0; }
@@ -251,7 +254,7 @@
 .smelly-story__photo img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; object-position: 50% 40%; }
 .smelly-story__copy { min-width: 0; }
 .smelly-story__photo-caption { position: absolute; left: 10px; right: 10px; bottom: 16px; text-align: center; color: var(--smelly-ink) !important; }
-.smelly-story__copy > .smelly-handwritten { margin-bottom: 18px; }
+.smelly-story__copy > .smelly-handwritten { margin-bottom: 18px; color: #a51240; }
 .smelly-story__copy h1 { font-size: clamp(42px, 5vw, 72px); line-height: 1.05; letter-spacing: -3px; }
 .smelly-story__text { margin-block: 22px 28px; max-width: 440px; font-size: 15px; line-height: 1.8; }
 .smelly-story__text p + p { margin-top: 16px; }
@@ -292,19 +295,21 @@
 .smelly-footer__brand > p { margin-top: 20px; max-width: 240px; }
 .smelly-footer__nav { display: flex; flex-direction: column; align-items: start; gap: 10px; }
 .smelly-footer__nav h3 { font: 700 20px/1.3 var(--smelly-serif); margin-bottom: 8px; letter-spacing: -0.5px; }
+.smelly-footer .smelly-footer__privacy-link { display: inline-flex; align-items: center; gap: 8px; }
+.smelly-footer__privacy-link img { flex-shrink: 0; width: auto; }
 .smelly-footer__bottom { display: flex; justify-content: space-between; flex-wrap: wrap; align-items: center; gap: 20px; padding-block: 22px; border-top: 1px solid var(--smelly-line); font-size: 11px; }
 .smelly-footer__bottom .smelly-handwritten { font-size: 15px; }
 .smelly-payments { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
 .smelly-payments svg { width: 32px; height: 22px; }
 
 @media (min-width: 1600px) {
-  .smelly-hero h1 { font-size: 104px; }
+  .smelly-hero :is(h1, h2) { font-size: 104px; }
 }
 
 @media (max-width: 1100px) {
   .smelly-shell { width: calc(100% - 64px); }
   .smelly-hero { gap: 32px; }
-  .smelly-hero h1 { font-size: 72px; letter-spacing: -4px; }
+  .smelly-hero :is(h1, h2) { font-size: 72px; letter-spacing: -4px; }
   .smelly-hero__main-photo { height: 460px; }
   .smelly-hero__detail-photo { width: 145px; right: 0; }
   .smelly-hero__detail-photo img { height: 155px; }
@@ -329,7 +334,7 @@
   .smelly-hero { grid-template-columns: 1fr; gap: 28px; padding-block: 28px 54px; }
   .smelly-hero__copy { padding-block: 0; }
   .smelly-hero .smelly-hero__note { font-size: 17px; margin-block: 6px 20px; }
-  .smelly-hero h1 { font-size: clamp(58px, 13.8vw, 86px); line-height: 1; letter-spacing: -3.5px; margin-bottom: 20px; }
+  .smelly-hero :is(h1, h2) { font-size: clamp(58px, 13.8vw, 86px); line-height: 1; letter-spacing: -3.5px; margin-bottom: 20px; }
   .smelly-hero__description { font-size: 15px; max-width: 350px; margin-bottom: 22px; }
   .smelly-hero .smelly-hero__footnote { margin-top: 16px; }
   .smelly-hero__visual { width: min(440px, calc(100% - 10px)); margin-inline: auto; padding-right: 30px; }

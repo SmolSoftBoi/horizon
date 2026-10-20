@@ -2,11 +2,15 @@
   assign shop_link = section.settings.button_link | default: routes.all_products_collection_url
   assign hero_alt = 'smelly.photos.bubblegum' | t
   assign detail_alt = 'smelly.photos.pumpkin' | t
+  assign heading_tag = 'h1'
+  if template.name == 'index'
+    assign heading_tag = 'h2'
+  endif
 %}
 <div class="smelly-hero smelly-shell">
   <div class="smelly-hero__copy">
     {% if section.settings.note != blank %}<p class="smelly-handwritten smelly-hero__note">{{ section.settings.note | escape }}</p>{% endif %}
-    <h1>{{ section.settings.heading | escape | newline_to_br }}</h1>
+    <{{ heading_tag }}>{{ section.settings.heading | escape | newline_to_br }}</{{ heading_tag }}>
     <div class="smelly-hero__description">{{ section.settings.text }}</div>
     <a class="smelly-button" href="{{ shop_link }}">{{ section.settings.button_label | escape }}<span aria-hidden="true">↗</span></a>
     <p class="smelly-hero__footnote">{{ section.settings.caption | escape }}</p>
