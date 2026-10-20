@@ -8,6 +8,34 @@
   assign product_form_id = 'SmellyProduct-' | append: section_id | append: '-' | append: card_product.id
   assign product_variant = card_product.selected_or_first_available_variant
   assign minimum_quantity = product_variant.quantity_rule.min | default: 1
+  assign quantity_increment = product_variant.quantity_rule.increment | default: 1 | at_least: 1
+  assign cart_quantity = cart | item_count_for_variant: product_variant.id
+  assign quantity_to_add = minimum_quantity
+  # Include existing basket units when checking increments, maximums and stock.
+  assign resulting_quantity = cart_quantity | plus: quantity_to_add
+  assign quantity_remainder = resulting_quantity | modulo: quantity_increment
+  if quantity_remainder > 0
+    assign quantity_adjustment = quantity_increment | minus: quantity_remainder
+    assign quantity_to_add = quantity_to_add | plus: quantity_adjustment
+    assign resulting_quantity = resulting_quantity | plus: quantity_adjustment
+  endif
+
+  assign can_add_to_cart = product_variant.available
+  assign add_to_cart_text = 'smelly.add_to_basket' | t
+  if product_variant.available == false
+    assign add_to_cart_text = 'smelly.sold_out' | t
+  elsif product_variant.inventory_management == 'shopify' and product_variant.inventory_policy == 'deny' and resulting_quantity > product_variant.inventory_quantity
+    assign can_add_to_cart = false
+    assign add_to_cart_text = 'smelly.sold_out' | t
+  elsif product_variant.quantity_rule.max != blank and resulting_quantity > product_variant.quantity_rule.max
+    assign can_add_to_cart = false
+    assign add_to_cart_text = 'products.product.quantity_error_max' | t: maximum: product_variant.quantity_rule.max
+  endif
+
+  assign price_variant = product_variant
+  if price_variant.price != card_product.price
+    assign price_variant = card_product.variants | where: 'price', card_product.price | first
+  endif
   assign product_image_alt = card_product.featured_image.alt | default: card_product.title
   assign uses_selling_plans = false
   if card_product.requires_selling_plan or card_product.selling_plan_groups.size > 0
@@ -28,16 +56,27 @@
     <p class="smelly-product-card__price">
       {% if card_product.price_varies %}{{ 'smelly.price_from' | t }} {% endif %}
       {% if settings.currency_code_enabled_product_cards %}{{ card_product.price | money_with_currency }}{% else %}{{ card_product.price | money }}{% endif %}
-      {% if card_product.compare_at_price > card_product.price %}<s>{{ card_product.compare_at_price | money }}</s>{% endif %}
+      {% if price_variant.compare_at_price > card_product.price %}
+        <s>{% if settings.currency_code_enabled_product_cards %}{{ price_variant.compare_at_price | money_with_currency }}{% else %}{{ price_variant.compare_at_price | money }}{% endif %}</s>
+      {% endif %}
+      {% if price_variant.unit_price and price_variant.unit_price_measurement %}
+        {% liquid
+          assign unit_price = price_variant.unit_price | money
+          if settings.currency_code_enabled_product_cards
+            assign unit_price = price_variant.unit_price | money_with_currency
+          endif
+        %}
+        {% render 'unit-price', price: unit_price, measurement: price_variant.unit_price_measurement %}
+      {% endif %}
     </p>
   </div>
   {% if card_product.has_only_default_variant and uses_selling_plans == false %}
     {% form 'product', card_product, id: product_form_id, class: 'smelly-product-form' %}
       <input type="hidden" name="id" value="{{ product_variant.id }}">
-      <input type="hidden" name="quantity" value="{{ minimum_quantity }}">
+      <input type="hidden" name="quantity" value="{{ quantity_to_add }}">
       <input type="hidden" name="return_to" value="{{ routes.cart_url }}">
-      <button class="smelly-button smelly-button--small" type="submit" {% unless product_variant.available %}disabled{% endunless %}>
-        {% if product_variant.available %}{{ 'smelly.add_to_basket' | t }}<span class="visually-hidden"> — {{ card_product.title | escape }}</span>{% else %}{{ 'smelly.sold_out' | t }}{% endif %}
+      <button class="smelly-button smelly-button--small" type="submit" {% unless can_add_to_cart %}disabled{% endunless %}>
+        {{ add_to_cart_text }}{% if can_add_to_cart %}<span class="visually-hidden"> — {{ card_product.title | escape }}</span>{% endif %}
       </button>
       {{ form.errors | default_errors }}
     {% endform %}
@@ -45,3 +84,34 @@
     <a class="smelly-button smelly-button--small smelly-button--outline" href="{{ card_product.url }}">{{ 'smelly.choose_options' | t }}<span class="visually-hidden"> — {{ card_product.title | escape }}</span></a>
   {% endif %}
 </article>
+
+{% javascript %}
+  document.addEventListener('submit', (event) => {
+    const form = event.target;
+    if (!(form instanceof HTMLFormElement) || !form.matches('.smelly-product-form') || event.defaultPrevented) return;
+
+    if (form.dataset.smellySubmitting === 'true') {
+      event.preventDefault();
+      return;
+    }
+
+    const button = form.querySelector('button[type="submit"]');
+    if (!(button instanceof HTMLButtonElement) || button.disabled) {
+      event.preventDefault();
+      return;
+    }
+
+    form.dataset.smellySubmitting = 'true';
+    button.disabled = true;
+  });
+
+  // Back/forward restoration can retain the button disabled by the previous submission.
+  window.addEventListener('pageshow', () => {
+    document.querySelectorAll('.smelly-product-form[data-smelly-submitting="true"]').forEach((form) => {
+      if (!(form instanceof HTMLFormElement)) return;
+      delete form.dataset.smellySubmitting;
+      const button = form.querySelector('button[type="submit"]');
+      if (button instanceof HTMLButtonElement) button.disabled = false;
+    });
+  });
+{% endjavascript %}
