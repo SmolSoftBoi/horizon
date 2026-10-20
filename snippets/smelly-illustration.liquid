@@ -1,31 +1,73 @@
 {% doc %}
-  Renders a decorative line illustration for a scent range.
-  @param {string} kind - One of pumpkin, candy, festive, flower or heart.
+  Renders a decorative line illustration for a scent range or candle detail.
+  @param {string} kind - One of pumpkin, candy, festive, flower, heart, pour, soy or jar.
 {% enddoc %}
 
-<svg class="smelly-illustration" viewBox="0 0 160 120" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<svg class="smelly-illustration" viewBox="0 0 160 120" width="160" height="120" fill="none" stroke="currentColor" stroke-width="3.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
   {% case kind %}
+    {% when 'pour' %}
+      <path class="smelly-illustration__wash" d="M25 78c16 5 35 5 51 0v23a9 9 0 0 1-9 9H34a9 9 0 0 1-9-9Z"/>
+      <path d="M25 67v34a9 9 0 0 0 9 9h33a9 9 0 0 0 9-9V67"/>
+      <ellipse cx="50.5" cy="67" rx="25.5" ry="6"/>
+      <path d="M43 65V54"/>
+      <path class="smelly-illustration__solid" d="m50 100-9-9c-7-8 3-15 9-7 6-8 16-1 9 7Z"/>
+      <path class="smelly-illustration__wash" d="m80 49 30 12-2 6c-3 8-8 9-15 6l-12-5c-7-3-8-7-5-14Z"/>
+      <path d="m89 18 33 13-14 36c-3 8-8 9-15 6l-12-5c-7-3-8-7-5-14l6-14-14-3 21-19Zm30 22 5 2c16 6 6 29-8 24l-6-2M89 28l22 9"/>
+      {% comment %}Keep the continuous pour separate from the exposed wick in the open jar.{% endcomment %}
+      <path d="M68 37c-10 6-10 17-10 29"/>
+    {% when 'soy' %}
+      <path d="M56 111c4-27 14-50 24-73m-2 9c9-13 22-12 30-4"/>
+      <path class="smelly-illustration__wash" d="M77 48C54 49 42 36 42 19c22 1 36 12 35 29Zm3-13c-2-17 9-27 24-26 0 17-10 27-24 26ZM65 81C43 82 29 68 27 51c21-1 35 12 38 30Z"/>
+      <path d="M77 48C54 49 42 36 42 19c22 1 36 12 35 29Zm3-13c-2-17 9-27 24-26 0 17-10 27-24 26ZM65 81C43 82 29 68 27 51c21-1 35 12 38 30ZM76 47 53 29m29 3 14-15M63 78 39 61"/>
+      <path d="M109 43c13 1 17 15 9 23 4 12-4 21-14 21 0 12-11 20-22 16-10-3-13-14-6-22-3-11 5-22 16-22-2-9 6-16 17-16Z"/>
+      <circle class="smelly-illustration__shade" cx="108" cy="55" r="7"/>
+      <circle class="smelly-illustration__shade" cx="102" cy="74" r="7"/>
+      <circle class="smelly-illustration__shade" cx="87" cy="91" r="7"/>
+    {% when 'jar' %}
+      <path class="smelly-illustration__wash" d="M37 80h86v18a13 13 0 0 1-13 13H50a13 13 0 0 1-13-13Z"/>
+      <path d="M45 35v7l-8 10v46a13 13 0 0 0 13 13h60a13 13 0 0 0 13-13V52l-8-10v-7M45 44h70M47 101h66M44 57v13"/>
+      <rect class="smelly-illustration__wash" x="40" y="19" width="80" height="16" rx="5"/>
+      <rect x="40" y="19" width="80" height="16" rx="5"/>
+      <path d="M47 28h66"/>
+      <rect x="50" y="58" width="60" height="33" rx="5"/>
+      <path class="smelly-illustration__solid" d="m80 83-10-10c-8-9 3-17 10-8 7-9 18-1 10 8Z"/>
     {% when 'pumpkin' %}
-      <path d="M79 35c-7-14-28-12-33 1-20-2-29 13-27 34 2 26 24 38 44 33 10 6 24 6 34 0 20 5 43-7 45-33 2-21-8-36-27-34-5-13-27-15-35-1Z"/>
-      <path d="M80 34c-4-15 4-22 13-24M80 34c-16-10-31-5-35 7m35-7c-23 15-22 52-12 69m12-69c23 15 22 52 12 69M47 37c-13 18-11 44 3 60m63-60c13 18 11 44-3 60M80 40v61"/>
-      <path d="m19 18 3 7 7 3-7 3-3 7-3-7-7-3 7-3Zm115 6 2 5 5 2-5 2-2 5-2-5-5-2 5-2Z"/>
+      <path class="smelly-illustration__wash" d="M80 37C61 45 57 88 74 108c11 3 20-9 21-31 1-19-5-34-15-40Z"/>
+      <path d="M79 37C62 24 41 29 33 43 15 42 10 63 18 84c8 21 29 29 48 22 10 6 23 6 33 0 20 7 39-4 44-25 5-20-4-38-22-38-9-15-27-17-42-6Z"/>
+      <path d="M62 38C41 48 40 85 61 105M79 39c-18 15-20 49-5 69m8-69c18 15 18 49 5 69m14-70c22 12 23 47 4 67"/>
+      <path class="smelly-illustration__shade" d="M74 35c3-11-2-18 7-25l13 3c-9 6-10 13-10 23Z"/>
+      <path d="M74 35c3-11-2-18 7-25l13 3c-9 6-10 13-10 23m3-8c11-16 27-16 36-6-13 0-18 15-36 6Zm2 8c12-8 24-3 22 5-1 6-10 6-10 1"/>
     {% when 'candy' %}
-      <path d="m49 44-26-8 6 21-16 16 28 3m71-29 27-6-7 20 15 17-29 1"/>
-      <rect x="40" y="33" width="80" height="58" rx="27" transform="rotate(-12 80 62)"/>
-      <path d="M59 38c19 14 28 29 31 50M78 33c18 13 30 29 32 43M45 58c12 9 20 18 23 32"/>
-      <path d="m125 12 3 7 7 3-7 3-3 7-3-7-7-3 7-3ZM28 98l5 5m-1-12-5 5"/>
+      <g transform="rotate(-12 80 60)">
+        <path class="smelly-illustration__wash" d="m49 43-27-12 6 23-13 22 34-3m62-30 27-12-6 23 13 22-34-3"/>
+        <path class="smelly-illustration__shade" d="m16 75 31-15 2 13Zm129 0-31-15-3 13Z"/>
+        <path d="m49 43-27-12 6 23-13 22 34-3m62-30 27-12-6 23 13 22-34-3M29 42l16 13m-25 14 25-9m86-18-16 13m25 14-25-9"/>
+        <path class="smelly-illustration__wash" d="M108 47c12 25-3 47-29 46-16 0-26-9-29-20 19 17 54 6 58-26Z"/>
+        <path d="M80 27c19-1 33 12 33 32 0 21-13 35-32 34-20 0-34-13-34-33 0-19 13-32 33-33Z"/>
+        <path d="M74 58c-1-8 10-11 15-5 9 10-1 23-13 20-17-4-20-24-7-34 12-9 28-4 35 7"/>
+      </g>
     {% when 'festive' %}
-      <path d="M43 103V36a25 25 0 0 1 50 0v8H78v-8a10 10 0 0 0-20 0v67Z"/>
-      <path d="m44 47 14 11m-14 8 14 11m-14 8 14 11m-13-65 13 10m-6-24 11 10m9-16 4 15m8-11-2 15"/>
-      <path d="M102 95c-4-10-3-17 4-23 9 7 11 14 7 23m-4-2c12-3 20-2 26 5-8 9-16 10-26 5m0-4c-11 5-18 5-25-1 6-9 13-12 25-9"/>
-      <path d="m128 24 3 8 8 3-8 3-3 8-3-8-8-3 8-3Z"/>
+      <g transform="rotate(-9 75 60)">
+        {% comment %}Stripe shapes stay inside the cane so repeated SVGs need no clip-path IDs.{% endcomment %}
+        <path class="smelly-illustration__shade" d="m41 91 17 8v9l-17-8Zm0-24 17 8v12l-17-8Zm0-24 17 8v12l-17-8ZM43 27a26 26 0 0 1 7-10l12 13a9 9 0 0 0-4 7ZM61 12a26 26 0 0 1 13 0l-4 17a9 9 0 0 0-7 0Zm25 7a26 26 0 0 1 7 13l-17 5a9 9 0 0 0-3-7Zm-10 22h17v8H76Z"/>
+        <path d="M41 108V37a26 26 0 0 1 52 0v12H76V37a9 9 0 0 0-18 0v71H41Z"/>
+        <path d="M58 84h15"/>
+        <path class="smelly-illustration__wash" d="M74 78q3-8 0-12 9 1 10-8 7 2 14-7-2 12 5 15-9 3-8 11-11-4-16 6Zm5 8q10-7 13-12 3 8 12 4 1 8 14 10-11 3-10 11-9-5-14 2-3-9-13-9Z"/>
+        <path d="M74 78q3-8 0-12 9 1 10-8 7 2 14-7-2 12 5 15-9 3-8 11-11-4-16 6Zm5 8q10-7 13-12 3 8 12 4 1 8 14 10-11 3-10 11-9-5-14 2-3-9-13-9ZM80 77l13-15m-9 25 22 3"/>
+        <circle class="smelly-illustration__solid" cx="71" cy="80" r="4.5"/>
+        <circle class="smelly-illustration__solid" cx="79" cy="87" r="4.5"/>
+        <circle class="smelly-illustration__solid" cx="69" cy="91" r="4.5"/>
+      </g>
     {% when 'flower' %}
-      <path d="M80 107V64m0 30c-20-2-30-10-32-22 17 0 29 9 32 22Zm0-10c19-2 29-10 31-22-17 0-28 9-31 22Z"/>
-      <path d="M80 25c17-27 39-7 23 12 31-2 32 28 5 30 17 24-10 39-28 16-18 23-45 8-28-16-27-2-26-32 5-30-16-19 6-39 23-12Z"/>
-      <circle cx="80" cy="50" r="12"/>
-      <path d="m128 79 3 7 7 3-7 3-3 7-3-7-7-3 7-3ZM22 24l4 4m-1-11-5 5"/>
+      <path d="M80 81c2 12-2 22-9 31"/>
+      <path class="smelly-illustration__wash" d="M77 103c-19 4-28-3-32-15 18-2 27 4 32 15Zm2-4c7-15 21-18 36-11-7 14-19 17-36 11Z"/>
+      <path d="M77 103c-19 4-28-3-32-15 18-2 27 4 32 15Zm2-4c7-15 21-18 36-11-7 14-19 17-36 11Z"/>
+      <path d="M70 27C61 11 71 5 81 8c9 0 14 8 10 19 14-11 25-2 25 8 0 7-6 11-14 11 17 7 15 21 7 26-9 5-18 1-22-8 3 19-10 25-20 19-8-5-5-17 0-22-14 11-27 3-24-9 1-7 7-11 16-9-16-9-11-23 0-23 6 0 10 3 11 7Z"/>
+      <circle class="smelly-illustration__shade" cx="80" cy="45" r="11"/>
+      <circle cx="80" cy="45" r="11"/>
     {% else %}
-      <path d="M80 98 37 57C9 28 53 1 80 35c27-34 71-7 43 22Z"/>
-      <path d="m124 15 3 7 7 3-7 3-3 7-3-7-7-3 7-3ZM26 87l5 5m-1-12-5 5"/>
+      <path class="smelly-illustration__wash" d="M35 62c14 15 31 23 46 29 16-10 31-25 44-42-4 25-31 45-46 53C64 91 44 77 35 62Z"/>
+      <path d="M79 102C65 91 30 70 29 47c-2-21 21-31 38-15l12 14c9-23 31-28 44-13 20 22-15 50-44 69Z"/>
+      <path d="M39 43c0-7 5-11 12-11"/>
   {% endcase %}
 </svg>
