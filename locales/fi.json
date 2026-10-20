@@ -343,5 +343,43 @@
       "success_moderated": "Kommentti on julkaistu; odotetaan moderointia",
       "success": "Kommentti on julkaistu"
     }
+  },
+  "smelly": {
+    "brand_name": "Smelly A.F.",
+    "brand_descriptor": "Candle Co.",
+    "home": "Smelly A.F. home",
+    "shop_all": "Shop all scents",
+    "add_to_basket": "Add to basket",
+    "choose_options": "Choose options",
+    "sold_out": "Sold out",
+    "price_from": "From",
+    "explore_range": "Explore the range",
+    "read_journal": "Visit the journal",
+    "read_story": "Read the story",
+    "privacy_policy": "Privacy policy",
+    "footer_navigation": "Footer navigation",
+    "explore": "Explore",
+    "search_scents": "Search scents",
+    "the_details": "The details",
+    "contact": "Get in touch",
+    "payment_methods": "Accepted payment methods",
+    "photos": {
+      "bubblegum": "Pink Bubblegum soy wax candle with pink wax, original label and gold lid",
+      "pumpkin": "Pumpkin Spice soy wax candle with its original label and gold lid beside autumn decorations",
+      "pumpkin_spice": "Pumpkin Spice soy wax candle with orange wax, original label and gold lid",
+      "parma_violets": "Parma Violets soy wax candle with purple wax, original label and gold lid",
+      "candy_cane": "Candy Cane soy wax candle with red wax, original label and gold lid",
+      "christmas_spice": "Christmas Spice soy wax candle with its original label and gold lid"
+    },
+    "newsletter": {
+      "email": "Your email address",
+      "subscribe": "Count me in",
+      "success": "You’re in. Look out for a little A.F. in your inbox.",
+      "consent": "Subscribe to receive marketing emails. You can unsubscribe at any time."
+    },
+    "editor": {
+      "featured": "Choose a collection to show real products, prices and Add to basket buttons. These editorial photographs show the supplied candles without sample prices or stock.",
+      "journal": "Select a blog with published articles. This section stays hidden from shoppers until articles are available."
+    }
   }
 }

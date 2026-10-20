@@ -8,6 +8,18 @@
     "theme_support_url": "https://support.shopify.com/"
   },
   {
+    "name": "Smelly A.F. branding",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "smelly_branding",
+        "label": "Use Smelly A.F. wordmark and classic serif headings",
+        "default": true,
+        "info": "Upload your own logo in Logo and favicon to replace the text wordmark."
+      }
+    ]
+  },
+  {
     "name": "t:names.logo_and_favicon",
     "settings": [
       {

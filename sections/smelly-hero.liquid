@@ -1,0 +1,46 @@
+{% liquid
+  assign shop_link = section.settings.button_link | default: routes.all_products_collection_url
+  assign hero_alt = 'smelly.photos.bubblegum' | t
+  assign detail_alt = 'smelly.photos.pumpkin' | t
+%}
+<div class="smelly-hero smelly-shell">
+  <div class="smelly-hero__copy">
+    {% if section.settings.note != blank %}<p class="smelly-handwritten smelly-hero__note">{{ section.settings.note | escape }}</p>{% endif %}
+    <h1>{{ section.settings.heading | escape | newline_to_br }}</h1>
+    <div class="smelly-hero__description">{{ section.settings.text }}</div>
+    <a class="smelly-button" href="{{ shop_link }}">{{ section.settings.button_label | escape }}<span aria-hidden="true">↗</span></a>
+    <p class="smelly-hero__footnote">{{ section.settings.caption | escape }}</p>
+  </div>
+  <div class="smelly-hero__visual">
+    <div class="smelly-hero__main-photo">
+      {% render 'smelly-photo', image: section.settings.image, fallback: 'smelly-pink-bubblegum.jpg', alt: hero_alt, loading: 'eager', priority: 'high', sizes: '(min-width: 990px) 45vw, 90vw' %}
+    </div>
+    <div class="smelly-hero__detail-photo">
+      {% render 'smelly-photo', image: section.settings.detail_image, fallback: 'smelly-pumpkin-spice.jpg', alt: detail_alt %}
+      <span class="smelly-handwritten">{{ section.settings.detail_caption | escape }}</span>
+    </div>
+    <div class="smelly-hero__seal"><span>{{ section.settings.sticker | escape | newline_to_br }}</span>{% render 'smelly-illustration', kind: 'heart' %}</div>
+    <span class="smelly-hero__spark" aria-hidden="true">✳</span>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Smelly A.F. hero",
+  "tag": "section",
+  "class": "smelly-section smelly-hero-section",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "text", "id": "note", "label": "Handwritten note", "default": "A little jar. A lot of personality." },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "Seriously\ngood scents." },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Hand-poured soy wax candles for homes that don’t take themselves too seriously.</p>" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop all scents" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "text", "id": "caption", "label": "Caption", "default": "Good scents. Better days. A.F." },
+    { "type": "image_picker", "id": "image", "label": "Main photograph" },
+    { "type": "image_picker", "id": "detail_image", "label": "Small photograph" },
+    { "type": "text", "id": "detail_caption", "label": "Photograph caption", "default": "Cosy looks good on you." },
+    { "type": "textarea", "id": "sticker", "label": "Sticker text", "default": "Hand-poured.\nWith A.F. attitude." }
+  ],
+  "presets": [{ "name": "Smelly A.F. hero" }]
+}
+{% endschema %}

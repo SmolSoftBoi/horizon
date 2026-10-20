@@ -1,0 +1,31 @@
+{% doc %}
+  Renders a decorative line illustration for a scent range.
+  @param {string} kind - One of pumpkin, candy, festive, flower or heart.
+{% enddoc %}
+
+<svg class="smelly-illustration" viewBox="0 0 160 120" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  {% case kind %}
+    {% when 'pumpkin' %}
+      <path d="M79 35c-7-14-28-12-33 1-20-2-29 13-27 34 2 26 24 38 44 33 10 6 24 6 34 0 20 5 43-7 45-33 2-21-8-36-27-34-5-13-27-15-35-1Z"/>
+      <path d="M80 34c-4-15 4-22 13-24M80 34c-16-10-31-5-35 7m35-7c-23 15-22 52-12 69m12-69c23 15 22 52 12 69M47 37c-13 18-11 44 3 60m63-60c13 18 11 44-3 60M80 40v61"/>
+      <path d="m19 18 3 7 7 3-7 3-3 7-3-7-7-3 7-3Zm115 6 2 5 5 2-5 2-2 5-2-5-5-2 5-2Z"/>
+    {% when 'candy' %}
+      <path d="m49 44-26-8 6 21-16 16 28 3m71-29 27-6-7 20 15 17-29 1"/>
+      <rect x="40" y="33" width="80" height="58" rx="27" transform="rotate(-12 80 62)"/>
+      <path d="M59 38c19 14 28 29 31 50M78 33c18 13 30 29 32 43M45 58c12 9 20 18 23 32"/>
+      <path d="m125 12 3 7 7 3-7 3-3 7-3-7-7-3 7-3ZM28 98l5 5m-1-12-5 5"/>
+    {% when 'festive' %}
+      <path d="M43 103V36a25 25 0 0 1 50 0v8H78v-8a10 10 0 0 0-20 0v67Z"/>
+      <path d="m44 47 14 11m-14 8 14 11m-14 8 14 11m-13-65 13 10m-6-24 11 10m9-16 4 15m8-11-2 15"/>
+      <path d="M102 95c-4-10-3-17 4-23 9 7 11 14 7 23m-4-2c12-3 20-2 26 5-8 9-16 10-26 5m0-4c-11 5-18 5-25-1 6-9 13-12 25-9"/>
+      <path d="m128 24 3 8 8 3-8 3-3 8-3-8-8-3 8-3Z"/>
+    {% when 'flower' %}
+      <path d="M80 107V64m0 30c-20-2-30-10-32-22 17 0 29 9 32 22Zm0-10c19-2 29-10 31-22-17 0-28 9-31 22Z"/>
+      <path d="M80 25c17-27 39-7 23 12 31-2 32 28 5 30 17 24-10 39-28 16-18 23-45 8-28-16-27-2-26-32 5-30-16-19 6-39 23-12Z"/>
+      <circle cx="80" cy="50" r="12"/>
+      <path d="m128 79 3 7 7 3-7 3-3 7-3-7-7-3 7-3ZM22 24l4 4m-1-11-5 5"/>
+    {% else %}
+      <path d="M80 98 37 57C9 28 53 1 80 35c27-34 71-7 43 22Z"/>
+      <path d="m124 15 3 7 7 3-7 3-3 7-3-7-7-3 7-3ZM26 87l5 5m-1-12-5 5"/>
+  {% endcase %}
+</svg>

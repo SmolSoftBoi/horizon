@@ -1,0 +1,21 @@
+{% doc %}
+  Renders an editable Shopify image or an unaltered bundled candle photograph.
+  @param {image} [image] - Merchant-selected image.
+  @param {string} fallback - Bundled asset filename.
+  @param {string} alt - Alternative text for the fallback photograph.
+  @param {string} [loading] - Image loading strategy.
+  @param {string} [sizes] - Responsive sizes for a merchant-selected image.
+  @param {string} [priority] - Fetch priority.
+{% enddoc %}
+
+{% liquid
+  assign image_loading = loading | default: 'lazy'
+  assign image_priority = priority | default: 'auto'
+  assign image_sizes = sizes | default: '(min-width: 750px) 40vw, 100vw'
+  assign photo_alt = image.alt | default: alt
+%}
+{% if image != blank %}
+  {{ image | image_url: width: 1600 | image_tag: widths: '320, 480, 640, 800, 1200, 1600', sizes: image_sizes, loading: image_loading, fetchpriority: image_priority, alt: photo_alt }}
+{% else %}
+  <img src="{{ fallback | asset_url }}" alt="{{ alt | escape }}" width="{% if fallback == 'smelly-pumpkin-spice.jpg' %}1152{% else %}1536{% endif %}" height="{% if fallback == 'smelly-candy-cane.jpg' %}2047{% else %}2048{% endif %}" loading="{{ image_loading }}" fetchpriority="{{ image_priority }}">
+{% endif %}

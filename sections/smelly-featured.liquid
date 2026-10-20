@@ -1,0 +1,58 @@
+{% liquid
+  assign featured_collection = section.settings.collection | default: collections.all
+  assign shop_link = featured_collection.url | default: routes.all_products_collection_url
+%}
+<div class="smelly-shell smelly-section-space">
+  <div class="smelly-section-heading">
+    <div><p class="smelly-handwritten">{{ section.settings.note | escape }}</p><h2>{{ section.settings.heading | escape }}</h2></div>
+    <a class="smelly-text-link" href="{{ shop_link }}">{{ 'smelly.shop_all' | t }}<span aria-hidden="true">↗</span></a>
+  </div>
+  <div class="smelly-product-grid">
+    {% for card_product in featured_collection.products limit: section.settings.product_count %}
+      {% render 'smelly-product-card', card_product: card_product, section_id: section.id %}
+    {% else %}
+      {% for block in section.blocks %}
+        {% assign photo_key = block.settings.photo | replace: '-', '_' %}
+        {% assign photo_translation_key = 'smelly.photos.' | append: photo_key %}
+        {% assign photo_alt = photo_translation_key | t %}
+        {% assign fallback_photo = 'smelly-' | append: block.settings.photo | replace: 'bubblegum', 'pink-bubblegum' | append: '.jpg' %}
+        <article class="smelly-product-card smelly-product-card--editorial" {{ block.shopify_attributes }}>
+          <a class="smelly-product-card__image" href="{{ routes.all_products_collection_url }}">
+            {% render 'smelly-photo', image: block.settings.image, fallback: fallback_photo, alt: photo_alt, sizes: '(min-width: 990px) 23vw, 45vw' %}
+          </a>
+          <div class="smelly-product-card__details"><h3>{{ block.settings.heading | escape }}</h3><p class="smelly-handwritten">{{ block.settings.note | escape }}</p></div>
+        </article>
+      {% endfor %}
+    {% endfor %}
+  </div>
+  {% if featured_collection.products_count == 0 and request.design_mode %}<p class="smelly-editor-note">{{ 'smelly.editor.featured' | t }}</p>{% endif %}
+</div>
+{% schema %}
+{
+  "name": "Smelly A.F. featured",
+  "tag": "section",
+  "class": "smelly-section",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "text", "id": "note", "label": "Handwritten note", "default": "Meet your next scent obsession" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Small jars. Big moods." },
+    { "type": "collection", "id": "collection", "label": "Collection", "info": "Uses all products until you choose a collection. Real products replace the editorial photographs below." },
+    { "type": "range", "id": "product_count", "label": "Products", "min": 2, "max": 8, "step": 1, "default": 4 }
+  ],
+  "max_blocks": 4,
+  "blocks": [{ "type": "scent", "name": "Editorial photograph", "settings": [
+    { "type": "text", "id": "heading", "label": "Scent name", "default": "Pink Bubblegum" },
+    { "type": "text", "id": "note", "label": "Handwritten note", "default": "Sweet A.F." },
+    { "type": "image_picker", "id": "image", "label": "Photograph" },
+    { "type": "select", "id": "photo", "label": "Bundled photograph", "options": [
+      { "value": "bubblegum", "label": "Pink Bubblegum" }, { "value": "pumpkin-spice", "label": "Pumpkin Spice" }, { "value": "candy-cane", "label": "Candy Cane" }, { "value": "parma-violets", "label": "Parma Violets" }, { "value": "christmas-spice", "label": "Christmas Spice" }
+    ], "default": "bubblegum" }
+  ] }],
+  "presets": [{ "name": "Smelly A.F. featured", "blocks": [
+    { "type": "scent", "settings": { "heading": "Pink Bubblegum", "note": "Sweet A.F.", "photo": "bubblegum" } },
+    { "type": "scent", "settings": { "heading": "Pumpkin Spice", "note": "Spooky A.F.", "photo": "pumpkin-spice" } },
+    { "type": "scent", "settings": { "heading": "Candy Cane", "note": "Festive A.F.", "photo": "candy-cane" } },
+    { "type": "scent", "settings": { "heading": "Parma Violets", "note": "Floral feels.", "photo": "parma-violets" } }
+  ] }]
+}
+{% endschema %}

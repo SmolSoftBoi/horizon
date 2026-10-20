@@ -1,0 +1,47 @@
+{% doc %}
+  Renders a catalogue product using Shopify prices and a native product form.
+  @param {product} card_product - The live catalogue product.
+  @param {string} section_id - Section identifier for unique form IDs.
+{% enddoc %}
+
+{% liquid
+  assign product_form_id = 'SmellyProduct-' | append: section_id | append: '-' | append: card_product.id
+  assign product_variant = card_product.selected_or_first_available_variant
+  assign minimum_quantity = product_variant.quantity_rule.min | default: 1
+  assign product_image_alt = card_product.featured_image.alt | default: card_product.title
+  assign uses_selling_plans = false
+  if card_product.requires_selling_plan or card_product.selling_plan_groups.size > 0
+    assign uses_selling_plans = true
+  endif
+%}
+<article class="smelly-product-card">
+  <a class="smelly-product-card__image" href="{{ card_product.url }}">
+    {% if card_product.featured_image != blank %}
+      {{ card_product.featured_image | image_url: width: 800 | image_tag: widths: '240, 400, 600, 800', sizes: '(min-width: 990px) 23vw, 45vw', loading: 'lazy', alt: product_image_alt }}
+    {% else %}
+      {{ 'product-1' | placeholder_svg_tag: 'smelly-product-card__placeholder' }}
+    {% endif %}
+    {% unless card_product.available %}<span class="smelly-product-card__badge">{{ 'smelly.sold_out' | t }}</span>{% endunless %}
+  </a>
+  <div class="smelly-product-card__details">
+    <h3><a href="{{ card_product.url }}">{{ card_product.title | escape }}</a></h3>
+    <p class="smelly-product-card__price">
+      {% if card_product.price_varies %}{{ 'smelly.price_from' | t }} {% endif %}
+      {% if settings.currency_code_enabled_product_cards %}{{ card_product.price | money_with_currency }}{% else %}{{ card_product.price | money }}{% endif %}
+      {% if card_product.compare_at_price > card_product.price %}<s>{{ card_product.compare_at_price | money }}</s>{% endif %}
+    </p>
+  </div>
+  {% if card_product.has_only_default_variant and uses_selling_plans == false %}
+    {% form 'product', card_product, id: product_form_id, class: 'smelly-product-form' %}
+      <input type="hidden" name="id" value="{{ product_variant.id }}">
+      <input type="hidden" name="quantity" value="{{ minimum_quantity }}">
+      <input type="hidden" name="return_to" value="{{ routes.cart_url }}">
+      <button class="smelly-button smelly-button--small" type="submit" {% unless product_variant.available %}disabled{% endunless %}>
+        {% if product_variant.available %}{{ 'smelly.add_to_basket' | t }}<span class="visually-hidden"> — {{ card_product.title | escape }}</span>{% else %}{{ 'smelly.sold_out' | t }}{% endif %}
+      </button>
+      {{ form.errors | default_errors }}
+    {% endform %}
+  {% else %}
+    <a class="smelly-button smelly-button--small smelly-button--outline" href="{{ card_product.url }}">{{ 'smelly.choose_options' | t }}<span class="visually-hidden"> — {{ card_product.title | escape }}</span></a>
+  {% endif %}
+</article>

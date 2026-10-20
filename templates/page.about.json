@@ -1,0 +1,114 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "blocks": {
+        "heading": {
+          "type": "text",
+          "name": "t:names.title",
+          "settings": {
+            "text": "<h1>{{ closest.page.title }}</h1>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "h2",
+            "font": "var(--font-body--family)",
+            "font_size": "",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "page-content": {
+          "type": "page-content",
+          "settings": {},
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "heading",
+        "page-content"
+      ],
+      "settings": {
+        "content_direction": "column",
+        "gap": 32,
+        "padding-block-start": 40,
+        "padding-block-end": 80
+      }
+    },
+    "story": {
+      "type": "smelly-story",
+      "settings": {
+        "main_heading": false,
+        "note": "Hello, we’re Smelly A.F.",
+        "heading": "A little candle. A big A.F. personality.",
+        "text": "<p>We think a good candle should bring a little joy to the everyday. Colourful wax. Scents with character. A name that makes you smile.</p><p>From sweet-shop nostalgia to your favourite time of year, find a little jar that feels like you.</p>",
+        "caption": "Good scents. Better days.",
+        "button_label": "A little about us",
+        "signature": "Homes should smell amazing. A.F."
+      }
+    },
+    "ranges": {
+      "type": "smelly-ranges",
+      "settings": {
+        "note": "Whatever your mood, there’s an A.F. for that.",
+        "heading": "Find your kind of A.F.",
+        "text": "A little sweet, a little seasonal, a whole lot of personality."
+      },
+      "blocks": {
+        "range_1": {
+          "type": "range",
+          "settings": {
+            "heading": "Spooky A.F.",
+            "text": "Cosy nights. Spooky season.",
+            "illustration": "pumpkin"
+          }
+        },
+        "range_2": {
+          "type": "range",
+          "settings": {
+            "heading": "Festive A.F.",
+            "text": "A little extra festive feeling.",
+            "illustration": "festive"
+          }
+        },
+        "range_3": {
+          "type": "range",
+          "settings": {
+            "heading": "Sweet A.F.",
+            "text": "For your inner sweet tooth.",
+            "illustration": "candy"
+          }
+        },
+        "range_4": {
+          "type": "range",
+          "settings": {
+            "heading": "Fresh A.F.",
+            "text": "Fresh mood. Fresh start.",
+            "illustration": "flower"
+          }
+        }
+      },
+      "block_order": [
+        "range_1",
+        "range_2",
+        "range_3",
+        "range_4"
+      ]
+    }
+  },
+  "order": [
+    "main",
+    "story",
+    "ranges"
+  ]
+}
