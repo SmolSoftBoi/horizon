@@ -3,6 +3,8 @@
   assign hero_image = section.settings.image
   assign tablet_image = section.settings.tablet_image | default: hero_image
   assign mobile_image = section.settings.mobile_image | default: tablet_image
+  assign tablet_image_width = tablet_image.width | at_most: 1600
+  assign mobile_image_width = mobile_image.width | at_most: 1200
   assign hero_alt = section.settings.image_alt | default: hero_image.alt | default: shop.name
   assign image_loading = 'eager'
   assign image_priority = 'auto'
@@ -31,7 +33,7 @@
     {% if mobile_image != blank %}
       <source
         media="(max-width: 749px)"
-        srcset="{% if mobile_image.width > 480 %}{{ mobile_image | image_url: width: 480 }} 480w,{% endif %}{% if mobile_image.width > 768 %}{{ mobile_image | image_url: width: 768 }} 768w,{% endif %}{{ mobile_image | image_url: width: 1200 }} {{ mobile_image.width | at_most: 1200 }}w"
+        srcset="{% if mobile_image.width > 480 %}{{ mobile_image | image_url: width: 480 }} 480w,{% endif %}{% if mobile_image.width > 768 %}{{ mobile_image | image_url: width: 768 }} 768w,{% endif %}{{ mobile_image | image_url: width: mobile_image_width }} {{ mobile_image_width }}w"
         sizes="100vw"
         width="{{ mobile_image.width }}"
         height="{{ mobile_image.height }}"
@@ -42,7 +44,7 @@
     {% if tablet_image != blank %}
       <source
         media="(max-width: 989px)"
-        srcset="{% if tablet_image.width > 768 %}{{ tablet_image | image_url: width: 768 }} 768w,{% endif %}{% if tablet_image.width > 1200 %}{{ tablet_image | image_url: width: 1200 }} 1200w,{% endif %}{{ tablet_image | image_url: width: 1600 }} {{ tablet_image.width | at_most: 1600 }}w"
+        srcset="{% if tablet_image.width > 768 %}{{ tablet_image | image_url: width: 768 }} 768w,{% endif %}{% if tablet_image.width > 1200 %}{{ tablet_image | image_url: width: 1200 }} 1200w,{% endif %}{{ tablet_image | image_url: width: tablet_image_width }} {{ tablet_image_width }}w"
         sizes="100vw"
         width="{{ tablet_image.width }}"
         height="{{ tablet_image.height }}"
