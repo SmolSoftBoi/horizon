@@ -1,30 +1,85 @@
 {% liquid
   assign shop_link = section.settings.button_link | default: routes.all_products_collection_url
-  assign hero_alt = 'smelly.photos.bubblegum' | t
-  assign detail_alt = 'smelly.photos.pumpkin' | t
+  assign hero_image = section.settings.image
+  assign tablet_image = section.settings.tablet_image | default: hero_image
+  assign mobile_image = section.settings.mobile_image | default: tablet_image
+  assign tablet_image_width = tablet_image.width | at_most: 1600
+  assign mobile_image_width = mobile_image.width | at_most: 1200
+  assign hero_alt = section.settings.image_alt | default: hero_image.alt | default: shop.name
+  assign image_loading = 'eager'
+  assign image_priority = 'auto'
+  if section.index == 1 or section.index == blank
+    assign image_priority = 'high'
+  elsif section.index > 3
+    assign image_loading = 'lazy'
+  endif
   assign heading_tag = 'h1'
   if template.name == 'index'
     assign heading_tag = 'h2'
   endif
 %}
-<div class="smelly-hero smelly-shell">
-  <div class="smelly-hero__copy">
-    {% if section.settings.note != blank %}<p class="smelly-handwritten smelly-hero__note">{{ section.settings.note | escape }}</p>{% endif %}
-    <{{ heading_tag }}>{{ section.settings.heading | escape | newline_to_br }}</{{ heading_tag }}>
-    <div class="smelly-hero__description">{{ section.settings.text }}</div>
-    <a class="smelly-button" href="{{ shop_link }}">{{ section.settings.button_label | escape }}<span aria-hidden="true">↗</span></a>
-    <p class="smelly-hero__footnote">{{ section.settings.caption | escape }}</p>
-  </div>
-  <div class="smelly-hero__visual">
-    <div class="smelly-hero__main-photo">
-      {% render 'smelly-photo', image: section.settings.image, fallback: 'smelly-pink-bubblegum.jpg', alt: hero_alt, loading: 'eager', priority: 'high', sizes: '(min-width: 990px) 45vw, 90vw' %}
+<div class="smelly-hero">
+  <picture
+    class="smelly-hero__media"
+    style="
+      --smelly-hero-desktop-position: {{ hero_image.presentation.focal_point | default: '50% 50%' }};
+      --smelly-hero-tablet-position: {{ tablet_image.presentation.focal_point | default: '50% 50%' }};
+      --smelly-hero-mobile-position: {{ mobile_image.presentation.focal_point | default: '50% 100%' }};
+      --smelly-hero-desktop-ratio: {{ hero_image.aspect_ratio | default: 3 }};
+      --smelly-hero-tablet-ratio: {{ tablet_image.aspect_ratio | default: 1.5 }};
+      --smelly-hero-mobile-ratio: {{ mobile_image.aspect_ratio | default: 0.6666667 }};
+    "
+  >
+    {% if mobile_image != blank %}
+      <source
+        media="(max-width: 749px)"
+        srcset="{% if mobile_image.width > 480 %}{{ mobile_image | image_url: width: 480 }} 480w,{% endif %}{% if mobile_image.width > 768 %}{{ mobile_image | image_url: width: 768 }} 768w,{% endif %}{{ mobile_image | image_url: width: mobile_image_width }} {{ mobile_image_width }}w"
+        sizes="100vw"
+        width="{{ mobile_image.width }}"
+        height="{{ mobile_image.height }}"
+      >
+    {% else %}
+      <source media="(max-width: 749px)" srcset="{{ 'smelly-hero-lifestyle-mobile.jpg' | asset_url }}" width="1024" height="1536">
+    {% endif %}
+    {% if tablet_image != blank %}
+      <source
+        media="(max-width: 989px)"
+        srcset="{% if tablet_image.width > 768 %}{{ tablet_image | image_url: width: 768 }} 768w,{% endif %}{% if tablet_image.width > 1200 %}{{ tablet_image | image_url: width: 1200 }} 1200w,{% endif %}{{ tablet_image | image_url: width: tablet_image_width }} {{ tablet_image_width }}w"
+        sizes="100vw"
+        width="{{ tablet_image.width }}"
+        height="{{ tablet_image.height }}"
+      >
+    {% else %}
+      <source media="(max-width: 989px)" srcset="{{ 'smelly-hero-lifestyle-tablet.jpg' | asset_url }}" width="1536" height="1024">
+    {% endif %}
+    {% if hero_image != blank %}
+      {{ hero_image | image_url: width: 2400 | image_tag: widths: '640, 960, 1440, 1920, 2400', sizes: '100vw', loading: image_loading, fetchpriority: image_priority, alt: hero_alt }}
+    {% else %}
+      <img src="{{ 'smelly-hero-lifestyle-desktop.jpg' | asset_url }}" width="2172" height="724" alt="{{ hero_alt | escape }}" loading="{{ image_loading }}" fetchpriority="{{ image_priority }}">
+    {% endif %}
+  </picture>
+  <div class="smelly-hero__content">
+    <div class="smelly-hero__copy">
+      {% if section.settings.note != blank %}<p class="smelly-handwritten smelly-hero__note">{{ section.settings.note | escape }}</p>{% endif %}
+      <{{ heading_tag }} class="smelly-hero__heading">{{ section.settings.heading | escape | newline_to_br }}</{{ heading_tag }}>
+      {% if section.settings.text != blank %}
+        <div class="smelly-hero__description">{{ section.settings.text }}</div>
+      {% endif %}
+      {% if section.settings.button_label != blank %}
+        <a class="smelly-button smelly-hero__button" href="{{ shop_link | escape }}">
+          {{ section.settings.button_label | escape }}<span aria-hidden="true">↗</span>
+        </a>
+      {% endif %}
+      {% if section.settings.caption != blank %}
+        <p class="smelly-hero__footnote">{{ section.settings.caption | escape }}</p>
+      {% endif %}
     </div>
-    <div class="smelly-hero__detail-photo">
-      {% render 'smelly-photo', image: section.settings.detail_image, fallback: 'smelly-pumpkin-spice.jpg', alt: detail_alt %}
-      <span class="smelly-handwritten">{{ section.settings.detail_caption | escape }}</span>
-    </div>
-    <div class="smelly-hero__seal"><span>{{ section.settings.sticker | escape | newline_to_br }}</span>{% render 'smelly-illustration', kind: 'heart' %}</div>
-    <span class="smelly-hero__spark" aria-hidden="true">✳</span>
+    {% if section.settings.sticker != blank %}
+      <div class="smelly-hero__annotation">
+        <span class="smelly-handwritten">{{ section.settings.sticker | escape | newline_to_br }}</span>
+        <span class="smelly-hero__heart" aria-hidden="true">{% render 'smelly-illustration', kind: 'heart' %}</span>
+      </div>
+    {% endif %}
   </div>
 </div>
 {% schema %}
@@ -34,16 +89,17 @@
   "class": "smelly-section smelly-hero-section",
   "disabled_on": { "groups": ["header", "footer"] },
   "settings": [
-    { "type": "text", "id": "note", "label": "Handwritten note", "default": "A little jar. A lot of personality." },
     { "type": "textarea", "id": "heading", "label": "Heading", "default": "Seriously\ngood scents." },
     { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Hand-poured soy wax candles for homes that don’t take themselves too seriously.</p>" },
     { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop all scents" },
     { "type": "url", "id": "button_link", "label": "Button link" },
-    { "type": "text", "id": "caption", "label": "Caption", "default": "Good scents. Better days. A.F." },
-    { "type": "image_picker", "id": "image", "label": "Main photograph" },
-    { "type": "image_picker", "id": "detail_image", "label": "Small photograph" },
-    { "type": "text", "id": "detail_caption", "label": "Photograph caption", "default": "Cosy looks good on you." },
-    { "type": "textarea", "id": "sticker", "label": "Sticker text", "default": "Hand-poured.\nWith A.F. attitude." }
+    { "type": "image_picker", "id": "image", "label": "Desktop photograph", "info": "Use a wide photograph with clear space on the left for the text." },
+    { "type": "image_picker", "id": "tablet_image", "label": "Tablet photograph", "info": "Used at 750–989px. Falls back to the desktop photograph, or the bundled tablet scene." },
+    { "type": "image_picker", "id": "mobile_image", "label": "Mobile photograph", "info": "Use a portrait photograph with clear space at the top. Falls back to the tablet or desktop photograph, or the bundled mobile scene." },
+    { "type": "text", "id": "image_alt", "label": "Image description", "default": "Smelly A.F. candles with colourful wax and gold lids on a wooden table in a cosy living room.", "info": "Shared by all three photographs. Leave blank to use the desktop image’s alt text." },
+    { "type": "textarea", "id": "sticker", "label": "Handwritten annotation", "default": "Hand-poured.\nWith A.F. attitude.", "info": "Shown on desktop and tablet." },
+    { "type": "text", "id": "note", "label": "Optional note above heading" },
+    { "type": "text", "id": "caption", "label": "Optional caption below button" }
   ],
   "presets": [{ "name": "Smelly A.F. hero" }]
 }

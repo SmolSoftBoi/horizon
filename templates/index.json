@@ -12,12 +12,12 @@
     "hero": {
       "type": "smelly-hero",
       "settings": {
-        "note": "A little jar. A lot of personality.",
+        "note": "",
         "heading": "Seriously\ngood scents.",
         "text": "<p>Hand-poured soy wax candles for homes that don’t take themselves too seriously.</p>",
         "button_label": "Shop all scents",
-        "caption": "Good scents. Better days. A.F.",
-        "detail_caption": "Cosy looks good on you.",
+        "caption": "",
+        "image_alt": "Smelly A.F. candles with colourful wax and gold lids on a wooden table in a cosy living room.",
         "sticker": "Hand-poured.\nWith A.F. attitude."
       }
     },
