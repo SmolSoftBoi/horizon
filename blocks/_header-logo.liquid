@@ -74,14 +74,18 @@
       class="header-logo__transparent-header-image-container"
       data-testid="header-logo-inverse"
     >
-      {% render 'image',
-        image: inverse_logo,
-        class: 'header-logo__image',
-        height: settings.logo_height,
-        alt_text_fallback: alt_text_fallback,
-        text_fallback: shop.name,
-        style: inverse_logo_style
-      %}
+      {% if settings.smelly_branding and inverse_logo == blank %}
+        {% render 'smelly-wordmark' %}
+      {% else %}
+        {% render 'image',
+          image: inverse_logo,
+          class: 'header-logo__image',
+          height: settings.logo_height,
+          alt_text_fallback: alt_text_fallback,
+          text_fallback: shop.name,
+          style: inverse_logo_style
+        %}
+      {% endif %}
     </span>
   {% endif %}
 </a>
