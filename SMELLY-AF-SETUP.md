@@ -5,7 +5,7 @@ A Smelly A.F. storefront built on this checkout of Shopify Horizon. The theme us
 ## Included
 
 - Editable homepage sections: hero, candle details, featured products, ranges, story, journal and questions.
-- Branded header wordmark and newsletter footer. An uploaded logo takes precedence over the text wordmark.
+- Compact, centred header wordmark, pink navigation and basket accents, and spaced mobile controls. An uploaded logo takes precedence over the text wordmark. The newsletter footer uses the same branding.
 - A coordinated hero entrance, responsive button arrows, gentle product-photo zoom, moving range illustrations and animated FAQ answers. Motion uses CSS and follows the visitor’s reduced-motion preference.
 - About (`page.about`) and scent guide (`page.scents`) templates.
 - Horizon’s existing product, collection, search, basket, contact, journal and article templates, with the shared brand palette and typography.
@@ -53,9 +53,11 @@ Checks completed for this customisation:
 - Browser checks with Horizon’s real base CSS at 320, 390 and 1440px: hero, story and FAQ rich-text links stay underlined while buttons retain their styling. Uploaded footer logos render at 200px wide and shrink proportionally inside narrower containers.
 - Browser checks on locally rendered sections: all seven photographs load with alternative text, one homepage H1, working question accordions and email-format validation. No horizontal overflow at 320, 360, 390, 768, 1024, 1440 or 1920px.
 - Motion checks with Horizon’s base CSS: all four hero animations run once and finish within 750ms; keyboard focus remains visible; button arrows, linked product photographs, range illustrations and FAQ answers respond to interaction. Switching to reduced motion immediately cancels the entrance and disables these effects. Content and native FAQ controls remain usable with JavaScript disabled. No horizontal overflow at 320, 390, 768 or 1440px.
-- The local preview uses a header shell and fixtures for Shopify-only primitives. It verifies the new sections’ layout and conditional rendering, not Horizon’s live header or Shopify form submissions.
+- Header checks use the real Horizon Liquid blocks, base CSS and existing header JavaScript with local menu, account and logo fixtures. All 36 layouts from 320–1920px passed with accounts on/off, search off and uploaded logos: the logo stays centred and controls do not overlap. Keyboard focus, current-page underlines, search hover, sticky behaviour, longer menus, touch navigation and opening/closing the mobile drawer were also checked.
+- Compact height: 16 Standard/Compact comparisons at 320, 390, 750 and 1440px passed with the wordmark, uploaded logos, accounts disabled and two-row menus. Standard retains its previous height; the default wordmark measures 78px Compact versus 89px Standard on desktop, and 61px versus 77px on mobile. Controls retain 44px targets without overlap or clipping. Touch drawer navigation at 1024px, keyboard focus, sticky behaviour and mobile drawer opening/Escape closing also passed.
+- The homepage preview uses a header shell; the separate header preview uses the real header components. Both use fixtures for Shopify-only primitives. They verify local layout and conditional rendering; authenticated Shopify rendering, account services, search results, cart operations and form submissions still need a store preview.
 - ZIP structure and original photograph hashes checked. No production dependencies added.
 
-The Shopify skill’s separate validator could not start because its bundled `@shopify/theme-check-common` dependency is missing; the installed Shopify CLI supplied the Theme Check results above.
+The separate Shopify validator was unavailable in earlier checks because its bundled `@shopify/theme-check-common` dependency was missing. For the header update, automatic approval review blocked the remote validator because it could transmit repository files. The installed local Shopify CLI supplied the Theme Check results above.
 
 Horizon’s original licence and upstream theme information are retained. This is a merchant theme customisation; Horizon-derived themes are not eligible for Shopify Theme Store submission.

@@ -23,11 +23,111 @@
   --font-h4--weight: 700;
 }
 
-.smelly-theme .header-logo { overflow: visible; }
-.smelly-theme .header__row--top { padding-block: 12px; }
-.smelly-theme .header__row { background-color: var(--smelly-cream); }
-.smelly-theme .header { border-bottom: 1px solid var(--smelly-line); }
+.smelly-theme .header-logo { min-width: 0; overflow: visible; }
+.smelly-theme .header__row--top { padding-block: 0; }
+.smelly-theme .header {
+  --smelly-header-min-height: 88px;
+  --smelly-header-drawer-min-height: 76px;
+  border-bottom: 1px solid var(--smelly-line);
+}
+.smelly-theme .header:not(.header--compact) { --header-padding: 9px; }
+.smelly-theme .header--compact {
+  --smelly-header-min-height: 76px;
+  --smelly-header-drawer-min-height: 60px;
+}
 .smelly-theme :is(.button, .button-secondary) { font-weight: 600; }
+
+.smelly-theme .header__row--top .header__columns {
+  min-height: var(--smelly-header-min-height);
+}
+
+.smelly-theme .header-logo > span { min-width: 0; max-width: 100%; }
+.smelly-theme .header-logo__image { max-width: 100%; }
+.smelly-theme .header__column--right { gap: 8px; }
+.smelly-theme .header__column--right :is(.search-action, header-actions) { margin-inline: 0; }
+
+/* Without accounts, the top-row search already occupies the drawer search slot. */
+.smelly-theme #header-component:not(:has(shopify-account))
+  .header__row--top:has(.search-action:not(.search-action--hidden-on-menu))
+  .search-action--hidden-on-menu {
+  display: none;
+}
+
+.smelly-theme .header-logo .smelly-wordmark {
+  padding-top: 16px;
+  color: inherit;
+}
+.smelly-theme .header-logo .smelly-wordmark__name {
+  font-size: 40px;
+  line-height: 0.95;
+  letter-spacing: -2.2px;
+}
+.smelly-theme .header-logo .smelly-wordmark__descriptor {
+  font-size: 8px;
+  letter-spacing: 3.5px;
+  margin-top: 3px;
+}
+.smelly-theme .header-logo .smelly-wordmark__flame {
+  top: 0;
+  left: 50%;
+  width: 12px;
+  height: 16px;
+  transform: translateX(-50%) rotate(8deg);
+}
+
+.smelly-theme .header-menu .menu-list__link { min-height: 44px; }
+.smelly-theme .header-menu .menu-list__link-title {
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 7px;
+}
+.smelly-theme .header-menu
+  :is(.menu-list__link--active, .menu-list__link:hover, .menu-list__link:focus-visible)
+  .menu-list__link-title {
+  text-decoration-line: underline;
+  text-decoration-color: var(--smelly-pink);
+}
+.smelly-theme .header :is(a, button, summary):focus-visible {
+  outline: 2px solid var(--smelly-pink);
+  outline-offset: 4px;
+}
+.smelly-theme .header :is(.header-actions__action, .header__icon--menu) {
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 50%;
+}
+.smelly-theme .header :is(button.header-actions__action, .header__icon--menu):hover {
+  background-color: var(--smelly-blush);
+  color: var(--smelly-ink);
+}
+.smelly-theme .header .header__icon--menu { width: 44px; }
+
+/* Reserve both action slots when customer accounts add a second control. */
+.smelly-theme #header-component[data-menu-style='drawer'] .header__columns {
+  --header-template-columns: 44px 44px minmax(0, 1fr) 44px 44px;
+  min-height: var(--smelly-header-drawer-min-height);
+}
+.smelly-theme #header-component[data-menu-style='drawer'] header-actions:has(shopify-account) {
+  grid-column: 4 / 6;
+}
+
+@media (max-width: 749px) {
+  .smelly-theme #header-component .header__columns {
+    --header-template-columns: 44px 44px minmax(0, 1fr) 44px 44px;
+    min-height: var(--smelly-header-drawer-min-height);
+  }
+  .smelly-theme #header-component header-actions:has(shopify-account) {
+    grid-column: 4 / 6;
+  }
+  .smelly-theme .header-logo .smelly-wordmark__name {
+    font-size: clamp(20px, 6.6vw, 30px);
+    letter-spacing: -0.06em;
+  }
+  .smelly-theme .header-logo .smelly-wordmark__descriptor {
+    font-size: 6px;
+    letter-spacing: 2.5px;
+    margin-top: 2px;
+  }
+}
 
 .smelly-wordmark {
   display: inline-grid;
