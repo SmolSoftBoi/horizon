@@ -192,22 +192,144 @@
 .smelly-text-link span[aria-hidden] { font-size: 22px; }
 
 .smelly-hero-section { overflow: clip; }
-.smelly-hero { display: grid; grid-template-columns: 0.92fr 1.08fr; align-items: center; gap: 48px; padding-block: 56px 75px; }
-.smelly-hero__copy { position: relative; z-index: 1; padding-block: 20px; }
-.smelly-hero .smelly-hero__note { margin-bottom: 24px; transform: rotate(-3deg); transform-origin: left; }
-.smelly-hero :is(h1, h2) { font-size: clamp(64px, 6.8vw, 100px); letter-spacing: -5.5px; line-height: 0.99; margin-bottom: 28px; }
-.smelly-hero__description { max-width: 340px; font-size: 17px; line-height: 1.65; margin-bottom: 28px; }
-.smelly-hero .smelly-hero__footnote { margin-top: 22px; font-size: 12px; color: #65535a; }
-.smelly-hero__visual { position: relative; padding: 12px 40px 18px 0; }
-.smelly-hero__main-photo { height: 530px; border-radius: 48% 48% 5px 5px; overflow: hidden; background: var(--smelly-blush); }
-.smelly-hero__main-photo img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 46%; }
-.smelly-hero__detail-photo { position: absolute; bottom: -24px; right: -8px; width: 178px; padding: 8px 8px 16px; background: #fffdf9; transform: rotate(9deg); box-shadow: 0 6px 22px #261a211c; }
-.smelly-hero__detail-photo img { width: 100%; height: 185px; object-fit: cover; object-position: 50% 45%; }
-.smelly-hero__detail-photo .smelly-handwritten { display: block; text-align: center; font-size: 14px; color: var(--smelly-ink); padding-top: 8px; }
-.smelly-hero__seal { position: absolute; display: grid; place-content: center; text-align: center; top: 0; right: -8px; width: 126px; height: 126px; border-radius: 50%; background: var(--smelly-blush); transform: rotate(12deg); border: 1px dashed var(--smelly-pink); outline: 6px solid var(--smelly-blush); }
-.smelly-hero__seal span { font-size: 12px; font-weight: 600; line-height: 1.5; }
-.smelly-hero__seal svg { width: 40px; height: 28px; margin: 4px auto 0; color: var(--smelly-pink); }
-.smelly-hero__spark { position: absolute; left: -32px; bottom: 25px; color: var(--smelly-pink); font-size: 95px; line-height: 1; transform: rotate(15deg); }
+.smelly-hero {
+  --smelly-hero-gutter: clamp(24px, 4vw, 72px);
+
+  position: relative;
+  isolation: isolate;
+  min-height: calc(clamp(340px, 33.333vw, 640px) + var(--smelly-hero-header-offset, 0px));
+  color: var(--smelly-cream);
+  background: #2b190f;
+}
+.smelly-hero__media {
+  --smelly-hero-position: var(--smelly-hero-desktop-position);
+  --smelly-hero-ratio: var(--smelly-hero-desktop-ratio);
+
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  display: block;
+  width: 100%;
+}
+.smelly-hero__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Each picture source has its own focal point, replacing image_tag's desktop inline value. */
+  object-position: var(--smelly-hero-position) !important;
+}
+.smelly-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(90deg, #150c08cc, #150c0894 22%, #150c082e 32%, transparent 40%);
+}
+.smelly-hero__content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: calc(100% - var(--smelly-hero-gutter) * 2);
+  min-height: inherit;
+  margin-inline: auto;
+  padding-block: calc(32px + var(--smelly-hero-header-offset, 0px)) 32px;
+}
+[dir='rtl'] .smelly-hero__content { justify-content: flex-end; }
+.smelly-hero__copy { width: min(32.5vw, 520px); min-width: 0; }
+.smelly-hero .smelly-hero__heading {
+  margin: 0;
+  font-size: clamp(52px, 5.2vw, 86px);
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+  text-wrap: pretty;
+}
+.smelly-hero .smelly-hero__note {
+  margin-bottom: 16px;
+  color: inherit;
+  font-size: 18px;
+}
+.smelly-hero__description {
+  max-width: 30ch;
+  margin-block: 18px 22px;
+  font-size: clamp(14px, 1.1vw, 17px);
+  line-height: 1.5;
+}
+.smelly-hero__description p + p { margin-top: 12px; }
+.smelly-hero .smelly-hero__button {
+  min-width: 220px;
+  max-width: 100%;
+  min-height: 52px;
+  justify-content: space-between;
+  gap: 28px;
+}
+.smelly-hero .smelly-hero__footnote { margin-top: 16px; font-size: 12px; }
+.smelly-hero :is(a, button):focus-visible { outline-color: var(--smelly-cream); }
+.smelly-hero__annotation {
+  position: absolute;
+  top: calc(20px + var(--smelly-hero-header-offset, 0px));
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 240px;
+  color: var(--smelly-cream);
+  transform: rotate(3deg);
+}
+.smelly-hero__annotation .smelly-handwritten { color: inherit; font-size: clamp(16px, 1.4vw, 22px); line-height: 1.25; text-shadow: 0 1px 4px #150c08, 0 0 8px #150c08; }
+.smelly-hero__heart { width: 36px; height: 32px; flex-shrink: 0; filter: drop-shadow(0 1px 3px #150c08); }
+
+/* Header measurements exclude the floating header unless another section follows it. */
+#header-group:has(> .header-section > #header-component[transparent])
+  ~ #MainContent > .smelly-hero-section:first-child {
+  --smelly-hero-header-offset: calc(var(--header-group-height, 0px) + var(--header-height, 0px));
+}
+#header-group:has(> .header-section > #header-component[transparent]):has(> .header-section + .shopify-section)
+  ~ #MainContent > .smelly-hero-section:first-child {
+  --smelly-hero-header-offset: var(--header-group-height, 0px);
+}
+
+/* Extra room for the header must not zoom the products into a narrower crop. */
+#header-group:has(> .header-section > #header-component[transparent])
+  ~ #MainContent > .smelly-hero-section:first-child .smelly-hero__media {
+  inset-block-start: auto;
+  height: auto;
+  max-height: calc(100% - var(--smelly-hero-header-offset));
+  aspect-ratio: var(--smelly-hero-ratio);
+  mask-image: linear-gradient(180deg, transparent, #000 48px);
+}
+
+@media (min-width: 990px) {
+  /* Right-aligned writing needs a little room beside the first candle. */
+  [dir='rtl'] .smelly-hero__copy { width: min(30vw, 520px); transform: translateX(-12px); }
+}
+
+@media (min-width: 750px) and (max-width: 989px) {
+  .smelly-hero { min-height: calc(clamp(500px, 66.667vw, 660px) + var(--smelly-hero-header-offset, 0px)); }
+  .smelly-hero__media {
+    --smelly-hero-position: var(--smelly-hero-tablet-position);
+    --smelly-hero-ratio: var(--smelly-hero-tablet-ratio);
+  }
+  .smelly-hero__copy { width: 38vw; }
+  .smelly-hero .smelly-hero__heading { font-size: clamp(44px, 5.5vw, 54px); }
+  .smelly-hero__description { font-size: 15px; }
+}
+
+@media (max-width: 749px) {
+  .smelly-hero { --smelly-hero-gutter: 20px; min-height: calc(clamp(640px, 160vw, 960px) + var(--smelly-hero-header-offset, 0px)); }
+  .smelly-hero__media {
+    --smelly-hero-position: var(--smelly-hero-mobile-position);
+    --smelly-hero-ratio: var(--smelly-hero-mobile-ratio);
+  }
+  .smelly-hero::before { background: linear-gradient(180deg, #150c08b8, #150c084d 36%, transparent 56%); }
+  .smelly-hero__content { align-items: flex-start; padding-block: calc(28px + var(--smelly-hero-header-offset, 0px)) 40px; }
+  .smelly-hero__copy { width: min(100%, 420px); }
+  .smelly-hero .smelly-hero__heading { font-size: clamp(48px, 8.7vw, 66px); }
+  .smelly-hero__description { max-width: 34ch; margin-block: 16px 20px; font-size: 15px; line-height: 1.55; }
+  .smelly-hero .smelly-hero__note { font-size: 16px; }
+  .smelly-hero .smelly-hero__footnote { margin-top: 12px; font-size: 11px; }
+  .smelly-hero__annotation { display: none; }
+}
 
 .smelly-benefits-section { border-block: 1px solid var(--smelly-line); }
 .smelly-benefits { display: flex; justify-content: space-evenly; padding-block: 24px; gap: 32px; }
@@ -302,19 +424,8 @@
 .smelly-payments { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
 .smelly-payments svg { width: 32px; height: 22px; }
 
-@media (min-width: 1600px) {
-  .smelly-hero :is(h1, h2) { font-size: 104px; }
-}
-
 @media (max-width: 1100px) {
   .smelly-shell { width: calc(100% - 64px); }
-  .smelly-hero { gap: 32px; }
-  .smelly-hero :is(h1, h2) { font-size: 72px; letter-spacing: -4px; }
-  .smelly-hero__main-photo { height: 460px; }
-  .smelly-hero__detail-photo { width: 145px; right: 0; }
-  .smelly-hero__detail-photo img { height: 155px; }
-  .smelly-hero__seal { width: 106px; height: 106px; right: 0; }
-  .smelly-hero__seal span { font-size: 10px; }
   .smelly-story { gap: 52px; }
   .smelly-product-grid { gap: 18px; }
   .smelly-range-grid { gap: 14px; }
@@ -331,19 +442,6 @@
   .smelly-wordmark__descriptor { font-size: 7px; letter-spacing: 3px; }
   .smelly-wordmark__flame { top: -8px; height: 16px; }
   .smelly-handwritten { font-size: 19px; }
-  .smelly-hero { grid-template-columns: 1fr; gap: 28px; padding-block: 28px 54px; }
-  .smelly-hero__copy { padding-block: 0; }
-  .smelly-hero .smelly-hero__note { font-size: 17px; margin-block: 6px 20px; }
-  .smelly-hero :is(h1, h2) { font-size: clamp(58px, 13.8vw, 86px); line-height: 1; letter-spacing: -3.5px; margin-bottom: 20px; }
-  .smelly-hero__description { font-size: 15px; max-width: 350px; margin-bottom: 22px; }
-  .smelly-hero .smelly-hero__footnote { margin-top: 16px; }
-  .smelly-hero__visual { width: min(440px, calc(100% - 10px)); margin-inline: auto; padding-right: 30px; }
-  .smelly-hero__main-photo { height: 365px; }
-  .smelly-hero__detail-photo { width: 126px; right: -4px; bottom: -13px; }
-  .smelly-hero__detail-photo img { height: 132px; }
-  .smelly-hero__detail-photo .smelly-handwritten { font-size: 12px; }
-  .smelly-hero__seal { width: 100px; height: 100px; right: 0; top: 4px; }
-  .smelly-hero__spark { font-size: 72px; left: -12px; bottom: 8px; }
   .smelly-benefits { display: grid; grid-template-columns: 1fr; gap: 16px; padding-block: 24px; }
   .smelly-benefits__item { justify-self: start; }
   .smelly-benefits__item p { font-size: 13px; }
@@ -387,11 +485,6 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .smelly-hero__copy { animation: smelly-copy-enter 600ms cubic-bezier(0.22, 1, 0.36, 1) backwards; }
-  .smelly-hero__main-photo { animation: smelly-photo-enter 700ms cubic-bezier(0.22, 1, 0.36, 1) backwards; }
-  .smelly-hero__detail-photo { animation: smelly-polaroid-enter 650ms 100ms cubic-bezier(0.22, 1, 0.36, 1) backwards; }
-  .smelly-hero__seal { animation: smelly-seal-enter 550ms 160ms cubic-bezier(0.22, 1, 0.36, 1) backwards; }
-
   .smelly-button > span[aria-hidden],
   .smelly-text-link > span[aria-hidden] { transition: transform 200ms ease; }
   .smelly-product-card__image img { transition: transform 450ms cubic-bezier(0.22, 1, 0.36, 1); }
@@ -410,26 +503,6 @@
     .smelly-product-card:hover a.smelly-product-card__image img { transform: scale(1.035); }
     .smelly-range-card:hover .smelly-range-card__art { transform: rotate(-5deg) translateY(-3px); }
   }
-}
-
-@keyframes smelly-copy-enter {
-  from { opacity: 0.6; transform: translateY(16px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes smelly-photo-enter {
-  from { transform: translateY(20px) scale(0.97); }
-  to { transform: translateY(0) scale(1); }
-}
-
-@keyframes smelly-polaroid-enter {
-  from { transform: translate(12px, 18px) rotate(14deg); }
-  to { transform: translate(0, 0) rotate(9deg); }
-}
-
-@keyframes smelly-seal-enter {
-  from { transform: scale(0.9) rotate(3deg); }
-  to { transform: scale(1) rotate(12deg); }
 }
 
 @keyframes smelly-answer-enter {
