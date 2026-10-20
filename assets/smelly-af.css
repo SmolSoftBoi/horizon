@@ -103,7 +103,7 @@
 .smelly-theme .header .header__icon--menu { width: 44px; }
 
 /* Reserve both action slots when customer accounts add a second control. */
-.smelly-theme #header-component[data-menu-style='drawer'] .header__columns {
+.smelly-theme #header-component[data-menu-style='drawer'] .header__row--top .header__columns {
   --header-template-columns: 44px 44px minmax(0, 1fr) 44px 44px;
 
   min-height: var(--smelly-header-drawer-min-height);
@@ -113,7 +113,7 @@
 }
 
 @media (max-width: 749px) {
-  .smelly-theme #header-component .header__columns {
+  .smelly-theme #header-component .header__row--top .header__columns {
     --header-template-columns: 44px 44px minmax(0, 1fr) 44px 44px;
 
     min-height: var(--smelly-header-drawer-min-height);
