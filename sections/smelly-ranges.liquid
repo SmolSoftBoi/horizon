@@ -1,21 +1,78 @@
-<div class="smelly-shell smelly-section-space" id="SmellyRanges-{{ section.id }}">
-  <div class="smelly-section-heading smelly-section-heading--centred">
-    <p class="smelly-handwritten">{{ section.settings.note | escape }}</p><h2>{{ section.settings.heading | escape }}</h2>
-    {% if section.settings.text != blank %}<p>{{ section.settings.text | escape }}</p>{% endif %}
+{% liquid
+  assign range_count = section.blocks.size
+  assign explore_label = 'smelly.explore_range' | t
+  assign image_sizes = '(min-width: 750px) 220px, (min-width: 464px) 180px, calc((100vw - 104px) / 2)'
+  if range_count == 1
+    assign image_sizes = '(min-width: 750px) 220px, 180px'
+  endif
+  assign image_loading = 'lazy'
+  if section.index == 1 or section.index == 2
+    assign image_loading = 'eager'
+  endif
+%}
+
+{% if range_count > 0 or request.design_mode %}
+  <div class="smelly-shell smelly-section-space" id="SmellyRanges-{{ section.id }}">
+    {% if section.settings.note != blank or section.settings.heading != blank or section.settings.text != blank %}
+      <div class="smelly-section-heading smelly-section-heading--centred smelly-ranges-heading">
+        {% if section.settings.note != blank %}
+          <p class="smelly-handwritten">{{ section.settings.note | escape }}</p>
+        {% endif %}
+        {% if section.settings.heading != blank %}
+          <h2>{{ section.settings.heading | escape }}</h2>
+        {% endif %}
+        {% if section.settings.text != blank %}
+          <p>{{ section.settings.text | escape }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if range_count > 0 %}
+      <ul
+        class="smelly-range-grid"
+        role="list"
+        style="--smelly-range-columns: {{ range_count }}; --smelly-range-mobile-columns: {{ range_count | at_most: 2 }};"
+      >
+        {% for block in section.blocks %}
+          {% liquid
+            assign range_collection = block.settings.collection
+            assign range_url = range_collection.url | default: routes.all_products_collection_url
+            assign range_heading = block.settings.heading | default: range_collection.title | default: explore_label
+          %}
+          <li class="smelly-range-grid__item" {{ block.shopify_attributes }}>
+            <a
+              class="smelly-range-card smelly-range-card--{{ block.settings.illustration }}"
+              href="{{ range_url }}"
+              aria-labelledby="SmellyRangeLink-{{ section.id }}-{{ block.id }} SmellyRangeTitle-{{ section.id }}-{{ block.id }}"
+            >
+              <div class="smelly-range-card__art" aria-hidden="true">
+                <div class="smelly-range-card__illustration">
+                  {% if block.settings.image != blank %}
+                    {{
+                      block.settings.image
+                      | image_url: width: 480
+                      | image_tag: loading: image_loading, alt: '', widths: '160, 240, 360, 480', sizes: image_sizes
+                    }}
+                  {% else %}
+                    {% render 'smelly-illustration', kind: block.settings.illustration %}
+                  {% endif %}
+                </div>
+              </div>
+              <h3 id="SmellyRangeTitle-{{ section.id }}-{{ block.id }}">{{ range_heading | escape }}</h3>
+              {% if block.settings.text != blank %}
+                <p class="smelly-range-card__description">{{ block.settings.text | escape }}</p>
+              {% endif %}
+              <span class="smelly-range-card__link" id="SmellyRangeLink-{{ section.id }}-{{ block.id }}">
+                <span>{{ explore_label }}</span>
+                <span class="smelly-range-card__arrow" aria-hidden="true">↗</span>
+              </span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
   </div>
-  <div class="smelly-range-grid">
-    {% for block in section.blocks %}
-      {% liquid
-        assign range_collection = block.settings.collection
-        assign range_url = range_collection.url | default: routes.all_products_collection_url
-      %}
-      <a class="smelly-range-card smelly-range-card--{{ block.settings.illustration }}" href="{{ range_url }}" {{ block.shopify_attributes }}>
-        <div class="smelly-range-card__art">{% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 600 | image_tag: loading: 'lazy', widths: '300, 450, 600', sizes: '(min-width: 990px) 23vw, 45vw' }}{% else %}{% render 'smelly-illustration', kind: block.settings.illustration %}{% endif %}</div>
-        <h3>{{ block.settings.heading | escape }}</h3><p>{{ block.settings.text | escape }}</p><span class="smelly-range-card__link">{{ 'smelly.explore_range' | t }} <span aria-hidden="true">↗</span></span>
-      </a>
-    {% endfor %}
-  </div>
-</div>
+{% endif %}
 {% schema %}
 {
   "name": "Smelly A.F. ranges",
