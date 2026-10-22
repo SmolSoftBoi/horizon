@@ -429,6 +429,8 @@
 .smelly-editor-note { padding: 24px 0; font-size: 14px; }
 
 .smelly-ranges-section { background: #f7eee5; }
+/* Liquid retains the shell in design mode, even when every range is removed. */
+.smelly-ranges-section:not(:has(.smelly-shell)) { display: none; }
 .smelly-ranges-heading > * { max-width: 100%; overflow-wrap: anywhere; }
 .smelly-range-grid {
   display: grid;
