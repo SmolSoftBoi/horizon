@@ -164,6 +164,23 @@
 .smelly-illustration__wash { fill: currentColor; fill-opacity: 0.1; stroke: none; }
 .smelly-illustration__shade { fill: currentColor; fill-opacity: 0.28; stroke: none; }
 .smelly-illustration__solid { fill: currentColor; stroke: none; }
+/* Range artwork shares ink contours, opaque colour and finer interior marks. */
+.smelly-illustration__range {
+  --illustration-colour: #f0af72;
+  --illustration-accent: #d78048;
+  --illustration-leaf: #a5b987;
+  stroke-width: 2.3;
+}
+.smelly-illustration__range--festive { --illustration-colour: #e89bab; --illustration-accent: #c75e75; --illustration-leaf: #a9bb94; }
+.smelly-illustration__range--candy { --illustration-colour: #efaccb; --illustration-accent: #d9659c; }
+.smelly-illustration__range--flower { --illustration-colour: #e9bd66; --illustration-accent: #d49b45; --illustration-leaf: #a6bf8f; }
+.smelly-illustration__colour { fill: var(--illustration-colour); }
+.smelly-illustration__accent { fill: var(--illustration-accent); }
+.smelly-illustration__leaf { fill: var(--illustration-leaf); }
+.smelly-illustration__paper { fill: var(--smelly-cream, #fff9ef); }
+.smelly-illustration__detail { fill: none; stroke-width: 1.35; }
+.smelly-illustration__highlight { fill: none; stroke: var(--smelly-cream, #fff9ef); stroke-width: 2.6; }
+.smelly-illustration__ribbon { fill: none; stroke: var(--illustration-accent); stroke-width: 7; }
 /* Small illustrations need heavier strokes to retain the same visual weight. */
 .smelly-benefits__icon .smelly-illustration { stroke-width: 3.75; }
 .smelly-hero__heart .smelly-illustration,
@@ -407,18 +424,94 @@
 .smelly-editor-note { padding: 24px 0; font-size: 14px; }
 
 .smelly-ranges-section { background: #f7eee5; }
-.smelly-range-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
-.smelly-range-card { padding: 26px 22px 22px; min-width: 0; text-align: center; border-radius: 90px 90px 6px 6px; display: flex; flex-direction: column; align-items: center; }
-.smelly-range-card--pumpkin { background: #f5c89c; color: #693310 !important; }
-.smelly-range-card--festive { background: #e9c6cd; color: #72273b !important; }
-.smelly-range-card--candy { background: #f5c8df; color: #8a234f !important; }
-.smelly-range-card--flower { background: #dbe5d3; color: #344f35 !important; }
-.smelly-range-card__art { height: 126px; width: 150px; margin-bottom: 18px; }
-.smelly-range-card__art img { width: 100%; height: 100%; object-fit: contain; }
-.smelly-range-card h3 { font-size: 28px; letter-spacing: -1px; line-height: 1.2; }
-.smelly-range-card p { font-size: 13px; line-height: 1.5; margin-block: 12px 22px; }
-.smelly-range-card__link { margin-top: auto; font-size: 12px; font-weight: 600; border-bottom: 1px solid currentColor; padding-bottom: 2px; }
-.smelly-range-card:hover .smelly-range-card__link { border-bottom-width: 2px; padding-bottom: 1px; }
+.smelly-ranges-heading > * { max-width: 100%; overflow-wrap: anywhere; }
+.smelly-range-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--smelly-range-columns), minmax(0, 1fr));
+  gap: 20px;
+  max-width: calc(var(--smelly-range-columns) * 340px);
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+.smelly-range-grid__item { display: flex; min-width: 0; }
+.smelly-section .smelly-range-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  padding: 28px 24px 0;
+  border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  border-radius: 160px 160px 12px 12px;
+  background: var(--smelly-range-background, #f5c8df);
+  color: var(--smelly-range-ink, #8a234f);
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.smelly-range-card--pumpkin { --smelly-range-background: #f5c89c; --smelly-range-ink: #693310; }
+.smelly-range-card--festive { --smelly-range-background: #e9c6cd; --smelly-range-ink: #72273b; }
+.smelly-range-card--candy { --smelly-range-background: #f5c8df; --smelly-range-ink: #8a234f; }
+.smelly-range-card--flower { --smelly-range-background: #dbe5d3; --smelly-range-ink: #344f35; }
+.smelly-range-card__art {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 210px;
+  margin-bottom: 22px;
+}
+.smelly-range-card__art::before {
+  content: '';
+  position: absolute;
+  width: 85%;
+  max-width: 220px;
+  height: 100%;
+  border-radius: 50% 50% 46% 44%;
+  background: var(--smelly-cream);
+  opacity: 0.5;
+  transform: rotate(-8deg);
+}
+.smelly-range-card__illustration {
+  position: relative;
+  width: min(100%, 220px);
+  height: 165px;
+}
+.smelly-range-card__art img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.smelly-range-card h3 { max-width: 100%; font-size: clamp(26px, 2.5vw, 34px); letter-spacing: -0.035em; line-height: 1.15; overflow-wrap: anywhere; }
+.smelly-range-card .smelly-range-card__description { max-width: 100%; margin-block: 12px 26px; font-size: 14px; line-height: 1.6; overflow-wrap: anywhere; text-wrap: pretty; }
+.smelly-range-card__link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 60px;
+  margin-top: auto;
+  padding-block: 14px;
+  border-top: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+  font-size: 13px;
+  font-weight: 600;
+  text-align: start;
+}
+.smelly-range-card__arrow {
+  display: grid;
+  flex: 0 0 30px;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--smelly-cream);
+  font-size: 21px;
+  font-weight: 400;
+  line-height: 1;
+}
+.smelly-range-card:is(:hover, :focus-visible) .smelly-range-card__link > span:first-child { text-decoration: underline; text-underline-offset: 4px; }
+.smelly-section .smelly-range-card:focus-visible { outline: 3px solid var(--smelly-range-ink); outline-offset: 5px; }
+
+@media (max-width: 989px) {
+  .smelly-range-grid { grid-template-columns: repeat(var(--smelly-range-mobile-columns), minmax(0, 1fr)); max-width: calc(var(--smelly-range-mobile-columns) * 340px); }
+}
 
 .smelly-story-section { background: var(--smelly-blush); }
 .smelly-story { display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); align-items: center; gap: 100px; padding-block: 80px; }
@@ -479,9 +572,8 @@
   .smelly-story { gap: 52px; }
   .smelly-product-grid { gap: 18px; }
   .smelly-range-grid { gap: 14px; }
-  .smelly-range-card { padding-inline: 16px; }
-  .smelly-range-card h3 { font-size: 24px; }
-  .smelly-range-card__art { width: 120px; height: 105px; }
+  .smelly-section .smelly-range-card { padding-inline: 20px; }
+  .smelly-range-card__art { height: 180px; }
 }
 
 @media (max-width: 749px) {
@@ -511,11 +603,14 @@
   .smelly-product-card__details h3 { font-size: 18px; }
   .smelly-product-card__details .smelly-handwritten { font-size: 16px; }
   .smelly-product-card__price { font-size: 13px; }
-  .smelly-range-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 12px; }
-  .smelly-range-card { padding: 22px 12px 20px; border-radius: 70px 70px 5px 5px; }
-  .smelly-range-card__art { width: 115px; height: 90px; margin-bottom: 12px; }
-  .smelly-range-card h3 { font-size: 24px; letter-spacing: -1px; }
-  .smelly-range-card p { font-size: 12px; margin-block: 10px 16px; }
+  .smelly-range-grid { gap: 20px 12px; }
+  .smelly-section .smelly-range-card { padding: 20px 12px 0; border-radius: 100px 100px 10px 10px; }
+  .smelly-range-card__art { height: clamp(110px, 28vw, 180px); margin-bottom: 18px; }
+  .smelly-range-card__illustration { width: min(100%, 180px); height: 80%; }
+  .smelly-range-card h3 { font-size: clamp(23px, 5.6vw, 30px); }
+  .smelly-range-card .smelly-range-card__description { font-size: 13px; margin-block: 10px 20px; }
+  .smelly-range-card__link { gap: 8px; min-height: 54px; padding-block: 12px; font-size: 12px; }
+  .smelly-range-card__arrow { flex-basis: 22px; width: 22px; height: 22px; font-size: 17px; }
   .smelly-story { grid-template-columns: minmax(0, 1fr); gap: 38px; padding-block: 50px; }
   .smelly-story__photo { width: min(360px, calc(100% - 20px)); margin-inline: auto; padding-bottom: 52px; }
   .smelly-story__photo-caption { font-size: 18px; }
@@ -543,20 +638,20 @@
   .smelly-button > span[aria-hidden],
   .smelly-text-link > span[aria-hidden] { transition: transform 200ms ease; }
   .smelly-product-card__image img { transition: transform 450ms cubic-bezier(0.22, 1, 0.36, 1); }
-  .smelly-range-card__art { transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1); }
+  .smelly-range-card__illustration { transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1); }
   .smelly-faq__item summary span { transition: transform 200ms ease; }
   .smelly-faq__item[open] > div { animation: smelly-answer-enter 220ms ease-out; }
 
   .smelly-button:focus-visible > span[aria-hidden],
   .smelly-text-link:focus-visible > span[aria-hidden] { transform: translate(3px, -2px); }
   .smelly-product-card:focus-within a.smelly-product-card__image img { transform: scale(1.035); }
-  .smelly-range-card:focus-visible .smelly-range-card__art { transform: rotate(-5deg) translateY(-3px); }
+  .smelly-range-card:focus-visible .smelly-range-card__illustration { transform: rotate(-5deg) translateY(-3px); }
 
   @media (hover: hover) and (pointer: fine) {
     .smelly-button:not(:disabled):hover > span[aria-hidden],
     .smelly-text-link:hover > span[aria-hidden] { transform: translate(3px, -2px); }
     .smelly-product-card:hover a.smelly-product-card__image img { transform: scale(1.035); }
-    .smelly-range-card:hover .smelly-range-card__art { transform: rotate(-5deg) translateY(-3px); }
+    .smelly-range-card:hover .smelly-range-card__illustration { transform: rotate(-5deg) translateY(-3px); }
   }
 }
 
