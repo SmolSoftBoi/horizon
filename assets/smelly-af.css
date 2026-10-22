@@ -164,23 +164,28 @@
 .smelly-illustration__wash { fill: currentColor; fill-opacity: 0.1; stroke: none; }
 .smelly-illustration__shade { fill: currentColor; fill-opacity: 0.28; stroke: none; }
 .smelly-illustration__solid { fill: currentColor; stroke: none; }
-/* Range artwork shares ink contours, opaque colour and finer interior marks. */
-.smelly-illustration__range {
+.smelly-illustration__colour,
+.smelly-illustration__leaf { fill: currentColor; fill-opacity: 0.1; }
+.smelly-illustration__accent { fill: currentColor; fill-opacity: 0.28; }
+.smelly-illustration__highlight { display: none; }
+/* Richer colour and finer marks belong to range cards, not shared benefit icons. */
+.smelly-range-card .smelly-illustration__range {
   --illustration-colour: #f0af72;
   --illustration-accent: #d78048;
   --illustration-leaf: #a5b987;
   stroke-width: 2.3;
 }
-.smelly-illustration__range--festive { --illustration-colour: #e89bab; --illustration-accent: #c75e75; --illustration-leaf: #a9bb94; }
-.smelly-illustration__range--candy { --illustration-colour: #efaccb; --illustration-accent: #d9659c; }
-.smelly-illustration__range--flower { --illustration-colour: #e9bd66; --illustration-accent: #d49b45; --illustration-leaf: #a6bf8f; }
-.smelly-illustration__colour { fill: var(--illustration-colour); }
-.smelly-illustration__accent { fill: var(--illustration-accent); }
-.smelly-illustration__leaf { fill: var(--illustration-leaf); }
-.smelly-illustration__paper { fill: var(--smelly-cream, #fff9ef); }
-.smelly-illustration__detail { fill: none; stroke-width: 1.35; }
-.smelly-illustration__highlight { fill: none; stroke: var(--smelly-cream, #fff9ef); stroke-width: 2.6; }
-.smelly-illustration__ribbon { fill: none; stroke: var(--illustration-accent); stroke-width: 7; }
+.smelly-range-card .smelly-illustration__range--festive { --illustration-colour: #e89bab; --illustration-accent: #c75e75; --illustration-leaf: #a9bb94; }
+.smelly-range-card .smelly-illustration__range--candy { --illustration-colour: #efaccb; --illustration-accent: #d9659c; }
+.smelly-range-card .smelly-illustration__range--flower { --illustration-colour: #e9bd66; --illustration-accent: #d49b45; --illustration-leaf: #a6bf8f; }
+.smelly-range-card :is(.smelly-illustration__colour, .smelly-illustration__accent, .smelly-illustration__leaf) { fill-opacity: 1; }
+.smelly-range-card .smelly-illustration__colour { fill: var(--illustration-colour); }
+.smelly-range-card .smelly-illustration__accent { fill: var(--illustration-accent); }
+.smelly-range-card .smelly-illustration__leaf { fill: var(--illustration-leaf); }
+.smelly-range-card .smelly-illustration__paper { fill: var(--smelly-cream, #fff9ef); }
+.smelly-range-card .smelly-illustration__detail { fill: none; stroke-width: 1.35; }
+.smelly-range-card .smelly-illustration__highlight { display: inline; fill: none; stroke: var(--smelly-cream, #fff9ef); stroke-width: 2.6; }
+.smelly-range-card .smelly-illustration__ribbon { fill: none; stroke: var(--illustration-accent); stroke-width: 7; }
 /* Small illustrations need heavier strokes to retain the same visual weight. */
 .smelly-benefits__icon .smelly-illustration { stroke-width: 3.75; }
 .smelly-hero__heart .smelly-illustration,
