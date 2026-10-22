@@ -28,7 +28,7 @@
         "detail_1": {
           "type": "detail",
           "settings": {
-            "icon": "heart",
+            "icon": "pour",
             "heading": "Hand-poured",
             "text": "A personal touch in every jar"
           }
@@ -36,7 +36,7 @@
         "detail_2": {
           "type": "detail",
           "settings": {
-            "icon": "flower",
+            "icon": "soy",
             "heading": "Soy wax candles",
             "text": "Colourful wax. Characterful scents."
           }
@@ -44,7 +44,7 @@
         "detail_3": {
           "type": "detail",
           "settings": {
-            "icon": "candy",
+            "icon": "jar",
             "heading": "150g of personality",
             "text": "Your shelf’s new favourite"
           }

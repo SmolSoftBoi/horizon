@@ -160,7 +160,14 @@
 .smelly-footer :is(a, button, input):focus-visible { outline: 3px solid var(--smelly-pink); outline-offset: 5px; }
 .smelly-handwritten { font-family: 'Segoe Print', 'Bradley Hand', 'Comic Sans MS', cursive; font-size: 22px; line-height: 1.4; font-weight: 400; letter-spacing: -0.5px; }
 .smelly-section .smelly-handwritten { color: var(--smelly-pink); }
-.smelly-illustration { width: 100%; height: 100%; }
+.smelly-illustration { display: block; width: 100%; height: 100%; }
+.smelly-illustration__wash { fill: currentColor; fill-opacity: 0.1; stroke: none; }
+.smelly-illustration__shade { fill: currentColor; fill-opacity: 0.28; stroke: none; }
+.smelly-illustration__solid { fill: currentColor; stroke: none; }
+/* Small illustrations need heavier strokes to retain the same visual weight. */
+.smelly-benefits__icon .smelly-illustration { stroke-width: 3.75; }
+.smelly-hero__heart .smelly-illustration,
+.smelly-story__signature .smelly-illustration { stroke-width: 4.5; }
 
 .smelly-section .smelly-button,
 .smelly-footer .smelly-button {
@@ -331,12 +338,55 @@
   .smelly-hero__annotation { display: none; }
 }
 
-.smelly-benefits-section { border-block: 1px solid var(--smelly-line); }
-.smelly-benefits { display: flex; justify-content: space-evenly; padding-block: 24px; gap: 32px; }
-.smelly-benefits__item { display: flex; align-items: center; gap: 14px; }
-.smelly-benefits__icon { width: 44px; height: 36px; flex-shrink: 0; }
-.smelly-benefits__item p { font-weight: 600; font-size: 14px; }
-.smelly-benefits__item span:not(.smelly-benefits__icon) { font-size: 12px; color: #65535a; }
+.smelly-benefits-section:has(.smelly-benefits) { border-block: 1px solid var(--smelly-line); }
+.smelly-benefits {
+  display: grid;
+  grid-template-columns: repeat(var(--smelly-benefits-columns), minmax(0, 1fr));
+  margin-block: 0;
+  padding: 32px 0;
+  list-style: none;
+}
+.smelly-benefits__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  min-width: 0;
+  padding: 8px 24px;
+}
+.smelly-benefits__item + .smelly-benefits__item::before {
+  content: '';
+  position: absolute;
+  inset-block: 8px;
+  inset-inline-start: 0;
+  border-inline-start: 1px solid var(--smelly-line);
+}
+.smelly-benefits__icon {
+  display: block;
+  flex: 0 0 72px;
+  width: 72px;
+  height: 60px;
+  color: var(--smelly-pink);
+}
+.smelly-benefits__copy { min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
+.smelly-benefits__heading {
+  font: 700 clamp(20px, 1.6vw, 24px)/1.2 var(--smelly-serif);
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+.smelly-benefits__copy .smelly-benefits__text {
+  margin-top: 7px;
+  color: #65535a;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.smelly-benefits__text:first-child { margin-top: 0; }
+
+@media (min-width: 750px) and (max-width: 1100px) {
+  .smelly-benefits__item { flex-direction: column; gap: 12px; padding-inline: 20px; text-align: center; }
+  .smelly-benefits__icon { flex-basis: auto; }
+}
 
 .smelly-section-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 36px; }
 .smelly-section-heading .smelly-handwritten { margin-bottom: 12px; }
@@ -442,11 +492,16 @@
   .smelly-wordmark__descriptor { font-size: 7px; letter-spacing: 3px; }
   .smelly-wordmark__flame { top: -8px; height: 16px; }
   .smelly-handwritten { font-size: 19px; }
-  .smelly-benefits { display: grid; grid-template-columns: 1fr; gap: 16px; padding-block: 24px; }
-  .smelly-benefits__item { justify-self: start; }
-  .smelly-benefits__item p { font-size: 13px; }
-  .smelly-benefits__item span:not(.smelly-benefits__icon) { font-size: 12px; }
-  .smelly-benefits__icon { width: 36px; height: 30px; }
+  .smelly-benefits { grid-template-columns: 1fr; padding-block: 12px; }
+  .smelly-benefits__item { justify-content: start; gap: 18px; padding: 20px 8px; }
+  .smelly-benefits__item + .smelly-benefits__item::before {
+    inset-block: 0 auto;
+    inset-inline: 8px;
+    border-inline-start: 0;
+    border-block-start: 1px solid var(--smelly-line);
+  }
+  .smelly-benefits__icon { flex-basis: 60px; width: 60px; height: 50px; }
+  .smelly-benefits__heading { font-size: 22px; }
   .smelly-section-heading { flex-wrap: wrap; align-items: start; gap: 18px; margin-bottom: 28px; }
   .smelly-section-heading--centred { align-items: center; gap: 0; }
   .smelly-section-heading .smelly-handwritten { font-size: 18px; }
