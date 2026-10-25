@@ -1,6 +1,12 @@
 {% liquid
   assign current_sort = collection.sort_by | default: collection.default_sort_by
   assign clear_url = collection.url | sort_by: current_sort
+  assign collection_query = collection.current_vendor | default: collection.current_type
+  if collection_query != blank
+    assign encoded_query = collection_query | url_encode
+    assign encoded_sort = current_sort | url_encode
+    assign clear_url = request.path | default: collection.url | split: '?' | first | append: '?q=' | append: encoded_query | append: '&sort_by=' | append: encoded_sort
+  endif
   assign all_label = 'smelly.shop_all' | t
   assign all_label = section.settings.all_label | default: all_label
   assign heading = collection.title
@@ -60,10 +66,8 @@
 
   {% if collection.all_products_count > 0 %}
     <form class="smelly-catalogue__controls" action="{{ request.path | default: collection.url }}" method="get" aria-label="{{ 'accessibility.filters' | t }}">
-      {% if collection.current_vendor != blank %}
-        <input type="hidden" name="q" value="{{ collection.current_vendor | escape }}">
-      {% elsif collection.current_type != blank %}
-        <input type="hidden" name="q" value="{{ collection.current_type | escape }}">
+      {% if collection_query != blank %}
+        <input type="hidden" name="q" value="{{ collection_query | escape }}">
       {% endif %}
       <p class="smelly-catalogue__count">{{ 'content.item_count' | t: count: collection.products_count }}</p>
       <div class="smelly-catalogue__filters">
