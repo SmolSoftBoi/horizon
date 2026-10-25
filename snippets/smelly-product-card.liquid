@@ -2,6 +2,7 @@
   Renders a catalogue product using Shopify prices and a native product form.
   @param {product} card_product - The live catalogue product.
   @param {string} section_id - Section identifier for unique form IDs.
+  @param {string} [image_sizes] - Responsive image sizes for the section's column count.
 {% enddoc %}
 
 {% liquid
@@ -37,15 +38,16 @@
     assign price_variant = card_product.variants | where: 'price', card_product.price | first
   endif
   assign product_image_alt = card_product.featured_image.alt | default: card_product.title
+  assign product_image_sizes = image_sizes | default: '(min-width: 990px) 23vw, 45vw'
   assign uses_selling_plans = false
   if card_product.requires_selling_plan or card_product.selling_plan_groups.size > 0
     assign uses_selling_plans = true
   endif
 %}
 <article class="smelly-product-card">
-  <a class="smelly-product-card__image" href="{{ card_product.url }}">
+  <a class="smelly-product-card__image" href="{{ card_product.url }}" aria-label="{{ card_product.title | escape }}">
     {% if card_product.featured_image != blank %}
-      {{ card_product.featured_image | image_url: width: 800 | image_tag: widths: '240, 400, 600, 800', sizes: '(min-width: 990px) 23vw, 45vw', loading: 'lazy', alt: product_image_alt }}
+      {{ card_product.featured_image | image_url: width: 1600 | image_tag: widths: '240, 400, 600, 800, 1200, 1600', sizes: product_image_sizes, loading: 'lazy', alt: product_image_alt }}
     {% else %}
       {{ 'product-1' | placeholder_svg_tag: 'smelly-product-card__placeholder' }}
     {% endif %}

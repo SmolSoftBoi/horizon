@@ -59,8 +59,9 @@
     "featured": {
       "type": "smelly-featured",
       "settings": {
-        "note": "Meet your next scent obsession",
-        "heading": "Small jars. Big moods.",
+        "note": "Small jars. Big moods.",
+        "heading": "Best sellers.",
+        "text": "A little sweet, a little seasonal. Find your next scent obsession.",
         "product_count": 4
       },
       "blocks": {

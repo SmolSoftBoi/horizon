@@ -1,42 +1,93 @@
 {% liquid
-  assign featured_collection = section.settings.collection | default: collections.all
+  assign featured_collection = section.settings.collection
   assign shop_link = featured_collection.url | default: routes.all_products_collection_url
+  assign product_count = section.blocks.size | at_most: section.settings.product_count
+  if featured_collection.products_count > 0
+    assign product_count = featured_collection.products_count | at_most: section.settings.product_count
+  endif
+  assign desktop_columns = product_count | at_most: 4 | at_least: 1
+  assign mobile_columns = product_count | at_most: 2 | at_least: 1
+  assign desktop_gaps = desktop_columns | minus: 1 | times: 24
+  assign maximum_image_width = 1320 | minus: desktop_gaps | divided_by: desktop_columns
+  assign desktop_image_width = 100 | divided_by: desktop_columns
+  assign mobile_image_width = 100 | divided_by: mobile_columns
 %}
-<div class="smelly-shell smelly-section-space">
-  <div class="smelly-section-heading">
-    <div><p class="smelly-handwritten">{{ section.settings.note | escape }}</p><h2>{{ section.settings.heading | escape }}</h2></div>
-    <a class="smelly-text-link" href="{{ shop_link }}">{{ 'smelly.shop_all' | t }}<span aria-hidden="true">↗</span></a>
+{% capture image_sizes %}(min-width: 1440px) {{ maximum_image_width }}px, (min-width: 990px) {{ desktop_image_width }}vw, (min-width: 375px) {{ mobile_image_width }}vw, 100vw{% endcapture %}
+{% if product_count > 0 or request.design_mode %}
+  <div
+    id="SmellyBestSellers-{{ section.id }}"
+    class="smelly-shell smelly-section-space smelly-bestsellers"
+    {% if section.settings.heading != blank %}role="region" aria-labelledby="SmellyBestSellersHeading-{{ section.id }}"{% endif %}
+  >
+    <div class="smelly-section-heading smelly-bestsellers__heading">
+      <div class="smelly-bestsellers__intro">
+        {% if section.settings.note != blank %}
+          <p class="smelly-handwritten">{{ section.settings.note | escape }}</p>
+        {% endif %}
+        {% if section.settings.heading != blank %}
+          <h2 id="SmellyBestSellersHeading-{{ section.id }}">{{ section.settings.heading | escape }}</h2>
+        {% endif %}
+        {% if section.settings.text != blank %}
+          <p class="smelly-bestsellers__description">{{ section.settings.text | escape }}</p>
+        {% endif %}
+      </div>
+      <a class="smelly-text-link" href="{{ shop_link }}">{{ 'smelly.shop_all' | t }}<span aria-hidden="true">↗</span></a>
+    </div>
+    {% if product_count > 0 %}
+      <ul
+        class="smelly-product-grid smelly-bestsellers__grid"
+        role="list"
+        style="--smelly-product-columns: {{ desktop_columns }}; --smelly-product-mobile-columns: {{ mobile_columns }};"
+      >
+        {% for card_product in featured_collection.products limit: section.settings.product_count %}
+          <li class="smelly-bestsellers__item">
+            {% render 'smelly-product-card', card_product: card_product, section_id: section.id, image_sizes: image_sizes %}
+          </li>
+        {% else %}
+          {% for block in section.blocks limit: section.settings.product_count %}
+            {% liquid
+              assign photo_key = block.settings.photo | replace: '-', '_'
+              assign photo_translation_key = 'smelly.photos.' | append: photo_key
+              assign photo_alt = photo_translation_key | t
+              assign fallback_photo = 'smelly-' | append: block.settings.photo | replace: 'bubblegum', 'pink-bubblegum' | append: '.jpg'
+              assign scent_link = block.settings.link | default: shop_link
+              assign scent_name = block.settings.heading | default: photo_alt
+            %}
+            <li class="smelly-bestsellers__item" {{ block.shopify_attributes }}>
+              <article class="smelly-product-card smelly-product-card--editorial">
+                <a class="smelly-product-card__image" href="{{ scent_link }}" aria-label="{{ scent_name | escape }}">
+                  {% render 'smelly-photo', image: block.settings.image, fallback: fallback_photo, alt: photo_alt, sizes: image_sizes %}
+                </a>
+                <div class="smelly-product-card__details">
+                  {% if block.settings.heading != blank %}
+                    <h3><a href="{{ scent_link }}">{{ block.settings.heading | escape }}</a></h3>
+                  {% endif %}
+                  {% if block.settings.note != blank %}
+                    <p class="smelly-handwritten">{{ block.settings.note | escape }}</p>
+                  {% endif %}
+                </div>
+              </article>
+            </li>
+          {% endfor %}
+        {% endfor %}
+      </ul>
+    {% endif %}
+    {% if featured_collection.products_count == blank or featured_collection.products_count == 0 %}
+      {% if request.design_mode %}<p class="smelly-editor-note">{{ 'smelly.editor.featured' | t }}</p>{% endif %}
+    {% endif %}
   </div>
-  <div class="smelly-product-grid">
-    {% for card_product in featured_collection.products limit: section.settings.product_count %}
-      {% render 'smelly-product-card', card_product: card_product, section_id: section.id %}
-    {% else %}
-      {% for block in section.blocks %}
-        {% assign photo_key = block.settings.photo | replace: '-', '_' %}
-        {% assign photo_translation_key = 'smelly.photos.' | append: photo_key %}
-        {% assign photo_alt = photo_translation_key | t %}
-        {% assign fallback_photo = 'smelly-' | append: block.settings.photo | replace: 'bubblegum', 'pink-bubblegum' | append: '.jpg' %}
-        <article class="smelly-product-card smelly-product-card--editorial" {{ block.shopify_attributes }}>
-          <a class="smelly-product-card__image" href="{{ routes.all_products_collection_url }}">
-            {% render 'smelly-photo', image: block.settings.image, fallback: fallback_photo, alt: photo_alt, sizes: '(min-width: 990px) 23vw, 45vw' %}
-          </a>
-          <div class="smelly-product-card__details"><h3>{{ block.settings.heading | escape }}</h3><p class="smelly-handwritten">{{ block.settings.note | escape }}</p></div>
-        </article>
-      {% endfor %}
-    {% endfor %}
-  </div>
-  {% if featured_collection.products_count == 0 and request.design_mode %}<p class="smelly-editor-note">{{ 'smelly.editor.featured' | t }}</p>{% endif %}
-</div>
+{% endif %}
 {% schema %}
 {
-  "name": "Smelly A.F. featured",
+  "name": "Smelly A.F. best sellers",
   "tag": "section",
-  "class": "smelly-section",
+  "class": "smelly-section smelly-bestsellers-section",
   "disabled_on": { "groups": ["header", "footer"] },
   "settings": [
-    { "type": "text", "id": "note", "label": "Handwritten note", "default": "Meet your next scent obsession" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Small jars. Big moods." },
-    { "type": "collection", "id": "collection", "label": "Collection", "info": "Uses all products until you choose a collection. Real products replace the editorial photographs below." },
+    { "type": "text", "id": "note", "label": "Handwritten note", "default": "Small jars. Big moods." },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Best sellers." },
+    { "type": "textarea", "id": "text", "label": "Description", "default": "A little sweet, a little seasonal. Find your next scent obsession." },
+    { "type": "collection", "id": "collection", "label": "Best sellers collection", "info": "Choose a collection and set its sort order to Best selling in Shopify admin, or arrange it manually. Products use the collection’s order. Without products, the editorial photographs below appear without prices or basket buttons." },
     { "type": "range", "id": "product_count", "label": "Products", "min": 2, "max": 8, "step": 1, "default": 4 }
   ],
   "max_blocks": 4,
@@ -44,11 +95,12 @@
     { "type": "text", "id": "heading", "label": "Scent name", "default": "Pink Bubblegum" },
     { "type": "text", "id": "note", "label": "Handwritten note", "default": "Sweet A.F." },
     { "type": "image_picker", "id": "image", "label": "Photograph" },
+    { "type": "url", "id": "link", "label": "Scent link", "info": "Links to the selected collection or all scents when empty." },
     { "type": "select", "id": "photo", "label": "Bundled photograph", "options": [
       { "value": "bubblegum", "label": "Pink Bubblegum" }, { "value": "pumpkin-spice", "label": "Pumpkin Spice" }, { "value": "candy-cane", "label": "Candy Cane" }, { "value": "parma-violets", "label": "Parma Violets" }, { "value": "christmas-spice", "label": "Christmas Spice" }
     ], "default": "bubblegum" }
   ] }],
-  "presets": [{ "name": "Smelly A.F. featured", "blocks": [
+  "presets": [{ "name": "Smelly A.F. best sellers", "blocks": [
     { "type": "scent", "settings": { "heading": "Pink Bubblegum", "note": "Sweet A.F.", "photo": "bubblegum" } },
     { "type": "scent", "settings": { "heading": "Pumpkin Spice", "note": "Spooky A.F.", "photo": "pumpkin-spice" } },
     { "type": "scent", "settings": { "heading": "Candy Cane", "note": "Festive A.F.", "photo": "candy-cane" } },

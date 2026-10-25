@@ -4,7 +4,8 @@ A Smelly A.F. storefront built on this checkout of Shopify Horizon. The theme us
 
 ## Included
 
-- Editable homepage sections: hero, candle details, featured products, ranges, story, journal and questions.
+- Editable homepage sections: hero, candle details, best sellers, ranges, story, journal and questions.
+- Best sellers retains the existing `smelly-featured` section and its saved photograph blocks. Its responsive grid shows up to eight products, with live prices and native basket controls, or the original editorial photographs without sample prices. Names, notes, introduction, photographs and editorial scent links remain editable.
 - Illustrated candle details with pouring-jug, soy-sprig and jar options, serif headings and fine separators. The strip uses equal columns on desktop, centred illustrations on tablet and stacked rows on mobile. Original icon choices remain available; blank entries stay selectable in the editor and are hidden from shoppers.
 - Eight shared vector illustrations use rounded ink outlines. The four range motifs combine opaque colour, finer interior lines and cream highlights: an orange pumpkin with a vine and crescent, a pink ribbon-tied candy cane with green holly, a pleated sweet with a bold pink swirl, and a cream daisy with a golden centre and veined leaves. Opaque layers keep the cane’s stripes behind the ribbon. Small detail icons and heart accents retain their inherited tints and heavier strokes. Wax pours into an open jar with an exposed wick; the closed jar stays unlit.
 - Illustrated range cards use generous arched colour panels, cream artwork backdrops and a divided explore link. The whole card opens its selected collection. Four ranges sit in one row from 990px and two columns below it; fewer ranges stay centred. Custom artwork and existing range settings remain editable. Empty sections stay hidden from shoppers while retaining their introduction in the editor.
@@ -18,7 +19,7 @@ A Smelly A.F. storefront built on this checkout of Shopify Horizon. The theme us
 ## Store setup
 
 1. Upload the supplied theme ZIP as a new, unpublished theme in **Online Store → Themes**. Keep the live theme until the preview has been checked.
-2. In the theme editor, select the featured-product collection. If none is selected, the section uses the store’s all-products collection. With no products, it displays the supplied photographs as an editorial gallery, without invented prices or purchasing controls.
+2. In the theme editor, open **Smelly A.F. best sellers** and select its collection. Set that collection’s product order to **Best selling** in Shopify admin for sales-based ordering, or use a manually curated order. The section preserves the collection’s order and does not calculate sales rankings. Without a populated selected collection, it displays the supplied photographs as an editorial gallery, without invented prices or purchasing controls; these photographs do not establish sales rankings. Optional scent links can point each editorial card to its product page. With no products or photograph blocks, the section stays hidden from shoppers and remains visible in the editor.
 3. Connect **Spooky A.F.**, **Festive A.F.**, **Sweet A.F.** and **Fresh A.F.** to the appropriate collections. Unassigned range cards link to all products.
 4. Create or select the About and Scents pages, assign their matching templates, and select the About page in the homepage story section to show its button. Page titles and page content come from Shopify.
 5. Configure the header’s existing `main-menu` with Shop, Scents, About, Journal and Contact links to the actual store resources. Select the footer menu and contact page. The theme does not create or change navigation, products, collections, pages, blog articles or policies.
@@ -49,6 +50,8 @@ Hand-poured soy wax and 150g are supported by the supplied labels. No mock price
 New interface strings are in the `smelly` namespace in storefront locale files. They use UK English as an explicit fallback in the inherited languages; translate those strings before enabling another storefront language. Existing Horizon translations are preserved.
 
 ## Local verification
+
+- Best sellers: 18 Liquid assertions and 69 browser layouts cover collection order and limits, editorial fallbacks, empty/editor states, escaped and long copy, custom photographs and links, and one to eight products. Product-state layouts pass at 320–2560px in LTR and RTL; prices and basket controls align with longer names. Keyboard focus, product navigation, reduced motion and native basket submission with and without JavaScript also pass. These checks use the actual Liquid and Horizon CSS with local catalogue and HTTP fixtures; live product data, Shopify editor behaviour and real basket processing still require an authenticated store preview. No lint, typecheck, test or build scripts are defined in this checkout.
 
 Run `shopify theme check` from the theme root, then `shopify theme package` to create the upload ZIP. This repository has no lint, typecheck, test or build scripts in `assets/package.json`.
 

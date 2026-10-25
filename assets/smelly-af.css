@@ -428,6 +428,41 @@
 .smelly-product-card__price s { color: #65535a; margin-left: 6px; }
 .smelly-editor-note { padding: 24px 0; font-size: 14px; }
 
+.smelly-bestsellers-section:not(:has(.smelly-shell)) { display: none; }
+.smelly-bestsellers__heading { gap: 24px 48px; }
+.smelly-bestsellers__intro { min-width: 0; width: 100%; max-width: 640px; overflow-wrap: anywhere; }
+.smelly-bestsellers__description { max-width: 490px; margin-top: 18px !important; color: #65535a; }
+.smelly-bestsellers__heading > .smelly-text-link { flex-shrink: 0; min-height: 44px; }
+.smelly-bestsellers .smelly-bestsellers__grid {
+  grid-template-columns: repeat(var(--smelly-product-columns), minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.smelly-bestsellers__item { min-width: 0; }
+.smelly-bestsellers .smelly-product-card { display: flex; flex-direction: column; height: 100%; }
+.smelly-bestsellers .smelly-product-card__image { flex-shrink: 0; border-radius: 10px; }
+.smelly-bestsellers .smelly-product-card__badge { left: auto; inset-inline-start: 12px; }
+.smelly-bestsellers .smelly-product-card__details { display: flex; flex: 1; flex-direction: column; overflow-wrap: anywhere; }
+.smelly-bestsellers .smelly-product-card__price { margin-top: auto !important; padding-top: 10px; }
+.smelly-bestsellers .smelly-product-card__price s { margin-inline: 6px 0; }
+.smelly-bestsellers .smelly-product-form { margin: 0; }
+.smelly-bestsellers .smelly-button--small { min-height: 48px; font-size: 14px; overflow-wrap: anywhere; }
+
+@media (max-width: 989px) {
+  .smelly-bestsellers .smelly-bestsellers__grid { grid-template-columns: repeat(var(--smelly-product-mobile-columns), minmax(0, 1fr)); }
+}
+
+@media (max-width: 749px) {
+  .smelly-bestsellers__heading { flex-direction: column; align-items: start; }
+  .smelly-bestsellers__description { font-size: 14px; margin-top: 14px !important; }
+  .smelly-bestsellers .smelly-button--small { font-size: 13px; padding-inline: 12px; }
+}
+
+@media (max-width: 374px) {
+  .smelly-bestsellers .smelly-bestsellers__grid { grid-template-columns: 1fr; }
+}
+
 .smelly-ranges-section { background: #f7eee5; }
 /* Liquid retains the shell in design mode, even when every range is removed. */
 .smelly-ranges-section:not(:has(.smelly-shell)) { display: none; }
