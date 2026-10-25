@@ -3,6 +3,9 @@
   @param {product} card_product - The live catalogue product.
   @param {string} section_id - Section identifier for unique form IDs.
   @param {string} [image_sizes] - Responsive image sizes for the section's column count.
+  @param {string} [image_loading] - Image loading strategy; defaults to lazy.
+  @param {string} [image_priority] - Image fetch priority; defaults to auto.
+  @param {string} [product_view_context] - Context for Horizon's standard product view event.
 {% enddoc %}
 
 {% liquid
@@ -39,15 +42,20 @@
   endif
   assign product_image_alt = card_product.featured_image.alt | default: card_product.title
   assign product_image_sizes = image_sizes | default: '(min-width: 990px) 23vw, 45vw'
+  assign product_image_loading = image_loading | default: 'lazy'
+  assign product_image_priority = image_priority | default: 'auto'
   assign uses_selling_plans = false
   if card_product.requires_selling_plan or card_product.selling_plan_groups.size > 0
     assign uses_selling_plans = true
   endif
 %}
+{% if product_view_context != blank %}
+  <product-component class="smelly-product-card__view" view-event-payload="{{ card_product | standard_event_data: 'view', context: product_view_context | escape }}">
+{% endif %}
 <article class="smelly-product-card">
   <a class="smelly-product-card__image" href="{{ card_product.url }}" aria-label="{{ card_product.title | escape }}">
     {% if card_product.featured_image != blank %}
-      {{ card_product.featured_image | image_url: width: 1600 | image_tag: widths: '240, 400, 600, 800, 1200, 1600', sizes: product_image_sizes, loading: 'lazy', alt: product_image_alt }}
+      {{ card_product.featured_image | image_url: width: 1600 | image_tag: widths: '240, 400, 600, 800, 1200, 1600', sizes: product_image_sizes, loading: product_image_loading, fetchpriority: product_image_priority, alt: product_image_alt }}
     {% else %}
       {{ 'product-1' | placeholder_svg_tag: 'smelly-product-card__placeholder' }}
     {% endif %}
@@ -86,6 +94,7 @@
     <a class="smelly-button smelly-button--small smelly-button--outline" href="{{ card_product.url }}">{{ 'smelly.choose_options' | t }}<span class="visually-hidden"> — {{ card_product.title | escape }}</span></a>
   {% endif %}
 </article>
+{% if product_view_context != blank %}</product-component>{% endif %}
 
 {% javascript %}
   document.addEventListener('submit', (event) => {
