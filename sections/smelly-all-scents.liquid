@@ -156,11 +156,9 @@
           {% liquid
             assign image_loading = 'lazy'
             assign image_priority = 'auto'
-            if forloop.index <= 4
+            if forloop.first
               assign image_loading = 'eager'
-              if forloop.first
-                assign image_priority = 'high'
-              endif
+              assign image_priority = 'high'
             endif
           %}
           <li>
