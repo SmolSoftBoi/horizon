@@ -16,6 +16,7 @@
   assign cart_quantity = cart | item_count_for_variant: product_variant.id
   assign quantity_to_add = minimum_quantity
   # Include existing basket units when checking increments, maximums and stock.
+  # Shopify requires rule minima and maxima to be multiples of the increment.
   assign resulting_quantity = cart_quantity | plus: quantity_to_add
   assign quantity_remainder = resulting_quantity | modulo: quantity_increment
   if quantity_remainder > 0
