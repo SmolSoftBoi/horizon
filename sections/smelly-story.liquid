@@ -1,17 +1,62 @@
-{% assign story_alt = 'smelly.photos.christmas_spice' | t %}
-<div class="smelly-story smelly-shell smelly-section-space">
-  <div class="smelly-story__photo">
-    {% render 'smelly-photo', image: section.settings.image, fallback: 'smelly-christmas-spice.jpg', alt: story_alt %}
-    <span class="smelly-story__photo-caption smelly-handwritten">{{ section.settings.caption | escape }}</span>
+{% liquid
+  assign story_alt = 'smelly.photos.christmas_spice' | t
+  if section.settings.image != blank
+    assign story_alt = section.settings.image_alt | default: shop.name
+  endif
+  assign story_link = section.settings.link | default: section.settings.page.url
+  assign has_copy = false
+  if section.settings.note != blank or section.settings.heading != blank or section.settings.text != blank or section.settings.signature != blank
+    assign has_copy = true
+  endif
+  if story_link != blank and section.settings.button_label != blank
+    assign has_copy = true
+  endif
+%}
+
+{% if has_copy or section.settings.image != blank or section.settings.caption != blank or request.design_mode %}
+  <div class="smelly-story smelly-shell smelly-section-space{% unless has_copy %} smelly-story--photo-only{% endunless %}">
+    <figure class="smelly-story__photo">
+      {% render 'smelly-photo',
+        image: section.settings.image,
+        fallback: 'smelly-christmas-spice.jpg',
+        alt: story_alt,
+        sizes: '(min-width: 1100px) 440px, (min-width: 750px) 38vw, (min-width: 440px) 336px, calc(100vw - 84px)'
+      %}
+      {% if section.settings.caption != blank %}
+        <figcaption class="smelly-story__photo-caption smelly-handwritten">{{ section.settings.caption | escape }}</figcaption>
+      {% endif %}
+    </figure>
+
+    {% if has_copy %}
+      <div class="smelly-story__copy">
+        {% if section.settings.note != blank %}
+          <p class="smelly-handwritten">{{ section.settings.note | escape }}</p>
+        {% endif %}
+        {% if section.settings.heading != blank %}
+          {% if section.settings.main_heading %}
+            <h1 class="smelly-story__heading">{{ section.settings.heading | escape | newline_to_br }}</h1>
+          {% else %}
+            <h2 class="smelly-story__heading">{{ section.settings.heading | escape | newline_to_br }}</h2>
+          {% endif %}
+        {% endif %}
+        {% if section.settings.text != blank %}
+          <div class="smelly-story__text">{{ section.settings.text }}</div>
+        {% endif %}
+        {% if story_link != blank and section.settings.button_label != blank %}
+          <a class="smelly-button" href="{{ story_link | escape }}">
+            <span>{{ section.settings.button_label | escape }}</span><span aria-hidden="true">↗</span>
+          </a>
+        {% endif %}
+        {% if section.settings.signature != blank %}
+          <div class="smelly-story__signature">
+            {% render 'smelly-illustration', kind: 'heart' %}
+            <span class="smelly-handwritten">{{ section.settings.signature | escape }}</span>
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
   </div>
-  <div class="smelly-story__copy">
-    <p class="smelly-handwritten">{{ section.settings.note | escape }}</p>
-    {% if section.settings.main_heading %}<h1>{{ section.settings.heading | escape }}</h1>{% else %}<h2>{{ section.settings.heading | escape }}</h2>{% endif %}
-    <div class="smelly-story__text">{{ section.settings.text }}</div>
-    {% if section.settings.page != blank %}<a class="smelly-button smelly-button--outline" href="{{ section.settings.page.url }}">{{ section.settings.button_label | escape }}<span aria-hidden="true">↗</span></a>{% endif %}
-    <div class="smelly-story__signature">{% render 'smelly-illustration', kind: 'heart' %}<span class="smelly-handwritten">{{ section.settings.signature | escape }}</span></div>
-  </div>
-</div>
+{% endif %}
 {% schema %}
 {
   "name": "Smelly A.F. story",
@@ -20,15 +65,17 @@
   "disabled_on": { "groups": ["header", "footer"] },
   "settings": [
     { "type": "checkbox", "id": "main_heading", "label": "Use as page heading", "default": false },
-    { "type": "text", "id": "note", "label": "Handwritten note", "default": "Hello, we’re Smelly A.F." },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "A little candle. A big A.F. personality." },
+    { "type": "text", "id": "note", "label": "Handwritten note", "default": "Good scents. Better days." },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "Create a cosier,\nhappier home." },
     { "type": "richtext", "id": "text", "label": "Text", "default": "<p>We think a good candle should bring a little joy to the everyday. Colourful wax. Scents with character. A name that makes you smile.</p><p>From sweet-shop nostalgia to your favourite time of year, find a little jar that feels like you.</p>" },
     { "type": "image_picker", "id": "image", "label": "Photograph" },
-    { "type": "text", "id": "caption", "label": "Photograph caption", "default": "Good scents. Better days." },
+    { "type": "text", "id": "image_alt", "label": "Image description", "info": "Describe your uploaded photograph. Its own alt text takes priority; otherwise this description or the store name is used." },
+    { "type": "text", "id": "caption", "label": "Photograph caption", "default": "A little jar of happy." },
+    { "type": "url", "id": "link", "label": "Button link", "info": "Takes priority over the story page. Leave both links blank to hide the button." },
     { "type": "page", "id": "page", "label": "Story page" },
-    { "type": "text", "id": "button_label", "label": "Button label", "default": "A little about us" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop all scents" },
     { "type": "text", "id": "signature", "label": "Signature", "default": "Homes should smell amazing. A.F." }
   ],
-  "presets": [{ "name": "Smelly A.F. story" }]
+  "presets": [{ "name": "Smelly A.F. cosier home", "settings": { "link": "shopify://collections/all" } }]
 }
 {% endschema %}
