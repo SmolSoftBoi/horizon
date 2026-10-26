@@ -157,11 +157,12 @@
       "type": "smelly-story",
       "settings": {
         "main_heading": false,
-        "note": "Hello, we’re Smelly A.F.",
-        "heading": "A little candle. A big A.F. personality.",
+        "note": "Good scents. Better days.",
+        "heading": "Create a cosier,\nhappier home.",
         "text": "<p>We think a good candle should bring a little joy to the everyday. Colourful wax. Scents with character. A name that makes you smile.</p><p>From sweet-shop nostalgia to your favourite time of year, find a little jar that feels like you.</p>",
-        "caption": "Good scents. Better days.",
-        "button_label": "A little about us",
+        "caption": "A little jar of happy.",
+        "link": "shopify://collections/all",
+        "button_label": "Shop all scents",
         "signature": "Homes should smell amazing. A.F."
       }
     },

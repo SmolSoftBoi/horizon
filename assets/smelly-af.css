@@ -640,17 +640,22 @@
 }
 
 .smelly-story-section { background: var(--smelly-blush); }
-.smelly-story { display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); align-items: center; gap: 100px; padding-block: 80px; }
-.smelly-story__photo { position: relative; min-width: 0; padding: 10px 10px 64px; background: #fffdf9; transform: rotate(-4deg); margin: 8px; }
-.smelly-story__photo img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; object-position: 50% 40%; }
-.smelly-story__copy { min-width: 0; }
-.smelly-story__photo-caption { position: absolute; left: 10px; right: 10px; bottom: 16px; text-align: center; color: var(--smelly-ink) !important; }
+.smelly-story-section:not(:has(.smelly-story)) { display: none; }
+.smelly-story { display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); align-items: center; gap: clamp(44px, 7vw, 100px); padding-block: 88px; }
+.smelly-story.smelly-story--photo-only { grid-template-columns: minmax(0, 1fr); }
+.smelly-story__photo { min-width: 0; width: min(100% - 24px, 464px); justify-self: center; padding: 12px; margin: 12px; background: #fffdf9; transform: rotate(-3deg); box-shadow: 0 6px 18px #261a2114; }
+.smelly-story__photo img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 40%; }
+.smelly-story__copy { min-width: 0; max-width: 560px; overflow-wrap: anywhere; }
+.smelly-story .smelly-story__photo-caption { margin-top: 18px; margin-bottom: 8px; text-align: center; color: var(--smelly-ink); font-size: 21px; overflow-wrap: anywhere; }
 .smelly-story__copy > .smelly-handwritten { margin-bottom: 18px; color: #a51240; }
-.smelly-story__copy h1 { font-size: clamp(42px, 5vw, 72px); line-height: 1.05; letter-spacing: -3px; }
-.smelly-story__text { margin-block: 22px 28px; max-width: 440px; font-size: 15px; line-height: 1.8; }
+.smelly-story .smelly-story__heading { font-size: clamp(38px, 4.6vw, 66px); line-height: 1.06; letter-spacing: -0.045em; }
+.smelly-story__text { margin-block: 24px 30px; max-width: 47ch; font-size: 16px; line-height: 1.75; }
 .smelly-story__text p + p { margin-top: 16px; }
-.smelly-story__signature { display: flex; align-items: center; gap: 10px; margin-top: 26px; }
-.smelly-story__signature svg { width: 48px; height: 40px; color: var(--smelly-pink); }
+.smelly-story .smelly-button { max-width: 100%; gap: 22px; text-align: start; }
+.smelly-story .smelly-button > span:first-child { min-width: 0; }
+.smelly-story .smelly-button > span[aria-hidden] { flex-shrink: 0; }
+.smelly-story__signature { display: flex; align-items: center; gap: 10px; margin-top: 28px; }
+.smelly-story__signature svg { flex: 0 0 48px; width: 48px; height: 40px; color: var(--smelly-pink); }
 .smelly-story__signature .smelly-handwritten { font-size: 18px; color: var(--smelly-ink); }
 
 .smelly-journal-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; }
@@ -738,12 +743,12 @@
   .smelly-range-card__link { gap: 8px; min-height: 54px; padding-block: 12px; font-size: 12px; }
   .smelly-range-card__arrow { flex-basis: 22px; width: 22px; height: 22px; font-size: 17px; }
   .smelly-story { grid-template-columns: minmax(0, 1fr); gap: 38px; padding-block: 50px; }
-  .smelly-story__photo { width: min(360px, calc(100% - 20px)); margin-inline: auto; padding-bottom: 52px; }
-  .smelly-story__photo-caption { font-size: 18px; }
-  .smelly-story__copy { padding-top: 4px; }
-  .smelly-story__copy h1 { font-size: 45px; letter-spacing: -2px; }
+  .smelly-story__photo { width: min(360px, calc(100% - 24px)); margin-inline: auto; }
+  .smelly-story .smelly-story__photo-caption { font-size: 18px; }
+  .smelly-story__copy { width: 100%; max-width: 520px; margin-inline: auto; padding-top: 4px; }
+  .smelly-story .smelly-story__heading { font-size: clamp(36px, 8vw, 46px); }
   .smelly-story__signature .smelly-handwritten { font-size: 16px; }
-  .smelly-story__text { font-size: 14px; }
+  .smelly-story__text { font-size: 15px; }
   .smelly-faq { grid-template-columns: 1fr; gap: 24px; }
   .smelly-faq__item summary { font-size: 14px; }
   .smelly-journal-grid { grid-template-columns: 1fr; gap: 36px; }
