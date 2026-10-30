@@ -1,0 +1,150 @@
+{% liquid
+  assign block_settings = block.settings
+  assign care_content = block_settings.care_text | strip_html | strip
+  assign has_care = false
+  if block_settings.care_heading != blank and care_content != blank
+    assign has_care = true
+  endif
+
+  assign has_policies = false
+  if block_settings.show_policies and block_settings.policy_heading != blank
+    if shop.shipping_policy.body != blank or shop.refund_policy.body != blank
+      assign has_policies = true
+    endif
+  endif
+%}
+
+{% if has_care or has_policies or request.design_mode %}
+  <div class="smelly-product-details" {{ block.shopify_attributes }}>
+    {% if has_care %}
+      <details class="smelly-product-details__row">
+        <summary>
+          {{ block_settings.care_heading | escape }}
+          <span class="svg-wrapper" aria-hidden="true">{{ 'icon-plus.svg' | inline_asset_content }}</span>
+        </summary>
+        <div class="smelly-product-details__content rte">{{ block_settings.care_text }}</div>
+      </details>
+    {% endif %}
+
+    {% if has_policies %}
+      <details class="smelly-product-details__row">
+        <summary>
+          {{ block_settings.policy_heading | escape }}
+          <span class="svg-wrapper" aria-hidden="true">{{ 'icon-plus.svg' | inline_asset_content }}</span>
+        </summary>
+        <div class="smelly-product-details__content rte">
+          <ul role="list">
+            {% if shop.shipping_policy.body != blank %}
+              <li><a href="{{ shop.shipping_policy.url }}">{{ shop.shipping_policy.title | escape }}</a></li>
+            {% endif %}
+            {% if shop.refund_policy.body != blank %}
+              <li><a href="{{ shop.refund_policy.url }}">{{ shop.refund_policy.title | escape }}</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </details>
+    {% endif %}
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .smelly-product-details {
+    width: 100%;
+    color: var(--smelly-ink);
+    overflow-wrap: anywhere;
+  }
+
+  .smelly-product-details__row {
+    border-block-start: 1px solid var(--smelly-line);
+  }
+
+  .smelly-product-details__row:last-child {
+    border-block-end: 1px solid var(--smelly-line);
+  }
+
+  .smelly-product-details__row summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    min-height: 56px;
+    padding-block: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .smelly-product-details__row summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .smelly-product-details__row summary .svg-wrapper {
+    flex: 0 0 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  .smelly-product-details__row[open] summary .svg-wrapper {
+    transform: rotate(45deg);
+  }
+
+  .smelly-product-details__content {
+    padding-block-end: 20px;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .smelly-product-details__content > :first-child {
+    margin-block-start: 0;
+  }
+
+  .smelly-product-details__content > :last-child {
+    margin-block-end: 0;
+  }
+
+  .smelly-product-details :is(summary, a):focus-visible {
+    outline: 2px solid var(--smelly-pink);
+    outline-offset: 4px;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Smelly A.F. care & info",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "care_heading",
+      "label": "Care heading",
+      "default": "Candle care"
+    },
+    {
+      "type": "richtext",
+      "id": "care_text",
+      "label": "Care information",
+      "default": "<p>Follow the care and safety instructions supplied with your candle. Always remove the lid before lighting. Never leave a burning candle unattended, and keep it away from children, pets and anything that could catch fire.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_policies",
+      "label": "Show store policy links",
+      "default": true,
+      "info": "Uses the shipping and refund policies configured in Shopify. Links stay hidden until policies are available."
+    },
+    {
+      "type": "text",
+      "id": "policy_heading",
+      "label": "Policy heading",
+      "default": "Delivery & returns",
+      "visible_if": "{{ block.settings.show_policies }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Smelly A.F. care & info",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}
