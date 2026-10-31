@@ -166,6 +166,16 @@
         "signature": "Homes should smell amazing. A.F."
       }
     },
+    "about": {
+      "type": "smelly-about",
+      "settings": {
+        "note": "Hello, we’re Smelly A.F.",
+        "heading": "The little candle company\nwith a big A.F. personality.",
+        "text": "<p>Candles should smell brilliant and make you smile. That’s the idea behind Smelly A.F.: hand-poured soy wax, colourful candles and a playful streak.</p><p>From sweet-shop nostalgia to a little seasonal mischief, we’re here for the scents that feel like you. Pick your mood. Find your A.F.</p>",
+        "caption": "A little jar. A lot of A.F.",
+        "button_label": "A little about us"
+      }
+    },
     "journal": {
       "type": "smelly-journal",
       "settings": {
@@ -207,6 +217,7 @@
     "featured",
     "ranges",
     "story",
+    "about",
     "journal",
     "questions"
   ]
