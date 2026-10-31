@@ -16,19 +16,19 @@
           "type": "_product-media-gallery",
           "static": true,
           "settings": {
-            "media_presentation": "grid",
+            "media_presentation": "carousel",
             "media_columns": "two",
             "image_gap": 4,
             "large_first_image": false,
             "icons_style": "arrow",
-            "slideshow_controls_style": "counter",
+            "slideshow_controls_style": "thumbnails",
             "slideshow_mobile_controls_style": "dots",
-            "thumbnail_position": "right",
-            "thumbnail_width": 44,
-            "aspect_ratio": "adapt",
-            "constrain_to_viewport": true,
+            "thumbnail_position": "bottom",
+            "thumbnail_width": 64,
+            "aspect_ratio": "1",
+            "constrain_to_viewport": false,
             "media_fit": "contain",
-            "media_radius": 0,
+            "media_radius": 16,
             "extend_media": false,
             "zoom": true,
             "video_loop": false,
@@ -50,7 +50,7 @@
             "custom_width_mobile": 100,
             "height": "fit",
             "details_position": "flex-start",
-            "gap": 28,
+            "gap": 22,
             "sticky_details_desktop": true,
             "background_media": "none",
             "video_position": "cover",
@@ -59,7 +59,7 @@
             "border_width": 1,
             "border_opacity": 100,
             "border_radius": 0,
-            "padding-block-start": 24,
+            "padding-block-start": 8,
             "padding-block-end": 24,
             "padding-inline-start": 0,
             "padding-inline-end": 0
@@ -76,7 +76,7 @@
                 "align_baseline": false,
                 "horizontal_alignment_flex_direction_column": "flex-start",
                 "vertical_alignment_flex_direction_column": "center",
-                "gap": 12,
+                "gap": 16,
                 "width": "fill",
                 "custom_width": 100,
                 "width_mobile": "fill",
@@ -108,10 +108,10 @@
                   "name": "t:names.title",
                   "settings": {
                     "text": "<h1>{{ closest.product.title }}</h1>",
-                    "width": "fit-content",
+                    "width": "100%",
                     "max_width": "normal",
                     "alignment": "left",
-                    "type_preset": "h3",
+                    "type_preset": "h1",
                     "font": "var(--font-body--family)",
                     "font_size": "1rem",
                     "line_height": "normal",
@@ -155,19 +155,6 @@
                 "price_tVjtKg"
               ]
             },
-            "divider_VJhene": {
-              "type": "_divider",
-              "name": "t:names.divider",
-              "settings": {
-                "thickness": 1,
-                "corner_radius": "square",
-                "divider_color": "{{ settings.color_palette.color3 }}",
-                "width_percent": 100,
-                "padding-block-start": 0,
-                "padding-block-end": 0
-              },
-              "blocks": {}
-            },
             "variant_picker_R3rGDr": {
               "type": "variant-picker",
               "settings": {
@@ -184,7 +171,7 @@
             "buy_buttons_eYQEYi": {
               "type": "buy-buttons",
               "settings": {
-                "stacking": true,
+                "stacking": false,
                 "show_pickup_availability": false,
                 "gift_card_form": true,
                 "padding-block-start": 0,
@@ -240,14 +227,24 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
+            },
+            "smelly_care": {
+              "type": "smelly-product-details",
+              "settings": {
+                "care_heading": "Candle care",
+                "care_text": "<p>Follow the care and safety instructions supplied with your candle. Always remove the lid before lighting. Never leave a burning candle unattended, and keep it away from children, pets and anything that could catch fire.</p>",
+                "show_policies": true,
+                "policy_heading": "Delivery & returns"
+              },
+              "blocks": {}
             }
           },
           "block_order": [
             "group_icgrde",
-            "divider_VJhene",
+            "text_aEtTtq",
             "variant_picker_R3rGDr",
             "buy_buttons_eYQEYi",
-            "text_aEtTtq"
+            "smelly_care"
           ]
         },
         "disclosures": {
@@ -265,12 +262,17 @@
       "settings": {
         "content_width": "content-center-aligned",
         "desktop_media_position": "left",
-        "equal_columns": false,
+        "equal_columns": true,
         "limit_details_width": false,
         "gap": 48,
-        "padding-block-start": 0,
-        "padding-block-end": 0
-      }
+        "padding-block-start": 12,
+        "padding-block-end": 64,
+        "smelly_product_style": true,
+        "smelly_caption": "Small jar. Big mood.",
+        "enable_sticky_add_to_cart": true,
+        "background_color": "#fff9ef"
+      },
+      "name": "Smelly A.F. product"
     },
     "product_recommendations_qggXJq": {
       "type": "product-recommendations",

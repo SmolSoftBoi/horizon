@@ -182,6 +182,121 @@
 %}
 
 {% stylesheet %}
+  .product-information.smelly-product {
+    color: var(--smelly-ink);
+    overflow-wrap: anywhere;
+    row-gap: 0;
+  }
+
+  .smelly-product.section--page-width {
+    --page-width: calc(1240px + var(--page-margin) * 2);
+  }
+
+  .smelly-product__navigation {
+    grid-column: 2;
+    padding-block-end: 24px;
+  }
+
+  .smelly-product__back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    color: var(--smelly-ink);
+    font-size: 14px;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .smelly-product__back-link:hover {
+    color: var(--smelly-pink);
+  }
+
+  [dir='rtl'] .smelly-product__back-link span {
+    transform: scaleX(-1);
+  }
+
+  .smelly-product .product-details,
+  .smelly-product .product-details > .group-block {
+    min-width: 0;
+  }
+
+  .smelly-product .product-details h1 {
+    margin: 0;
+    font-family: var(--smelly-serif);
+    font-size: clamp(36px, 4.2vw, 60px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.045em;
+    text-wrap: pretty;
+  }
+
+  .smelly-product .product-details .price {
+    font-size: 22px;
+    font-weight: 600;
+  }
+
+  .smelly-product .product-details .rte {
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  .smelly-product .product-details .rte a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .smelly-product .product-media-container {
+    background: var(--smelly-blush);
+    overflow: clip;
+  }
+
+  .smelly-product__caption {
+    margin: 16px 0 0;
+    color: var(--smelly-pink);
+    font: italic 22px/1.4 'Bradley Hand', 'Segoe Print', cursive;
+    text-align: center;
+  }
+
+  .smelly-product .add-to-cart-button {
+    min-height: 54px;
+    border: 1px solid var(--smelly-pink);
+    border-radius: 100px;
+    background: var(--smelly-pink);
+    color: #fff;
+    box-shadow: none;
+  }
+
+  .smelly-product .add-to-cart-button:hover:not(:disabled) {
+    border-color: #a51240;
+    background: #a51240;
+  }
+
+  .smelly-product .add-to-cart-button:disabled {
+    border-color: var(--smelly-line);
+    background: var(--smelly-line);
+    color: #65595e;
+  }
+
+  .smelly-product .quantity-selector {
+    border-radius: 100px;
+  }
+
+  .smelly-product :is(a, button, input, summary, label:has(input)):focus-visible {
+    outline: 2px solid var(--smelly-pink);
+    outline-offset: 4px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .smelly-product .product-details > .group-block {
+      padding-block-start: 28px;
+    }
+
+    .smelly-product__navigation {
+      padding-block-end: 12px;
+    }
+  }
+
   .sticky-add-to-cart__bar {
     position: fixed;
     bottom: max(20px, var(--safe-area-inset-bottom));
@@ -385,6 +500,23 @@
     "groups": ["header", "footer"]
   },
   "settings": [
+    {
+      "type": "header",
+      "content": "Smelly A.F."
+    },
+    {
+      "type": "checkbox",
+      "id": "smelly_product_style",
+      "label": "Use Smelly A.F. product styling",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "smelly_caption",
+      "label": "Photograph caption",
+      "default": "Small jar. Big mood.",
+      "visible_if": "{{ section.settings.smelly_product_style }}"
+    },
     {
       "type": "header",
       "content": "t:content.layout"
