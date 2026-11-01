@@ -356,6 +356,7 @@
     "explore_range": "Explore the range",
     "read_journal": "Visit the journal",
     "read_story": "Read the story",
+    "testimonial_rating": "Rated {{ rating }} out of 5 stars",
     "privacy_policy": "Privacy policy",
     "footer_navigation": "Footer navigation",
     "explore": "Explore",
@@ -379,7 +380,10 @@
     },
     "editor": {
       "featured": "Choose a collection to show real products, prices and Add to basket buttons. These editorial photographs show the supplied candles without sample prices or stock.",
-      "journal": "Select a blog with published articles. This section stays hidden from shoppers until articles are available."
+      "journal": "Select a blog with published articles. This section stays hidden from shoppers until articles are available.",
+      "testimonials": "Add genuine customer quotes and names. Only complete testimonials appear to shoppers.",
+      "testimonial_quote": "Add a customer’s own words here.",
+      "testimonial_name": "Customer name"
     }
   }
 }
