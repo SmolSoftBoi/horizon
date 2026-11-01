@@ -682,11 +682,43 @@
 .smelly-about__caption .smelly-illustration { flex: 0 0 42px; width: 42px; height: 36px; color: var(--smelly-pink); stroke-width: 4.5; }
 .smelly-about__caption .smelly-handwritten { min-width: 0; color: var(--smelly-ink); font-size: 20px; }
 
-.smelly-journal-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; }
-.smelly-journal-card__image { display: block; aspect-ratio: 4 / 3; margin-bottom: 20px; border-radius: 5px; overflow: hidden; }
-.smelly-journal-card img { width: 100%; height: 100%; object-fit: cover; }
-.smelly-journal-card h3 { font-size: 25px; line-height: 1.2; letter-spacing: -0.6px; }
-.smelly-journal-card p { font-size: 14px; margin-block: 14px; }
+.smelly-journal-section:not(:has(.smelly-journal)) { display: none; }
+.smelly-journal { border-block-start: 1px solid var(--smelly-line); }
+.smelly-journal__heading { flex-wrap: wrap; }
+.smelly-journal__intro { flex: 1 1 420px; min-width: 0; max-width: min(100%, 660px); overflow-wrap: anywhere; }
+.smelly-journal .smelly-journal__description { max-width: 52ch; margin-top: 18px; color: #65535a; }
+.smelly-journal__heading > .smelly-button { flex-shrink: 0; max-width: 100%; gap: 20px; }
+.smelly-journal-grid {
+  display: grid;
+  grid-template-columns: repeat(calc(var(--smelly-journal-columns) * 2), minmax(0, 1fr));
+  gap: 40px 24px;
+  max-width: var(--smelly-journal-max-width);
+  padding: 0;
+  margin: 0 auto;
+  list-style: none;
+}
+.smelly-journal__item { min-width: 0; grid-column: span 2; }
+@media (min-width: 750px) {
+  /* With up to six cards, only the fourth or fifth card can leave an incomplete row. */
+  .smelly-journal__item:nth-child(4):last-child { grid-column: 3 / span 2; }
+  .smelly-journal__item:nth-child(4):nth-last-child(2) { grid-column: 2 / span 2; }
+}
+.smelly-journal-card { height: 100%; }
+.smelly-journal-card__link { display: flex; flex-direction: column; height: 100%; min-width: 0; border-radius: 8px; }
+.smelly-journal-card__image { position: relative; display: grid; place-items: center; aspect-ratio: 4 / 3; border-radius: 8px; overflow: hidden; background: var(--smelly-blush); }
+.smelly-journal-card__image img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
+.smelly-journal__item:nth-child(3n + 2) .smelly-journal-card__image { background: var(--smelly-lilac); }
+.smelly-journal__item:nth-child(3n) .smelly-journal-card__image { background: #dbe5d3; }
+.smelly-journal-card__image--illustration { color: var(--smelly-ink); }
+.smelly-journal-card__image--illustration .smelly-illustration { width: 45%; height: auto; }
+.smelly-journal-card__content { display: flex; flex: 1; flex-direction: column; align-items: start; padding-top: 22px; overflow-wrap: anywhere; }
+.smelly-journal-card__content > * { max-width: 100%; }
+.smelly-journal-card__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-bottom: 14px; color: #65535a; font-size: 12px; }
+.smelly-journal-card__tag { padding: 4px 12px; border-radius: 20px; background: var(--smelly-blush); color: #a51240; }
+.smelly-journal-card h3 { font-size: clamp(24px, 2.1vw, 30px); line-height: 1.17; letter-spacing: -0.7px; }
+.smelly-journal-card__link:is(:hover, :focus-visible) h3 { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.16em; }
+.smelly-journal-card .smelly-journal-card__excerpt { margin-top: 14px; margin-bottom: 4px; color: #65535a; font-size: 15px; line-height: 1.7; }
+.smelly-journal-card__read { margin-top: auto; padding-top: 20px; min-height: 44px; }
 .smelly-faq { display: grid; grid-template-columns: 1fr 1.3fr; gap: 80px; }
 .smelly-faq h2 { margin-top: 12px; }
 .smelly-faq__item { border-bottom: 1px solid var(--smelly-line); }
@@ -781,7 +813,12 @@
   .smelly-about__caption .smelly-handwritten { font-size: 18px; }
   .smelly-faq { grid-template-columns: 1fr; gap: 24px; }
   .smelly-faq__item summary { font-size: 14px; }
-  .smelly-journal-grid { grid-template-columns: 1fr; gap: 36px; }
+  .smelly-journal__heading { flex-direction: column; gap: 24px; }
+  .smelly-journal__intro { flex-basis: auto; }
+  .smelly-journal .smelly-journal__description { font-size: 15px; }
+  .smelly-journal-grid { grid-template-columns: minmax(0, 1fr); gap: 36px; max-width: 424px; }
+  .smelly-journal__item { grid-column: auto; }
+  .smelly-journal-card__content { padding-top: 18px; }
   .smelly-newsletter { grid-template-columns: 1fr; gap: 30px; padding-block: 42px; }
   .smelly-newsletter h2 { font-size: 36px; }
   .smelly-newsletter__input-row { padding-left: 14px; }

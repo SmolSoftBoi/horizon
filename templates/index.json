@@ -180,7 +180,12 @@
       "type": "smelly-journal",
       "settings": {
         "note": "Notes from our little candle corner",
-        "heading": "A little light reading."
+        "heading": "A little light reading.",
+        "text": "Candle care, scent inspiration and little ways to make yourself at home.",
+        "article_count": 3,
+        "show_tags": true,
+        "show_date": true,
+        "show_excerpt": true
       }
     },
     "questions": {

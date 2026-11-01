@@ -1,32 +1,122 @@
-{% if section.settings.blog.articles_count > 0 or request.design_mode %}
-  <div class="smelly-shell smelly-section-space">
-    <div class="smelly-section-heading"><div><p class="smelly-handwritten">{{ section.settings.note | escape }}</p><h2>{{ section.settings.heading | escape }}</h2></div>
-      {% if section.settings.blog != blank %}<a class="smelly-text-link" href="{{ section.settings.blog.url }}">{{ 'smelly.read_journal' | t }}<span aria-hidden="true">↗</span></a>{% endif %}
+{% liquid
+  assign journal_blog = section.settings.blog
+  assign article_count = journal_blog.articles_count | default: 0 | at_most: section.settings.article_count
+  assign desktop_columns = article_count | at_least: 1 | at_most: 3
+  assign desktop_gaps = desktop_columns | minus: 1 | times: 24
+  assign desktop_spacing = desktop_gaps | plus: 112
+  assign tablet_spacing = desktop_gaps | plus: 64
+  assign maximum_grid_width = desktop_columns | times: 424 | plus: desktop_gaps
+  assign maximum_shell_width = maximum_grid_width | plus: 112
+%}
+{% comment %}Match the 424px card cap, 24px gaps and 112/64/40px shell gutters in smelly-af.css.{% endcomment %}
+{% capture image_sizes %}(min-width: {{ maximum_shell_width }}px) 424px, (min-width: 1101px) calc((100vw - {{ desktop_spacing }}px) / {{ desktop_columns }}), (min-width: 750px) min(424px, calc((100vw - {{ tablet_spacing }}px) / {{ desktop_columns }})), (min-width: 464px) 424px, calc(100vw - 40px){% endcapture %}
+
+{% if article_count > 0 or request.design_mode %}
+  <div
+    class="smelly-journal smelly-shell smelly-section-space"
+    {% if section.settings.heading != blank %}role="region" aria-labelledby="SmellyJournalHeading-{{ section.id }}"{% endif %}
+  >
+    <div class="smelly-section-heading smelly-journal__heading">
+      <div class="smelly-journal__intro">
+        {% if section.settings.note != blank %}
+          <p class="smelly-handwritten">{{ section.settings.note | escape }}</p>
+        {% endif %}
+        {% if section.settings.heading != blank %}
+          <h2 id="SmellyJournalHeading-{{ section.id }}">{{ section.settings.heading | escape }}</h2>
+        {% endif %}
+        {% if section.settings.text != blank %}
+          <p class="smelly-journal__description">{{ section.settings.text | escape }}</p>
+        {% endif %}
+      </div>
+      {% if article_count > 0 %}
+        <a class="smelly-button smelly-button--outline" href="{{ journal_blog.url | escape }}">
+          <span>{{ 'smelly.read_journal' | t }}</span><span aria-hidden="true">↗</span>
+        </a>
+      {% endif %}
     </div>
-    <div class="smelly-journal-grid">
-      {% for article in section.settings.blog.articles limit: 3 %}
-        <article class="smelly-journal-card">
-          {% if article.image != blank %}<a class="smelly-journal-card__image" href="{{ article.url }}">{{ article.image | image_url: width: 900 | image_tag: widths: '300, 450, 600, 900', sizes: '(min-width: 750px) 30vw, 90vw', loading: 'lazy' }}</a>{% endif %}
-          <h3><a href="{{ article.url }}">{{ article.title | escape }}</a></h3>
-          <p>{{ article.excerpt_or_content | strip_html | truncatewords: 22 }}</p>
-          <a class="smelly-text-link" href="{{ article.url }}">{{ 'smelly.read_story' | t }}<span class="visually-hidden">: {{ article.title | escape }}</span><span aria-hidden="true">↗</span></a>
-        </article>
-      {% else %}
-        <p class="smelly-editor-note">{{ 'smelly.editor.journal' | t }}</p>
-      {% endfor %}
-    </div>
+
+    {% if article_count > 0 %}
+      <ul
+        class="smelly-journal-grid"
+        role="list"
+        style="--smelly-journal-columns: {{ desktop_columns }}; --smelly-journal-max-width: {{ maximum_grid_width }}px;"
+      >
+        {% for article in journal_blog.articles limit: section.settings.article_count %}
+          {% liquid
+            assign article_excerpt = article.excerpt_or_content | strip_html | strip
+            assign article_tag = article.tags | first
+            assign image_loading = 'lazy'
+            if forloop.first
+              if section.index == 1 or section.index == 2
+                assign image_loading = 'eager'
+              endif
+            endif
+          %}
+          <li class="smelly-journal__item">
+            <article class="smelly-journal-card">
+              <a
+                class="smelly-journal-card__link"
+                href="{{ article.url | escape }}"
+                aria-labelledby="SmellyJournalTitle-{{ section.id }}-{{ article.id }}"
+              >
+                <div class="smelly-journal-card__image{% if article.image == blank %} smelly-journal-card__image--illustration{% endif %}">
+                  {% if article.image != blank %}
+                    {% comment %}image_tag supplies the image's alt text and focal-point object-position automatically.{% endcomment %}
+                    {{ article.image
+                      | image_url: width: 1280
+                      | image_tag:
+                        widths: '240, 360, 424, 640, 848, 1280',
+                        sizes: image_sizes,
+                        loading: image_loading
+                    }}
+                  {% else %}
+                    {% render 'smelly-illustration', kind: 'jar' %}
+                  {% endif %}
+                </div>
+                <div class="smelly-journal-card__content">
+                  {% if section.settings.show_date or section.settings.show_tags and article_tag != blank %}
+                    <div class="smelly-journal-card__meta">
+                      {% if section.settings.show_tags and article_tag != blank %}
+                        <span class="smelly-journal-card__tag">{{ article_tag | escape }}</span>
+                      {% endif %}
+                      {% if section.settings.show_date %}
+                        {{ article.published_at | time_tag: format: 'date' }}
+                      {% endif %}
+                    </div>
+                  {% endif %}
+                  <h3 id="SmellyJournalTitle-{{ section.id }}-{{ article.id }}">{{ article.title | escape }}</h3>
+                  {% if section.settings.show_excerpt and article_excerpt != blank %}
+                    <p class="smelly-journal-card__excerpt">{{ article_excerpt | truncatewords: 22 | escape_once }}</p>
+                  {% endif %}
+                  <span class="smelly-text-link smelly-journal-card__read" aria-hidden="true">
+                    {{ 'smelly.read_story' | t }}<span aria-hidden="true">↗</span>
+                  </span>
+                </div>
+              </a>
+            </article>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="smelly-editor-note">{{ 'smelly.editor.journal' | t }}</p>
+    {% endif %}
   </div>
 {% endif %}
 {% schema %}
 {
   "name": "Smelly A.F. journal",
   "tag": "section",
-  "class": "smelly-section",
+  "class": "smelly-section smelly-journal-section",
   "disabled_on": { "groups": ["header", "footer"] },
   "settings": [
     { "type": "text", "id": "note", "label": "Handwritten note", "default": "Notes from our little candle corner" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "A little light reading." },
-    { "type": "blog", "id": "blog", "label": "Blog", "info": "This section only appears to shoppers when the selected blog has articles." }
+    { "type": "textarea", "id": "text", "label": "Description", "default": "Candle care, scent inspiration and little ways to make yourself at home." },
+    { "type": "blog", "id": "blog", "label": "Blog", "info": "Stories appear in the blog’s order. This section only appears to shoppers when the selected blog has published articles." },
+    { "type": "range", "id": "article_count", "label": "Articles", "min": 2, "max": 6, "step": 1, "default": 3 },
+    { "type": "checkbox", "id": "show_tags", "label": "Show first article tag", "default": true },
+    { "type": "checkbox", "id": "show_date", "label": "Show publication date", "default": true },
+    { "type": "checkbox", "id": "show_excerpt", "label": "Show article excerpt", "default": true }
   ],
   "presets": [{ "name": "Smelly A.F. journal" }]
 }
