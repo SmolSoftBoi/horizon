@@ -690,14 +690,19 @@
 .smelly-journal__heading > .smelly-button { flex-shrink: 0; max-width: 100%; gap: 20px; }
 .smelly-journal-grid {
   display: grid;
-  grid-template-columns: repeat(var(--smelly-journal-columns), minmax(0, 1fr));
+  grid-template-columns: repeat(calc(var(--smelly-journal-columns) * 2), minmax(0, 1fr));
   gap: 40px 24px;
   max-width: var(--smelly-journal-max-width);
   padding: 0;
   margin: 0 auto;
   list-style: none;
 }
-.smelly-journal__item { min-width: 0; }
+.smelly-journal__item { min-width: 0; grid-column: span 2; }
+@media (min-width: 750px) {
+  /* With up to six cards, only the fourth or fifth card can leave an incomplete row. */
+  .smelly-journal__item:nth-child(4):last-child { grid-column: 3 / span 2; }
+  .smelly-journal__item:nth-child(4):nth-last-child(2) { grid-column: 2 / span 2; }
+}
 .smelly-journal-card { height: 100%; }
 .smelly-journal-card__link { display: flex; flex-direction: column; height: 100%; min-width: 0; border-radius: 8px; }
 .smelly-journal-card__image { position: relative; display: grid; place-items: center; aspect-ratio: 4 / 3; border-radius: 8px; overflow: hidden; background: var(--smelly-blush); }
@@ -812,6 +817,7 @@
   .smelly-journal__intro { flex-basis: auto; }
   .smelly-journal .smelly-journal__description { font-size: 15px; }
   .smelly-journal-grid { grid-template-columns: minmax(0, 1fr); gap: 36px; max-width: 424px; }
+  .smelly-journal__item { grid-column: auto; }
   .smelly-journal-card__content { padding-top: 18px; }
   .smelly-newsletter { grid-template-columns: 1fr; gap: 30px; padding-block: 42px; }
   .smelly-newsletter h2 { font-size: 36px; }

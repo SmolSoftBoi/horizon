@@ -4,15 +4,12 @@
   assign desktop_columns = article_count | at_least: 1 | at_most: 3
   assign desktop_gaps = desktop_columns | minus: 1 | times: 24
   assign desktop_spacing = desktop_gaps | plus: 112
+  assign tablet_spacing = desktop_gaps | plus: 64
   assign maximum_grid_width = desktop_columns | times: 424 | plus: desktop_gaps
   assign maximum_shell_width = maximum_grid_width | plus: 112
-  assign image_loading = 'lazy'
-  if section.index == 1 or section.index == 2
-    assign image_loading = 'eager'
-  endif
 %}
-{% comment %}Match the 424px card cap, 24px column gaps and shared shell gutters in smelly-af.css.{% endcomment %}
-{% capture image_sizes %}(min-width: {{ maximum_shell_width }}px) 424px, (min-width: 750px) calc((100vw - {{ desktop_spacing }}px) / {{ desktop_columns }}), (min-width: 464px) 424px, calc(100vw - 40px){% endcapture %}
+{% comment %}Match the 424px card cap, 24px gaps and 112/64/40px shell gutters in smelly-af.css.{% endcomment %}
+{% capture image_sizes %}(min-width: {{ maximum_shell_width }}px) 424px, (min-width: 1101px) calc((100vw - {{ desktop_spacing }}px) / {{ desktop_columns }}), (min-width: 750px) min(424px, calc((100vw - {{ tablet_spacing }}px) / {{ desktop_columns }})), (min-width: 464px) 424px, calc(100vw - 40px){% endcapture %}
 
 {% if article_count > 0 or request.design_mode %}
   <div
@@ -48,6 +45,12 @@
           {% liquid
             assign article_excerpt = article.excerpt_or_content | strip_html | strip
             assign article_tag = article.tags | first
+            assign image_loading = 'lazy'
+            if forloop.first
+              if section.index == 1 or section.index == 2
+                assign image_loading = 'eager'
+              endif
+            endif
           %}
           <li class="smelly-journal__item">
             <article class="smelly-journal-card">
@@ -58,6 +61,7 @@
               >
                 <div class="smelly-journal-card__image{% if article.image == blank %} smelly-journal-card__image--illustration{% endif %}">
                   {% if article.image != blank %}
+                    {% comment %}image_tag supplies the image's alt text and focal-point object-position automatically.{% endcomment %}
                     {{ article.image
                       | image_url: width: 1280
                       | image_tag:
@@ -82,7 +86,7 @@
                   {% endif %}
                   <h3 id="SmellyJournalTitle-{{ section.id }}-{{ article.id }}">{{ article.title | escape }}</h3>
                   {% if section.settings.show_excerpt and article_excerpt != blank %}
-                    <p class="smelly-journal-card__excerpt">{{ article_excerpt | truncatewords: 22 | escape }}</p>
+                    <p class="smelly-journal-card__excerpt">{{ article_excerpt | truncatewords: 22 | escape_once }}</p>
                   {% endif %}
                   <span class="smelly-text-link smelly-journal-card__read" aria-hidden="true">
                     {{ 'smelly.read_story' | t }}<span aria-hidden="true">↗</span>
