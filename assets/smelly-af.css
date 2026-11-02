@@ -682,6 +682,27 @@
 .smelly-about__caption .smelly-illustration { flex: 0 0 42px; width: 42px; height: 36px; color: var(--smelly-pink); stroke-width: 4.5; }
 .smelly-about__caption .smelly-handwritten { min-width: 0; color: var(--smelly-ink); font-size: 20px; }
 
+.smelly-testimonials-section { background: var(--smelly-blush); }
+.smelly-testimonials-section:not(:has(.smelly-testimonials)) { display: none; }
+.smelly-testimonials__heading { max-width: 760px; margin-inline: auto; overflow-wrap: anywhere; }
+.smelly-testimonials__heading > * { min-width: 0; width: 100%; max-width: 100%; }
+.smelly-testimonials .smelly-testimonials__editor-note { max-width: 640px; margin-inline: auto; padding-block: 0 24px; text-align: center; }
+.smelly-testimonials__grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; margin: 0; padding: 0; list-style: none; }
+.smelly-testimonials__item { flex: 1 1 calc((100% - 48px) / 3); min-width: 0; max-width: 424px; }
+.smelly-testimonial { display: flex; flex-direction: column; height: 100%; margin: 0; padding: clamp(24px, 2.5vw, 36px); border: 1px solid var(--smelly-line); border-radius: 12px; background: var(--smelly-cream); overflow-wrap: anywhere; }
+.smelly-testimonial__marks { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; color: var(--smelly-pink); }
+.smelly-testimonial__quote-mark { height: 44px; font: 700 76px/1 var(--smelly-serif); }
+.smelly-testimonial__rating { min-width: 0; }
+.smelly-testimonial__stars { font-size: 19px; line-height: 1; letter-spacing: 2px; white-space: nowrap; }
+.smelly-testimonial__quote { flex: 1; margin: 0; padding: 0; border: 0; font: 400 clamp(22px, 2vw, 26px)/1.4 var(--smelly-serif); }
+.smelly-testimonial__customer { margin-top: 28px; }
+.smelly-testimonial__name { font-size: 14px; font-weight: 650; }
+.smelly-testimonial .smelly-testimonial__detail { margin-top: 5px; font-size: 13px; color: #65535a; }
+
+@media (min-width: 750px) and (max-width: 989px) {
+  .smelly-testimonials__item { flex-basis: calc((100% - 24px) / 2); }
+}
+
 .smelly-journal-section:not(:has(.smelly-journal)) { display: none; }
 .smelly-journal { border-block-start: 1px solid var(--smelly-line); }
 .smelly-journal__heading { flex-wrap: wrap; }
@@ -811,6 +832,10 @@
   .smelly-about__text { font-size: 15px; }
   .smelly-about__photo { max-width: 460px; }
   .smelly-about__caption .smelly-handwritten { font-size: 18px; }
+  .smelly-testimonials__grid { gap: 18px; }
+  .smelly-testimonials__item { flex-basis: 100%; }
+  .smelly-testimonial { padding: 24px; }
+  .smelly-testimonial__customer { margin-top: 24px; }
   .smelly-faq { grid-template-columns: 1fr; gap: 24px; }
   .smelly-faq__item summary { font-size: 14px; }
   .smelly-journal__heading { flex-direction: column; gap: 24px; }

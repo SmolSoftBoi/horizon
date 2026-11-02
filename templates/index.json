@@ -176,6 +176,23 @@
         "button_label": "A little about us"
       }
     },
+    "testimonials": {
+      "type": "smelly-testimonials",
+      "settings": {
+        "note": "A little love for Smelly A.F.",
+        "heading": "What our customers say."
+      },
+      "blocks": {
+        "testimonial_1": { "type": "testimonial", "settings": {} },
+        "testimonial_2": { "type": "testimonial", "settings": {} },
+        "testimonial_3": { "type": "testimonial", "settings": {} }
+      },
+      "block_order": [
+        "testimonial_1",
+        "testimonial_2",
+        "testimonial_3"
+      ]
+    },
     "journal": {
       "type": "smelly-journal",
       "settings": {
@@ -223,6 +240,7 @@
     "ranges",
     "story",
     "about",
+    "testimonials",
     "journal",
     "questions"
   ]
