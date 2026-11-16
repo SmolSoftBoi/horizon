@@ -1,0 +1,21 @@
+{%- doc -%}
+  Outputs an escaped HTTP(S) URL or a path relative to the store root.
+  Browsers remove tabs and newlines and can treat backslashes as slashes, so only unambiguous paths are allowed.
+  @param {string} [url] - URL from a theme setting.
+{%- enddoc -%}
+
+{%- liquid
+  assign link_url = url | strip
+  assign lowercased_url = link_url | downcase
+  assign http_prefix = lowercased_url | slice: 0, 7
+  assign https_prefix = lowercased_url | slice: 0, 8
+  assign first_character = link_url | slice: 0, 1
+
+  if http_prefix == 'http://' or https_prefix == 'https://' or first_character == '/'
+    assign path_prefix = link_url | slice: 0, 2
+    assign encoded_url = link_url | url_encode
+    unless path_prefix == '//' or encoded_url contains '%09' or encoded_url contains '%0A' or encoded_url contains '%0D' or encoded_url contains '%5C'
+      echo link_url | escape
+    endunless
+  endif
+-%}

@@ -1,8 +1,11 @@
 {% liquid
   assign journey = section.settings
   assign follow_label = journey.button_label | strip
+  capture profile_href
+    render 'smelly-link-href', url: journey.profile_url
+  endcapture
   assign show_follow = false
-  if journey.profile_url != blank and follow_label != blank
+  if profile_href != blank and follow_label != blank
     assign show_follow = true
   endif
 
@@ -31,15 +34,21 @@
       {%- capture image_markup -%}
         {%- render 'smelly-photo', image: photo, fallback: fallback_photo, alt: photo_alt, sizes: image_sizes, loading: image_loading -%}
       {%- endcapture -%}
+      {%- liquid
+        assign image_loading = 'lazy'
+        capture post_href
+          render 'smelly-link-href', url: block.settings.post_url
+        endcapture
+      -%}
       <li class="smelly-journey__item" {{ block.shopify_attributes }}>
-        {% if block.settings.post_url != blank %}
+        {% if post_href != blank %}
           {% liquid
             assign post_label = caption | default: photo_alt
             if post_label == blank
               assign post_label = 'smelly.view_journey_post' | t: position: forloop.index
             endif
           %}
-          <a class="smelly-journey__photo" href="{{ block.settings.post_url | escape }}" aria-label="{{ post_label | escape }}">
+          <a class="smelly-journey__photo" href="{{ post_href }}" aria-label="{{ post_label | escape }}">
             {{ image_markup }}
             <span class="smelly-journey__post-mark" aria-hidden="true">↗</span>
           </a>
@@ -91,7 +100,7 @@
     {% endif %}
     {% if show_follow %}
       <div class="smelly-journey__follow">
-        <a class="smelly-button" href="{{ journey.profile_url | escape }}">
+        <a class="smelly-button" href="{{ profile_href }}">
           <span>{{ follow_label | escape }}</span><span aria-hidden="true">↗</span>
         </a>
       </div>
@@ -247,7 +256,7 @@
     { "type": "text", "id": "note", "label": "Handwritten note", "default": "Behind the scents" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Follow our journey" },
     { "type": "textarea", "id": "text", "label": "Description", "default": "New scents, little candle moments and a peek behind the scenes at Smelly A.F." },
-    { "type": "url", "id": "profile_url", "label": "Social profile URL", "info": "Enter your social profile address to show the follow button." },
+    { "type": "url", "id": "profile_url", "label": "Social profile URL", "info": "Use a full https:// or http:// URL, or a store path starting with /." },
     { "type": "text", "id": "button_label", "label": "Button label", "default": "Follow on Instagram" }
   ],
   "blocks": [
@@ -272,7 +281,7 @@
           ]
         },
         { "type": "text", "id": "caption", "label": "Caption" },
-        { "type": "url", "id": "post_url", "label": "Post URL" }
+        { "type": "url", "id": "post_url", "label": "Post URL", "info": "Use a full https:// or http:// URL, or a store path starting with /." }
       ]
     }
   ],
