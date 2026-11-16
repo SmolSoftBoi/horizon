@@ -231,6 +231,27 @@
         "question_1",
         "question_2"
       ]
+    },
+    "journey": {
+      "type": "smelly-journey",
+      "settings": {
+        "note": "Behind the scents",
+        "heading": "Follow our journey",
+        "text": "New scents, little candle moments and a peek behind the scenes at Smelly A.F.",
+        "button_label": "Follow on Instagram"
+      },
+      "blocks": {
+        "journey_bubblegum": { "type": "photo", "settings": { "starter_photo": "bubblegum" } },
+        "journey_violets": { "type": "photo", "settings": { "starter_photo": "parma-violets" } },
+        "journey_pumpkin": { "type": "photo", "settings": { "starter_photo": "pumpkin-spice" } },
+        "journey_candy_cane": { "type": "photo", "settings": { "starter_photo": "candy-cane" } }
+      },
+      "block_order": [
+        "journey_bubblegum",
+        "journey_violets",
+        "journey_pumpkin",
+        "journey_candy_cane"
+      ]
     }
   },
   "order": [
@@ -242,6 +263,7 @@
     "about",
     "testimonials",
     "journal",
-    "questions"
+    "questions",
+    "journey"
   ]
 }
