@@ -1,0 +1,291 @@
+{% liquid
+  assign journey = section.settings
+  assign follow_label = journey.button_label | strip
+  assign show_follow = false
+  if journey.profile_url != blank and follow_label != blank
+    assign show_follow = true
+  endif
+
+  assign image_loading = 'eager'
+  if section.index > 3
+    assign image_loading = 'lazy'
+  endif
+  assign image_sizes = '(min-width: 1232px) 268px, (min-width: 1101px) calc((100vw - 160px) / 4), (min-width: 750px) calc((100vw - 112px) / 4), (min-width: 588px) 268px, calc((100vw - 52px) / 2)'
+%}
+
+{%- capture photo_tiles -%}
+  {%- for block in section.blocks -%}
+    {%- liquid
+      assign photo = block.settings.image
+      assign starter_photo = block.settings.starter_photo
+      assign caption = block.settings.caption | strip
+      assign photo_alt = photo.alt | default: caption
+      assign fallback_photo = ''
+      if photo == blank and starter_photo != blank and starter_photo != 'none'
+        assign photo_key = starter_photo | replace: '-', '_' | prepend: 'smelly.photos.'
+        assign photo_alt = photo_key | t
+        assign fallback_photo = starter_photo | replace: 'bubblegum', 'pink-bubblegum' | prepend: 'smelly-' | append: '.jpg'
+      endif
+    -%}
+    {%- if photo != blank or fallback_photo != blank -%}
+      {%- capture image_markup -%}
+        {%- render 'smelly-photo', image: photo, fallback: fallback_photo, alt: photo_alt, sizes: image_sizes, loading: image_loading -%}
+      {%- endcapture -%}
+      <li class="smelly-journey__item" {{ block.shopify_attributes }}>
+        {% if block.settings.post_url != blank %}
+          {% liquid
+            assign post_label = caption | default: photo_alt
+            if post_label == blank
+              assign post_label = 'smelly.view_journey_post' | t: position: forloop.index
+            endif
+          %}
+          <a class="smelly-journey__photo" href="{{ block.settings.post_url | escape }}" aria-label="{{ post_label | escape }}">
+            {{ image_markup }}
+            <span class="smelly-journey__post-mark" aria-hidden="true">↗</span>
+          </a>
+        {% else %}
+          <div class="smelly-journey__photo">{{ image_markup }}</div>
+        {% endif %}
+        {% if caption != blank %}
+          <p class="smelly-journey__caption">{{ caption | escape }}</p>
+        {% endif %}
+      </li>
+    {%- elsif request.design_mode -%}
+      <li class="smelly-journey__item" {{ block.shopify_attributes }}>
+        <div class="smelly-journey__photo smelly-journey__placeholder">
+          {% render 'smelly-illustration', kind: 'jar' %}
+        </div>
+        <p class="smelly-journey__caption">{{ 'smelly.editor.journey_photo' | t }}</p>
+      </li>
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+
+{% if photo_tiles != blank or show_follow or request.design_mode %}
+  <div
+    class="smelly-journey smelly-shell smelly-section-space"
+    {% if journey.heading != blank %}role="region" aria-labelledby="SmellyJourneyHeading-{{ section.id }}"{% endif %}
+  >
+    {% if journey.note != blank or journey.heading != blank or journey.text != blank %}
+      <div class="smelly-section-heading smelly-section-heading--centred smelly-journey__heading">
+        {% if journey.note != blank %}
+          <p class="smelly-handwritten smelly-journey__note">
+            <span>{{ journey.note | escape }}</span>
+            {% render 'smelly-illustration', kind: 'heart' %}
+          </p>
+        {% endif %}
+        {% if journey.heading != blank %}
+          <h2 id="SmellyJourneyHeading-{{ section.id }}">{{ journey.heading | escape }}</h2>
+        {% endif %}
+        {% if journey.text != blank %}
+          <p>{{ journey.text | escape }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+    {% if photo_tiles != blank %}
+      <ul class="smelly-journey__grid" role="list">
+        {{ photo_tiles }}
+      </ul>
+    {% elsif request.design_mode and show_follow == false %}
+      <p class="smelly-editor-note">{{ 'smelly.editor.journey' | t }}</p>
+    {% endif %}
+    {% if show_follow %}
+      <div class="smelly-journey__follow">
+        <a class="smelly-button" href="{{ journey.profile_url | escape }}">
+          <span>{{ follow_label | escape }}</span><span aria-hidden="true">↗</span>
+        </a>
+      </div>
+    {% endif %}
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .smelly-section.smelly-journey-section {
+    background: var(--smelly-blush);
+  }
+
+  .smelly-journey-section:not(:has(.smelly-journey)) {
+    display: none;
+  }
+
+  .smelly-journey {
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+
+  .smelly-journey__heading > * {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  .smelly-journey__note {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .smelly-journey__note > span {
+    min-width: 0;
+  }
+
+  .smelly-journey__note .smelly-illustration {
+    flex: 0 0 32px;
+    width: 32px;
+    height: 30px;
+    stroke-width: 4.5;
+  }
+
+  .smelly-journey__grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+  }
+
+  .smelly-journey__item {
+    flex: 0 0 calc((100% - 48px) / 4);
+    min-width: 0;
+    max-width: 268px;
+  }
+
+  .smelly-journey__photo {
+    position: relative;
+    display: block;
+    box-sizing: border-box;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border: 6px solid var(--smelly-cream);
+    border-radius: 12px;
+    background: var(--smelly-cream);
+  }
+
+  .smelly-journey__photo img {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .smelly-journey__post-mark {
+    position: absolute;
+    inset-block-end: 8px;
+    inset-inline-end: 8px;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--smelly-cream);
+    color: var(--smelly-ink);
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  .smelly-journey__photo:is(:hover, :focus-visible) .smelly-journey__post-mark {
+    background: var(--smelly-pink);
+    color: #fff;
+  }
+
+  .smelly-journey__placeholder {
+    display: grid;
+    place-items: center;
+  }
+
+  .smelly-journey__placeholder .smelly-illustration {
+    width: 45%;
+    height: auto;
+    color: var(--smelly-pink);
+  }
+
+  .smelly-journey .smelly-journey__caption {
+    margin-block-start: 8px;
+    font-size: 14px;
+  }
+
+  .smelly-journey__follow:not(:first-child) {
+    margin-block-start: 28px;
+  }
+
+  .smelly-journey .smelly-button {
+    max-width: 100%;
+    gap: 14px;
+  }
+
+  .smelly-journey .smelly-button > span:first-child {
+    min-width: 0;
+  }
+
+  .smelly-journey .smelly-button > span[aria-hidden] {
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 749px) {
+    .smelly-journey__grid {
+      gap: 12px;
+    }
+
+    .smelly-journey__item {
+      flex-basis: calc((100% - 12px) / 2);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Smelly A.F. journey",
+  "tag": "section",
+  "class": "smelly-section smelly-journey-section",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "note", "label": "Handwritten note", "default": "Behind the scents" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Follow our journey" },
+    { "type": "textarea", "id": "text", "label": "Description", "default": "New scents, little candle moments and a peek behind the scenes at Smelly A.F." },
+    { "type": "url", "id": "profile_url", "label": "Social profile URL", "info": "Enter your social profile address to show the follow button." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Follow on Instagram" }
+  ],
+  "blocks": [
+    {
+      "type": "photo",
+      "name": "Photo",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Photograph", "info": "Set alternative text for your photograph in Shopify Files." },
+        {
+          "type": "select",
+          "id": "starter_photo",
+          "label": "Starter photograph",
+          "info": "Used when no photograph is selected.",
+          "default": "none",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "bubblegum", "label": "Pink Bubblegum" },
+            { "value": "parma-violets", "label": "Parma Violets" },
+            { "value": "pumpkin-spice", "label": "Pumpkin Spice" },
+            { "value": "candy-cane", "label": "Candy Cane" },
+            { "value": "christmas-spice", "label": "Christmas Spice" }
+          ]
+        },
+        { "type": "text", "id": "caption", "label": "Caption" },
+        { "type": "url", "id": "post_url", "label": "Post URL" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Smelly A.F. journey",
+      "blocks": [
+        { "type": "photo", "settings": { "starter_photo": "bubblegum" } },
+        { "type": "photo", "settings": { "starter_photo": "parma-violets" } },
+        { "type": "photo", "settings": { "starter_photo": "pumpkin-spice" } },
+        { "type": "photo", "settings": { "starter_photo": "candy-cane" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
