@@ -1,0 +1,190 @@
+{% liquid
+  assign selected_collection = section.settings.collection
+  assign scents_collection = selected_collection | default: collections.all
+  assign browse_url = selected_collection.url | default: routes.all_products_collection_url
+  assign product_count = scents_collection.products_count | default: 0
+  assign image_sizes = '(min-width: 1432px) 170px, (min-width: 1101px) calc((100vw - 412px) / 6), (min-width: 990px) calc((100vw - 364px) / 6), (min-width: 750px) calc((100vw - 112px) / 4), calc((100vw - 64px) / 3)'
+  assign image_loading = 'lazy'
+  unless section.index > 2
+    assign image_loading = 'eager'
+  endunless
+%}
+
+{% if product_count > 0 or request.design_mode %}
+  <div
+    class="smelly-shell smelly-home-scents"
+    {% if section.settings.heading != blank %}role="region" aria-labelledby="SmellyHomeScents-{{ section.id }}"{% endif %}
+  >
+    <div class="smelly-home-scents__intro">
+      {% if section.settings.heading != blank %}
+        <h2 id="SmellyHomeScents-{{ section.id }}" class="smelly-home-scents__heading">
+          {{ section.settings.heading | escape }}
+        </h2>
+      {% endif %}
+      {% if product_count > 0 %}
+        <p class="smelly-home-scents__count">{{ 'content.item_count' | t: count: product_count }}</p>
+        <a class="smelly-button smelly-home-scents__browse" href="{{ browse_url | escape }}">
+          <span>{{ 'smelly.shop_all' | t }}</span><span aria-hidden="true">↗</span>
+        </a>
+      {% else %}
+        <p class="smelly-home-scents__count">{{ 'content.no_products_found' | t }}</p>
+      {% endif %}
+    </div>
+
+    {% if product_count > 0 %}
+      <ul class="smelly-home-scents__grid" role="list">
+        {% for scent in scents_collection.products limit: section.settings.product_limit %}
+          <li>
+            <a class="smelly-home-scents__product" href="{{ scent.url | escape }}">
+              <span class="smelly-home-scents__image" aria-hidden="true">
+                {% if scent.featured_image != blank %}
+                  {{
+                    scent.featured_image
+                    | image_url: width: 640
+                    | image_tag: widths: '96, 128, 160, 200, 240, 320, 400, 480, 640', sizes: image_sizes, loading: image_loading, alt: ''
+                  }}
+                  {% assign image_loading = 'lazy' %}
+                {% else %}
+                  {{ 'product-1' | placeholder_svg_tag }}
+                {% endif %}
+              </span>
+              <span class="smelly-home-scents__name">{{ scent.title | escape }}</span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .smelly-home-scents-section:not(:has(.smelly-home-scents)) {
+    display: none;
+  }
+
+  .smelly-home-scents-section {
+    border-block-start: 1px solid var(--smelly-line);
+  }
+
+  .smelly-home-scents {
+    display: grid;
+    grid-template-columns: 188px minmax(0, 1fr);
+    gap: 32px;
+    align-items: center;
+    padding-block: 40px;
+  }
+
+  .smelly-home-scents__intro {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .smelly-home-scents .smelly-home-scents__heading {
+    font-size: clamp(30px, 3vw, 42px);
+    letter-spacing: -0.045em;
+  }
+
+  .smelly-home-scents .smelly-home-scents__count {
+    margin-block-start: 6px;
+    font-size: 14px;
+  }
+
+  .smelly-home-scents .smelly-home-scents__browse {
+    max-width: 100%;
+    min-height: 44px;
+    margin-block-start: 14px;
+    padding: 8px 14px;
+    gap: 10px;
+    font-size: 13px;
+  }
+
+  .smelly-home-scents__browse > span[aria-hidden] {
+    flex-shrink: 0;
+    font-size: 17px;
+  }
+
+  .smelly-home-scents__grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .smelly-home-scents__product {
+    display: grid;
+    gap: 7px;
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .smelly-home-scents__image {
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    background: var(--smelly-blush);
+  }
+
+  .smelly-home-scents__image :is(img, svg) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .smelly-home-scents__name {
+    overflow-wrap: anywhere;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .smelly-home-scents__product:is(:hover, :focus-visible) .smelly-home-scents__name {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  @media (max-width: 989px) {
+    .smelly-home-scents {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 24px;
+    }
+
+    .smelly-home-scents__grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 749px) {
+    .smelly-home-scents {
+      gap: 20px;
+      padding-block: 32px;
+    }
+
+    .smelly-home-scents__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .smelly-home-scents__name {
+      font-size: 13px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Smelly A.F. home scents",
+  "tag": "section",
+  "class": "smelly-section smelly-home-scents-section",
+  "enabled_on": { "templates": ["index"] },
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "All Scents" },
+    { "type": "collection", "id": "collection", "label": "Collection", "info": "Leave blank to show all products. The button opens the collection shown in the grid." },
+    { "type": "range", "id": "product_limit", "label": "Products to show", "min": 3, "max": 12, "step": 1, "default": 12 }
+  ],
+  "presets": [{ "name": "Smelly A.F. home scents" }]
+}
+{% endschema %}
