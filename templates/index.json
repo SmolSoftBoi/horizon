@@ -12,18 +12,18 @@
     "hero": {
       "type": "smelly-hero",
       "settings": {
-        "note": "",
         "heading": "Seriously\ngood scents.",
         "text": "<p>Hand-poured soy wax candles for homes that don’t take themselves too seriously.</p>",
         "button_label": "Shop all scents",
-        "caption": "",
+        "button_link": "",
         "image_alt": "Smelly A.F. candles with colourful wax and gold lids on a wooden table in a cosy living room.",
-        "sticker": "Hand-poured.\nWith A.F. attitude."
+        "sticker": "Hand-poured.\nWith A.F. attitude.",
+        "note": "",
+        "caption": ""
       }
     },
     "details": {
       "type": "smelly-benefits",
-      "settings": {},
       "blocks": {
         "detail_1": {
           "type": "detail",
@@ -54,22 +54,18 @@
         "detail_1",
         "detail_2",
         "detail_3"
-      ]
+      ],
+      "settings": {}
     },
     "featured": {
       "type": "smelly-featured",
-      "settings": {
-        "note": "Small jars. Big moods.",
-        "heading": "Best sellers.",
-        "text": "A little sweet, a little seasonal. Find your next scent obsession.",
-        "product_count": 4
-      },
       "blocks": {
         "scent_1": {
           "type": "scent",
           "settings": {
             "heading": "Pink Bubblegum",
             "note": "Sweet A.F.",
+            "link": "",
             "photo": "bubblegum"
           }
         },
@@ -78,6 +74,7 @@
           "settings": {
             "heading": "Pumpkin Spice",
             "note": "Spooky A.F.",
+            "link": "",
             "photo": "pumpkin-spice"
           }
         },
@@ -86,6 +83,7 @@
           "settings": {
             "heading": "Candy Cane",
             "note": "Festive A.F.",
+            "link": "",
             "photo": "candy-cane"
           }
         },
@@ -94,6 +92,7 @@
           "settings": {
             "heading": "Parma Violets",
             "note": "Floral feels.",
+            "link": "",
             "photo": "parma-violets"
           }
         }
@@ -103,21 +102,24 @@
         "scent_2",
         "scent_3",
         "scent_4"
-      ]
+      ],
+      "settings": {
+        "note": "Small jars. Big moods.",
+        "heading": "Best sellers.",
+        "text": "A little sweet, a little seasonal. Find your next scent obsession.",
+        "collection": "best-sellers",
+        "product_count": 4
+      }
     },
     "ranges": {
       "type": "smelly-ranges",
-      "settings": {
-        "note": "Whatever your mood, there’s an A.F. for that.",
-        "heading": "Find your kind of A.F.",
-        "text": "A little sweet, a little seasonal, a whole lot of personality."
-      },
       "blocks": {
         "range_1": {
           "type": "range",
           "settings": {
             "heading": "Spooky A.F.",
             "text": "Cosy nights. Spooky season.",
+            "collection": "spooky-a-f",
             "illustration": "pumpkin"
           }
         },
@@ -126,6 +128,7 @@
           "settings": {
             "heading": "Festive A.F.",
             "text": "A little extra festive feeling.",
+            "collection": "festive-a-f",
             "illustration": "festive"
           }
         },
@@ -134,6 +137,7 @@
           "settings": {
             "heading": "Sweet A.F.",
             "text": "For your inner sweet tooth.",
+            "collection": "sweet-a-f",
             "illustration": "candy"
           }
         },
@@ -142,6 +146,7 @@
           "settings": {
             "heading": "Fresh A.F.",
             "text": "Fresh mood. Fresh start.",
+            "collection": "fresh-a-f",
             "illustration": "flower"
           }
         }
@@ -151,7 +156,12 @@
         "range_2",
         "range_3",
         "range_4"
-      ]
+      ],
+      "settings": {
+        "note": "Whatever your mood, there’s an A.F. for that.",
+        "heading": "Find your kind of A.F.",
+        "text": "A little sweet, a little seasonal, a whole lot of personality."
+      }
     },
     "story": {
       "type": "smelly-story",
@@ -160,8 +170,10 @@
         "note": "Good scents. Better days.",
         "heading": "Create a cosier,\nhappier home.",
         "text": "<p>We think a good candle should bring a little joy to the everyday. Colourful wax. Scents with character. A name that makes you smile.</p><p>From sweet-shop nostalgia to your favourite time of year, find a little jar that feels like you.</p>",
+        "image_alt": "",
         "caption": "A little jar of happy.",
         "link": "shopify://collections/all",
+        "page": "",
         "button_label": "Shop all scents",
         "signature": "Homes should smell amazing. A.F."
       }
@@ -172,26 +184,54 @@
         "note": "Hello, we’re Smelly A.F.",
         "heading": "The little candle company\nwith a big A.F. personality.",
         "text": "<p>Candles should smell brilliant and make you smile. That’s the idea behind Smelly A.F.: hand-poured soy wax, colourful candles and a playful streak.</p><p>From sweet-shop nostalgia to a little seasonal mischief, we’re here for the scents that feel like you. Pick your mood. Find your A.F.</p>",
+        "image_alt": "",
         "caption": "A little jar. A lot of A.F.",
+        "page": "",
+        "link": "",
         "button_label": "A little about us"
       }
     },
     "testimonials": {
       "type": "smelly-testimonials",
-      "settings": {
-        "note": "A little love for Smelly A.F.",
-        "heading": "What our customers say."
-      },
       "blocks": {
-        "testimonial_1": { "type": "testimonial", "settings": {} },
-        "testimonial_2": { "type": "testimonial", "settings": {} },
-        "testimonial_3": { "type": "testimonial", "settings": {} }
+        "testimonial_1": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "",
+            "customer_name": "",
+            "detail": "",
+            "rating": "none"
+          }
+        },
+        "testimonial_2": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "",
+            "customer_name": "",
+            "detail": "",
+            "rating": "none"
+          }
+        },
+        "testimonial_3": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "",
+            "customer_name": "",
+            "detail": "",
+            "rating": "none"
+          }
+        }
       },
       "block_order": [
         "testimonial_1",
         "testimonial_2",
         "testimonial_3"
-      ]
+      ],
+      "settings": {
+        "note": "A little love for Smelly A.F.",
+        "heading": "What our customers say.",
+        "text": ""
+      }
     },
     "journal": {
       "type": "smelly-journal",
@@ -199,6 +239,7 @@
         "note": "Notes from our little candle corner",
         "heading": "A little light reading.",
         "text": "Candle care, scent inspiration and little ways to make yourself at home.",
+        "blog": "",
         "article_count": 3,
         "show_tags": true,
         "show_date": true,
@@ -207,10 +248,6 @@
     },
     "questions": {
       "type": "smelly-faq",
-      "settings": {
-        "note": "A little candle know-how",
-        "heading": "Curious A.F.?"
-      },
       "blocks": {
         "question_1": {
           "type": "question",
@@ -230,28 +267,61 @@
       "block_order": [
         "question_1",
         "question_2"
-      ]
+      ],
+      "settings": {
+        "note": "A little candle know-how",
+        "heading": "Curious A.F.?"
+      }
     },
     "journey": {
       "type": "smelly-journey",
-      "settings": {
-        "note": "Behind the scents",
-        "heading": "Follow our journey",
-        "text": "New scents, little candle moments and a peek behind the scenes at Smelly A.F.",
-        "button_label": "Follow on Instagram"
-      },
       "blocks": {
-        "journey_bubblegum": { "type": "photo", "settings": { "starter_photo": "bubblegum" } },
-        "journey_violets": { "type": "photo", "settings": { "starter_photo": "parma-violets" } },
-        "journey_pumpkin": { "type": "photo", "settings": { "starter_photo": "pumpkin-spice" } },
-        "journey_candy_cane": { "type": "photo", "settings": { "starter_photo": "candy-cane" } }
+        "journey_bubblegum": {
+          "type": "photo",
+          "settings": {
+            "starter_photo": "bubblegum",
+            "caption": "",
+            "post_url": ""
+          }
+        },
+        "journey_violets": {
+          "type": "photo",
+          "settings": {
+            "starter_photo": "parma-violets",
+            "caption": "",
+            "post_url": ""
+          }
+        },
+        "journey_pumpkin": {
+          "type": "photo",
+          "settings": {
+            "starter_photo": "pumpkin-spice",
+            "caption": "",
+            "post_url": ""
+          }
+        },
+        "journey_candy_cane": {
+          "type": "photo",
+          "settings": {
+            "starter_photo": "candy-cane",
+            "caption": "",
+            "post_url": ""
+          }
+        }
       },
       "block_order": [
         "journey_bubblegum",
         "journey_violets",
         "journey_pumpkin",
         "journey_candy_cane"
-      ]
+      ],
+      "settings": {
+        "note": "Behind the scents",
+        "heading": "Follow our journey",
+        "text": "New scents, little candle moments and a peek behind the scenes at Smelly A.F.",
+        "profile_url": "",
+        "button_label": "Follow on Instagram"
+      }
     }
   },
   "order": [
