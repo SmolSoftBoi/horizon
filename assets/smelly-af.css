@@ -865,6 +865,30 @@
   .smelly-faq__item summary span { transition: transform 200ms ease; }
   .smelly-faq__item[open] > div { animation: smelly-answer-enter 220ms ease-out; }
 
+  .smelly-bestsellers__item > .smelly-product-card { transition: transform 220ms ease-out; }
+
+  .smelly-bestsellers__heading > .smelly-text-link { position: relative; }
+  .smelly-bestsellers__heading > .smelly-text-link::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: -1px;
+    height: 2px;
+    background: currentColor;
+    pointer-events: none;
+    transform: scaleX(0);
+    transition: transform 200ms ease-out;
+  }
+  .smelly-bestsellers__heading > .smelly-text-link:focus-visible::after { transform: scaleX(1); }
+
+  @supports (animation-timeline: view()) and (animation-range: entry) {
+    .smelly-bestsellers__item:not(:focus-within) {
+      animation: smelly-best-seller-enter ease-out both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 65%;
+    }
+  }
+
   .smelly-button:focus-visible > span[aria-hidden],
   .smelly-text-link:focus-visible > span[aria-hidden] { transform: translate(3px, -2px); }
   .smelly-product-card:focus-within a.smelly-product-card__image img { transform: scale(1.035); }
@@ -874,8 +898,15 @@
     .smelly-button:not(:disabled):hover > span[aria-hidden],
     .smelly-text-link:hover > span[aria-hidden] { transform: translate(3px, -2px); }
     .smelly-product-card:hover a.smelly-product-card__image img { transform: scale(1.035); }
+    .smelly-bestsellers__item:hover > .smelly-product-card { transform: translateY(-4px); }
+    .smelly-bestsellers__heading > .smelly-text-link:hover::after { transform: scaleX(1); }
     .smelly-range-card:hover .smelly-range-card__illustration { transform: rotate(-5deg) translateY(-3px); }
   }
+}
+
+@keyframes smelly-best-seller-enter {
+  from { opacity: 0.8; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
 }
 
 @keyframes smelly-answer-enter {
