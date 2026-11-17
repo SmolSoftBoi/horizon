@@ -2,7 +2,7 @@
   assign selected_collection = section.settings.collection
   assign scents_collection = selected_collection | default: collections.all
   assign browse_url = selected_collection.url | default: routes.all_products_collection_url
-  assign product_count = scents_collection.products_count | default: 0
+  assign product_count = scents_collection.products_count | default: 0 | at_most: section.settings.product_limit
   assign image_sizes = '(min-width: 1432px) 170px, (min-width: 1101px) calc((100vw - 412px) / 6), (min-width: 990px) calc((100vw - 364px) / 6), (min-width: 750px) calc((100vw - 112px) / 4), calc((100vw - 64px) / 3)'
   assign image_loading = 'lazy'
   unless section.index > 2
