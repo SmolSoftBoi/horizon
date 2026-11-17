@@ -865,7 +865,16 @@
   .smelly-faq__item summary span { transition: transform 200ms ease; }
   .smelly-faq__item[open] > div { animation: smelly-answer-enter 220ms ease-out; }
 
-  .smelly-bestsellers__item > .smelly-product-card { transition: transform 220ms ease-out; }
+  :where(#MainContent[data-template='index']) :is(.smelly-hero__copy, .smelly-hero__annotation) {
+    animation: smelly-reveal 420ms ease-out;
+  }
+
+  .smelly-bestsellers__item > .smelly-product-card,
+  :where(#MainContent[data-template='index']) .smelly-range-card { transition: transform 220ms ease-out; }
+  :where(#MainContent[data-template='index']) .smelly-range-card__arrow { transition: transform 200ms ease-out; }
+  :where(#MainContent[data-template='index']) .smelly-range-card:focus-visible .smelly-range-card__arrow {
+    transform: translateY(-2px);
+  }
 
   .smelly-bestsellers__heading > .smelly-text-link { position: relative; }
   .smelly-bestsellers__heading > .smelly-text-link::after {
@@ -882,8 +891,34 @@
   .smelly-bestsellers__heading > .smelly-text-link:focus-visible::after { transform: scaleX(1); }
 
   @supports (animation-timeline: view()) and (animation-range: entry) {
-    .smelly-bestsellers__item:not(:focus-within) {
-      animation: smelly-best-seller-enter ease-out both;
+    /* Reveal individual cards and pieces of copy so long sections can settle as people scroll. */
+    .smelly-bestsellers__item:not(:focus-within),
+    :where(#MainContent[data-template='index']) :where(
+      .smelly-benefits__item,
+      .smelly-ranges-heading,
+      .smelly-range-grid__item,
+      .smelly-home-scents__intro,
+      .smelly-home-scents__grid > li,
+      .smelly-story__photo,
+      .smelly-story__copy,
+      .smelly-about__frame,
+      .smelly-about__copy,
+      .smelly-testimonials__heading,
+      .smelly-testimonials__item,
+      .smelly-journal__heading,
+      .smelly-journal__item,
+      .smelly-faq > div:first-child,
+      .smelly-faq__item,
+      .smelly-journey__heading,
+      .smelly-journey__item,
+      .smelly-journey__follow
+    ):not(:focus-within),
+    :where(.page-wrapper:has(> #MainContent[data-template='index'])) .smelly-footer :where(
+      .smelly-newsletter > div:first-child,
+      .smelly-footer__brand,
+      .smelly-footer__nav
+    ):not(:focus-within) {
+      animation: smelly-reveal ease-out both;
       animation-timeline: view();
       animation-range: entry 0% entry 65%;
     }
@@ -901,12 +936,18 @@
     .smelly-bestsellers__item:hover > .smelly-product-card { transform: translateY(-4px); }
     .smelly-bestsellers__heading > .smelly-text-link:hover::after { transform: scaleX(1); }
     .smelly-range-card:hover .smelly-range-card__illustration { transform: rotate(-5deg) translateY(-3px); }
+    :where(#MainContent[data-template='index']) .smelly-range-grid__item:hover > .smelly-range-card {
+      transform: translateY(-3px);
+    }
+    :where(#MainContent[data-template='index']) .smelly-range-card:hover .smelly-range-card__arrow {
+      transform: translateY(-2px);
+    }
   }
 }
 
-@keyframes smelly-best-seller-enter {
-  from { opacity: 0.8; transform: translateY(12px); }
-  to { opacity: 1; transform: none; }
+@keyframes smelly-reveal {
+  from { opacity: 0.88; translate: 0 8px; }
+  to { opacity: 1; translate: none; }
 }
 
 @keyframes smelly-answer-enter {
