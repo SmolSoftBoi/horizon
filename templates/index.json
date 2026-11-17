@@ -163,6 +163,13 @@
         "text": "A little sweet, a little seasonal, a whole lot of personality."
       }
     },
+    "all_scents": {
+      "type": "smelly-home-scents",
+      "settings": {
+        "heading": "All Scents",
+        "product_limit": 12
+      }
+    },
     "story": {
       "type": "smelly-story",
       "settings": {
@@ -327,8 +334,9 @@
   "order": [
     "hero",
     "details",
-    "featured",
     "ranges",
+    "featured",
+    "all_scents",
     "story",
     "about",
     "testimonials",
