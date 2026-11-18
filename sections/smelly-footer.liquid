@@ -1,6 +1,19 @@
 {% liquid
   assign newsletter_id = 'SmellyNewsletter-' | append: section.id
   assign newsletter_input_id = newsletter_id | append: '-email'
+  assign menu_links = section.settings.menu.links
+  assign all_menu_links = menu_links
+  for menu_link in menu_links
+    if menu_link.links != blank
+      assign all_menu_links = all_menu_links | concat: menu_link.links
+      for child_link in menu_link.links
+        if child_link.links != blank
+          assign all_menu_links = all_menu_links | concat: child_link.links
+        endif
+      endfor
+    endif
+  endfor
+  assign menu_urls = all_menu_links | map: 'url'
 %}
 <div class="smelly-footer">
   <div class="smelly-newsletter smelly-shell">
@@ -30,17 +43,38 @@
       </a>
       <p>{{ section.settings.tagline | escape }}</p>
     </div>
-    <nav class="smelly-footer__nav" aria-label="{{ 'smelly.footer_navigation' | t }}">
-      <h3>{{ 'smelly.explore' | t }}</h3><a href="{{ routes.all_products_collection_url }}">{{ 'smelly.shop_all' | t }}</a><a href="{{ routes.search_url }}">{{ 'smelly.search_scents' | t }}</a>
-      {% for link in section.settings.menu.links %}
-        <a href="{{ link.url }}"{% if link.data_sharing_opt_out_icon %} class="smelly-footer__privacy-link"{% endif %}>
-          {{ link.title | escape }}{% if link.data_sharing_opt_out_icon %}{{ link.data_sharing_opt_out_icon }}{% endif %}
-        </a>
-      {% endfor %}
+    <nav class="smelly-footer__nav smelly-footer__explore" aria-labelledby="FooterExplore-{{ section.id }}">
+      <h2 id="FooterExplore-{{ section.id }}">{{ 'smelly.explore' | t }}</h2>
+      <ul class="list-unstyled" role="list">
+        {% unless menu_urls contains routes.all_products_collection_url %}
+          <li><a href="{{ routes.all_products_collection_url | escape }}">{{ 'smelly.shop_all' | t }}</a></li>
+        {% endunless %}
+        {% unless menu_urls contains routes.search_url %}
+          <li><a href="{{ routes.search_url | escape }}">{{ 'smelly.search_scents' | t }}</a></li>
+        {% endunless %}
+        {% if menu_links != blank %}
+          {% render 'smelly-footer-menu-item' for menu_links as menu_link %}
+        {% endif %}
+        {% if section.settings.contact_page.url != blank %}
+          {% unless menu_urls contains section.settings.contact_page.url %}
+            <li><a href="{{ section.settings.contact_page.url | escape }}">{{ 'smelly.contact' | t }}</a></li>
+          {% endunless %}
+        {% endif %}
+      </ul>
     </nav>
-    <div class="smelly-footer__nav"><h3>{{ 'smelly.the_details' | t }}</h3>{% for policy in shop.policies %}{% if policy.body != blank %}<a href="{{ policy.url }}">{{ policy.title | escape }}</a>{% endif %}{% endfor %}
-      {% if section.settings.contact_page != blank %}<a href="{{ section.settings.contact_page.url }}">{{ 'smelly.contact' | t }}</a>{% endif %}
-    </div>
+    {%- capture policy_links -%}
+      {%- for policy in shop.policies -%}
+        {%- if policy.body != blank and policy.url != blank and policy.title != blank -%}
+          <li><a href="{{ policy.url | escape }}">{{ policy.title | escape }}</a></li>
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endcapture -%}
+    {% if policy_links != blank %}
+      <nav class="smelly-footer__nav" aria-labelledby="FooterPolicies-{{ section.id }}">
+        <h2 id="FooterPolicies-{{ section.id }}">{{ 'content.terms_and_policies' | t }}</h2>
+        <ul class="list-unstyled" role="list">{{ policy_links }}</ul>
+      </nav>
+    {% endif %}
   </div>
   <div class="smelly-footer__bottom smelly-shell"><p>© {{ 'now' | date: '%Y' }} {{ shop.name | escape }}.</p><span class="smelly-handwritten">{{ section.settings.signoff | escape }}</span>
     {% if section.settings.show_payment_icons %}<ul class="smelly-payments" role="list" aria-label="{{ 'smelly.payment_methods' | t }}">{% for type in shop.enabled_payment_types %}<li>{{ type | payment_type_svg_tag }}</li>{% endfor %}</ul>{% endif %}
@@ -58,6 +92,7 @@
     { "type": "text", "id": "tagline", "label": "Brand tagline", "default": "Seriously good scents. A little less serious." },
     { "type": "link_list", "id": "menu", "label": "Footer menu", "default": "footer" },
     { "type": "page", "id": "contact_page", "label": "Contact page" },
+    { "type": "paragraph", "content": "t:content.manage_policies" },
     { "type": "checkbox", "id": "show_payment_icons", "label": "Show enabled payment methods", "default": true },
     { "type": "text", "id": "signoff", "label": "Sign-off", "default": "Hand-poured. With A.F. attitude." }
   ],
