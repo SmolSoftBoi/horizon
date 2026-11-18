@@ -1,3 +1,7 @@
+{%- doc -%}
+  Displays direct links to the store's published policies.
+{%- enddoc -%}
+
 {%- capture policy_links -%}
   {%- for policy in shop.policies -%}
     {%- if policy.body != blank and policy.url != blank and policy.title != blank -%}
