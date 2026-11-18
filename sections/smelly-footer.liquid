@@ -66,10 +66,35 @@
       </ul>
     </nav>
   </div>
-  <div class="smelly-footer__bottom smelly-shell"><p>© {{ 'now' | date: '%Y' }} {{ shop.name | escape }}.</p><span class="smelly-handwritten">{{ section.settings.signoff | escape }}</span>
+  <div class="smelly-footer__bottom smelly-shell">
+    <p>© {{ 'now' | date: '%Y' }} {{ shop.name | escape }}.</p>
+    {% content_for 'block', type: 'footer-policy-list', id: 'policy-links' %}
+    <span class="smelly-handwritten">{{ section.settings.signoff | escape }}</span>
     {% if section.settings.show_payment_icons %}<ul class="smelly-payments" role="list" aria-label="{{ 'smelly.payment_methods' | t }}">{% for type in shop.enabled_payment_types %}<li>{{ type | payment_type_svg_tag }}</li>{% endfor %}</ul>{% endif %}
   </div>
 </div>
+
+{% stylesheet %}
+  .smelly-footer__bottom .footer-policy-links {
+    --color-foreground: var(--smelly-ink);
+    color: var(--color-utilities);
+
+    @media (max-width: 749px) {
+      flex-basis: 100%;
+    }
+  }
+
+  .smelly-footer__bottom .footer-policy-links__list {
+    justify-content: start;
+    column-gap: 1rem;
+  }
+
+  .smelly-footer__bottom .footer-policy-links a {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+{% endstylesheet %}
+
 {% schema %}
 {
   "name": "Smelly A.F. footer",
