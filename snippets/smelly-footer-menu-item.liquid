@@ -1,0 +1,24 @@
+{%- doc -%}
+  Renders a footer menu item and its children in the merchant's chosen order.
+  @param {link} menu_link - The Shopify navigation link.
+{%- enddoc -%}
+
+<li>
+  {% if menu_link.url != blank and menu_link.url != '#' %}
+    <a
+      href="{{ menu_link.url | escape }}"
+      {% if menu_link.current %}aria-current="page"{% endif %}
+      {% if menu_link.data_sharing_opt_out_icon %}class="smelly-footer__privacy-link"{% endif %}
+    >
+      {{- menu_link.title | escape -}}
+      {{- menu_link.data_sharing_opt_out_icon -}}
+    </a>
+  {% else %}
+    <span>{{ menu_link.title | escape }}</span>
+  {% endif %}
+  {% if menu_link.links != blank %}
+    <ul class="list-unstyled" role="list">
+      {% render 'smelly-footer-menu-item' for menu_link.links as menu_link %}
+    </ul>
+  {% endif %}
+</li>

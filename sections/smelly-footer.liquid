@@ -1,6 +1,22 @@
 {% liquid
   assign newsletter_id = 'SmellyNewsletter-' | append: section.id
   assign newsletter_input_id = newsletter_id | append: '-email'
+  assign menu_links = section.settings.menu.links
+  capture menu_destinations
+    if menu_links != blank
+      render 'smelly-footer-destination' for menu_links as menu_link
+    endif
+  endcapture
+  assign menu_destinations = menu_destinations | split: '|'
+  capture shop_all_destination
+    render 'smelly-footer-destination', url: routes.all_products_collection_url
+  endcapture
+  capture search_destination
+    render 'smelly-footer-destination', url: routes.search_url
+  endcapture
+  capture contact_destination
+    render 'smelly-footer-destination', url: section.settings.contact_page.url
+  endcapture
 %}
 <div class="smelly-footer">
   <div class="smelly-newsletter smelly-shell">
@@ -30,17 +46,25 @@
       </a>
       <p>{{ section.settings.tagline | escape }}</p>
     </div>
-    <nav class="smelly-footer__nav" aria-label="{{ 'smelly.footer_navigation' | t }}">
-      <h3>{{ 'smelly.explore' | t }}</h3><a href="{{ routes.all_products_collection_url }}">{{ 'smelly.shop_all' | t }}</a><a href="{{ routes.search_url }}">{{ 'smelly.search_scents' | t }}</a>
-      {% for link in section.settings.menu.links %}
-        <a href="{{ link.url }}"{% if link.data_sharing_opt_out_icon %} class="smelly-footer__privacy-link"{% endif %}>
-          {{ link.title | escape }}{% if link.data_sharing_opt_out_icon %}{{ link.data_sharing_opt_out_icon }}{% endif %}
-        </a>
-      {% endfor %}
+    <nav class="smelly-footer__nav" aria-labelledby="FooterExplore-{{ section.id }}">
+      <h2 id="FooterExplore-{{ section.id }}">{{ 'smelly.explore' | t }}</h2>
+      <ul class="list-unstyled" role="list">
+        {% unless menu_destinations contains shop_all_destination %}
+          <li><a href="{{ routes.all_products_collection_url | escape }}">{{ 'smelly.shop_all' | t }}</a></li>
+        {% endunless %}
+        {% unless menu_destinations contains search_destination %}
+          <li><a href="{{ routes.search_url | escape }}">{{ 'smelly.search_scents' | t }}</a></li>
+        {% endunless %}
+        {% if menu_links != blank %}
+          {% render 'smelly-footer-menu-item' for menu_links as menu_link %}
+        {% endif %}
+        {% if section.settings.contact_page.url != blank %}
+          {% unless menu_destinations contains contact_destination %}
+            <li><a href="{{ section.settings.contact_page.url | escape }}">{{ 'smelly.contact' | t }}</a></li>
+          {% endunless %}
+        {% endif %}
+      </ul>
     </nav>
-    <div class="smelly-footer__nav"><h3>{{ 'smelly.the_details' | t }}</h3>{% for policy in shop.policies %}{% if policy.body != blank %}<a href="{{ policy.url }}">{{ policy.title | escape }}</a>{% endif %}{% endfor %}
-      {% if section.settings.contact_page != blank %}<a href="{{ section.settings.contact_page.url }}">{{ 'smelly.contact' | t }}</a>{% endif %}
-    </div>
   </div>
   <div class="smelly-footer__bottom smelly-shell"><p>© {{ 'now' | date: '%Y' }} {{ shop.name | escape }}.</p><span class="smelly-handwritten">{{ section.settings.signoff | escape }}</span>
     {% if section.settings.show_payment_icons %}<ul class="smelly-payments" role="list" aria-label="{{ 'smelly.payment_methods' | t }}">{% for type in shop.enabled_payment_types %}<li>{{ type | payment_type_svg_tag }}</li>{% endfor %}</ul>{% endif %}

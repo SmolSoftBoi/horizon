@@ -1,0 +1,39 @@
+{%- doc -%}
+  Returns a comparison key for a fallback URL, or a list of keys for a menu
+  item and its children. Local paths keep their query strings and fragments.
+  @param {string} [url] - The fallback URL.
+  @param {link} [menu_link] - The menu item to traverse.
+{%- enddoc -%}
+
+{%- liquid
+  assign destination = menu_link.url | default: url | strip
+  assign prefix = destination | split: '//' | first
+  assign protocol = prefix | downcase
+  if protocol == 'https:' or protocol == 'http:' or prefix == empty
+    assign protocol_prefix = prefix | append: '//'
+    assign address = destination | remove_first: protocol_prefix
+    assign authority = address | split: '/' | first
+    assign host = authority | downcase
+    if prefix == empty
+      assign protocol = request.origin | split: '//' | first
+    endif
+    assign port = host | split: ':' | last
+    if protocol == 'https:' and port == '443'
+      assign host = host | remove_first: ':443'
+    elsif protocol == 'http:' and port == '80'
+      assign host = host | remove_first: ':80'
+    endif
+    assign store_hosts = request.host | append: ',' | append: shop.domain | append: ',' | append: shop.permanent_domain | downcase | split: ','
+    if host != blank and store_hosts contains host
+      assign destination = address | remove_first: authority | default: '/'
+    endif
+  endif
+  # Encoding keeps a literal pipe in a URL distinct from the list separator.
+  echo destination | url_encode
+  if menu_link
+    echo '|'
+    if menu_link.links != blank
+      render 'smelly-footer-destination' for menu_link.links as menu_link
+    endif
+  endif
+-%}

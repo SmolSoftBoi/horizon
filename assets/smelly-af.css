@@ -762,12 +762,15 @@
 .smelly-footer .smelly-newsletter__input-row .smelly-button { min-height: 46px; padding: 12px 20px; gap: 14px; font-size: 13px; flex-shrink: 0; }
 .smelly-footer .smelly-newsletter__consent { color: #65535a; font-size: 11px; line-height: 1.6; margin-top: 12px; }
 .smelly-newsletter__consent a { text-decoration: underline; }
-.smelly-footer__main { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 60px; padding-block: 54px; }
+.smelly-footer__main { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 60px; padding-block: 54px; }
 .smelly-footer__brand { padding-top: 12px; }
 .smelly-footer__logo { width: 200px; max-width: 100%; height: auto; }
 .smelly-footer__brand > p { margin-top: 20px; max-width: 240px; }
-.smelly-footer__nav { display: flex; flex-direction: column; align-items: start; gap: 10px; }
-.smelly-footer__nav h3 { font: 700 20px/1.3 var(--smelly-serif); margin-bottom: 8px; letter-spacing: -0.5px; }
+.smelly-footer__nav { min-width: 0; overflow-wrap: anywhere; }
+.smelly-footer__nav h2 { font: 700 20px/1.3 var(--smelly-serif); margin-bottom: 18px; letter-spacing: -0.5px; }
+.smelly-footer__nav ul { display: grid; gap: 8px; }
+.smelly-footer__nav ul ul { margin-block-start: 8px; padding-inline-start: 12px; border-inline-start: 1px solid var(--smelly-line); }
+.smelly-footer__nav a { display: inline-block; min-height: 24px; }
 .smelly-footer .smelly-footer__privacy-link { display: inline-flex; align-items: center; gap: 8px; }
 .smelly-footer__privacy-link img { flex-shrink: 0; width: auto; }
 .smelly-footer__bottom { display: flex; justify-content: space-between; flex-wrap: wrap; align-items: center; gap: 20px; padding-block: 22px; border-top: 1px solid var(--smelly-line); font-size: 11px; }
@@ -849,8 +852,7 @@
   .smelly-newsletter__input-row { padding-left: 14px; }
   .smelly-newsletter__input-row input { font-size: 16px; }
   .smelly-footer .smelly-newsletter__input-row .smelly-button { padding-inline: 15px; gap: 8px; }
-  .smelly-footer__main { grid-template-columns: 1fr 1fr; gap: 35px 20px; padding-block: 38px; }
-  .smelly-footer__brand { grid-column: 1 / -1; }
+  .smelly-footer__main { grid-template-columns: minmax(0, 1fr); gap: 35px; padding-block: 38px; }
   .smelly-footer__brand > p { max-width: 100%; font-size: 13px; }
   .smelly-footer__nav { font-size: 13px; }
   .smelly-footer__bottom { align-items: start; gap: 12px; }
