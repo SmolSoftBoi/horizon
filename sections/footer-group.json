@@ -19,12 +19,73 @@
         "text": "New scents, seasonal moods and a little A.F. in your inbox.",
         "tagline": "Seriously good scents. A little less serious.",
         "menu": "footer",
+        "contact_page": "",
         "show_payment_icons": true,
         "signoff": "Hand-poured. With A.F. attitude."
+      }
+    },
+    "footer_utilities_DKg7WV": {
+      "type": "footer-utilities",
+      "blocks": {
+        "footer_copyright_DFbzBF": {
+          "type": "footer-copyright",
+          "settings": {
+            "show_powered_by": true,
+            "text_color": "",
+            "font_size": "0.75rem",
+            "case": "none"
+          },
+          "blocks": {}
+        },
+        "footer_policy_list_niJHzk": {
+          "type": "footer-policy-list",
+          "settings": {
+            "text_color": "",
+            "font_size": "0.75rem",
+            "case": "none"
+          },
+          "blocks": {}
+        },
+        "social_links_L4gNkT": {
+          "type": "social-links",
+          "settings": {
+            "icon_color": "",
+            "facebook_url": "",
+            "instagram_url": "",
+            "youtube_url": "",
+            "tiktok_url": "",
+            "twitter_url": "",
+            "threads_url": "",
+            "linkedin_url": "",
+            "bluesky_url": "",
+            "snapchat_url": "",
+            "pinterest_url": "",
+            "tumblr_url": "",
+            "vimeo_url": "",
+            "custom_url": ""
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "footer_copyright_DFbzBF",
+        "footer_policy_list_niJHzk",
+        "social_links_L4gNkT"
+      ],
+      "name": "t:names.policies_and_links",
+      "settings": {
+        "section_width": "page-width",
+        "gap": 24,
+        "background_color": "{{ settings.color_palette.background }}",
+        "divider_thickness": 0,
+        "divider_color": "",
+        "padding-block-start": 20,
+        "padding-block-end": 20
       }
     }
   },
   "order": [
-    "smelly_footer"
+    "smelly_footer",
+    "footer_utilities_DKg7WV"
   ]
 }

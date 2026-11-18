@@ -57,60 +57,6 @@
       ],
       "settings": {}
     },
-    "featured": {
-      "type": "smelly-featured",
-      "blocks": {
-        "scent_1": {
-          "type": "scent",
-          "settings": {
-            "heading": "Pink Bubblegum",
-            "note": "Sweet A.F.",
-            "link": "",
-            "photo": "bubblegum"
-          }
-        },
-        "scent_2": {
-          "type": "scent",
-          "settings": {
-            "heading": "Pumpkin Spice",
-            "note": "Spooky A.F.",
-            "link": "",
-            "photo": "pumpkin-spice"
-          }
-        },
-        "scent_3": {
-          "type": "scent",
-          "settings": {
-            "heading": "Candy Cane",
-            "note": "Festive A.F.",
-            "link": "",
-            "photo": "candy-cane"
-          }
-        },
-        "scent_4": {
-          "type": "scent",
-          "settings": {
-            "heading": "Parma Violets",
-            "note": "Floral feels.",
-            "link": "",
-            "photo": "parma-violets"
-          }
-        }
-      },
-      "block_order": [
-        "scent_1",
-        "scent_2",
-        "scent_3",
-        "scent_4"
-      ],
-      "settings": {
-        "note": "Small jars. Big moods.",
-        "heading": "Best sellers.",
-        "text": "A little sweet, a little seasonal. Find your next scent obsession.",
-        "collection": "best-sellers",
-        "product_count": 4
-      }
-    },
     "ranges": {
       "type": "smelly-ranges",
       "blocks": {
@@ -163,10 +109,66 @@
         "text": "A little sweet, a little seasonal, a whole lot of personality."
       }
     },
+    "featured": {
+      "type": "smelly-featured",
+      "blocks": {
+        "scent_1": {
+          "type": "scent",
+          "settings": {
+            "heading": "Pink Bubblegum",
+            "note": "Sweet A.F.",
+            "link": "",
+            "photo": "bubblegum"
+          }
+        },
+        "scent_2": {
+          "type": "scent",
+          "settings": {
+            "heading": "Pumpkin Spice",
+            "note": "Spooky A.F.",
+            "link": "",
+            "photo": "pumpkin-spice"
+          }
+        },
+        "scent_3": {
+          "type": "scent",
+          "settings": {
+            "heading": "Candy Cane",
+            "note": "Festive A.F.",
+            "link": "",
+            "photo": "candy-cane"
+          }
+        },
+        "scent_4": {
+          "type": "scent",
+          "settings": {
+            "heading": "Parma Violets",
+            "note": "Floral feels.",
+            "link": "",
+            "photo": "parma-violets"
+          }
+        }
+      },
+      "block_order": [
+        "scent_1",
+        "scent_2",
+        "scent_3",
+        "scent_4"
+      ],
+      "settings": {
+        "note": "Small jars. Big moods.",
+        "heading": "Best sellers.",
+        "text": "A little sweet, a little seasonal. Find your next scent obsession.",
+        "collection": "best-sellers",
+        "button_label": "Shop Best Sellers",
+        "product_count": 4
+      }
+    },
     "all_scents": {
       "type": "smelly-home-scents",
       "settings": {
         "heading": "All Scents",
+        "collection": "",
         "product_limit": 12
       }
     },
@@ -234,6 +236,7 @@
         "testimonial_2",
         "testimonial_3"
       ],
+      "disabled": true,
       "settings": {
         "note": "A little love for Smelly A.F.",
         "heading": "What our customers say.",
@@ -242,11 +245,12 @@
     },
     "journal": {
       "type": "smelly-journal",
+      "disabled": true,
       "settings": {
         "note": "Notes from our little candle corner",
         "heading": "A little light reading.",
         "text": "Candle care, scent inspiration and little ways to make yourself at home.",
-        "blog": "",
+        "blog": "news",
         "article_count": 3,
         "show_tags": true,
         "show_date": true,
