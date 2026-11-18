@@ -11,6 +11,33 @@
   "type": "footer",
   "name": "t:names.footer",
   "sections": {
+    "footer_utilities_ViWYDA": {
+      "type": "footer-utilities",
+      "blocks": {
+        "footer_policy_list_XgFhGT": {
+          "type": "footer-policy-list",
+          "settings": {
+            "text_color": "",
+            "font_size": "0.75rem",
+            "case": "none"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "footer_policy_list_XgFhGT"
+      ],
+      "name": "t:names.policies_and_links",
+      "settings": {
+        "section_width": "page-width",
+        "gap": 24,
+        "background_color": "{{ settings.color_palette.foreground }}",
+        "divider_thickness": 1,
+        "divider_color": "",
+        "padding-block-start": 20,
+        "padding-block-end": 20
+      }
+    },
     "smelly_footer": {
       "type": "smelly-footer",
       "settings": {
@@ -26,6 +53,7 @@
     }
   },
   "order": [
+    "footer_utilities_ViWYDA",
     "smelly_footer"
   ]
 }
