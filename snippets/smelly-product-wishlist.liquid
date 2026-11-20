@@ -1,0 +1,307 @@
+{% doc %}
+  Renders controls or the browser-local wishlist dialog for a product.
+  @param {product} product - The product to save.
+  @param {string} section_id - The product section ID.
+  @param {string} placement - Gallery, purchase, or dialog.
+{% enddoc %}
+
+{% if product.id != blank %}
+  {% if placement == 'dialog' %}
+    <smelly-product-wishlist
+      data-product-id="{{ product.id }}"
+      data-product-title="{{ product.title | escape }}"
+      data-product-url="{{ product.url | escape }}"
+      data-add="{{ 'smelly.product.wishlist_add' | t | escape }}"
+      data-remove="{{ 'smelly.product.wishlist_remove' | t | escape }}"
+      data-remove-item="{{ 'accessibility.remove_item' | t: title: '[product]' | escape }}"
+      data-error="{{ 'smelly.product.wishlist_error' | t | escape }}"
+    >
+      <p class="visually-hidden" role="status" data-wishlist-status></p>
+      <dialog id="SmellyWishlist-{{ section_id }}" aria-labelledby="SmellyWishlistTitle-{{ section_id }}" class="smelly-wishlist__dialog">
+        <div class="smelly-wishlist__heading">
+          <h2 id="SmellyWishlistTitle-{{ section_id }}">{{ 'smelly.product.wishlist' | t }}</h2>
+          <form method="dialog">
+            <button type="submit" class="button-unstyled smelly-wishlist__close" autofocus aria-label="{{ 'accessibility.close_dialog' | t }}">
+              <span class="svg-wrapper" aria-hidden="true">{{ 'icon-close.svg' | inline_asset_content }}</span>
+            </button>
+          </form>
+        </div>
+        <p data-wishlist-empty>{{ 'smelly.product.wishlist_empty' | t }}</p>
+        <p role="status" data-wishlist-dialog-status></p>
+        <ul role="list" data-wishlist-items></ul>
+        <template>
+          <li>
+            <a></a>
+            <button type="button" class="button-unstyled" data-wishlist-remove>{{ 'accessibility.remove' | t }}</button>
+          </li>
+        </template>
+      </dialog>
+    </smelly-product-wishlist>
+  {% else %}
+    <button type="button" class="button-unstyled smelly-wishlist__toggle smelly-wishlist__toggle--{{ placement }}" data-wishlist-toggle hidden>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+        <path d="M12 20.5 4.3 13a4.9 4.9 0 0 1 7-6.9l.7.7.7-.7a4.9 4.9 0 0 1 7 6.9Z" stroke-linejoin="round"/>
+      </svg>
+      <span{% if placement == 'gallery' %} class="visually-hidden"{% endif %}>{{ 'smelly.product.wishlist_add' | t }}</span>
+    </button>
+    {% if placement == 'purchase' %}
+      <button type="button" class="button-unstyled smelly-wishlist__open" aria-haspopup="dialog" aria-controls="SmellyWishlist-{{ section_id }}" data-wishlist-open hidden>
+        {{ 'smelly.product.wishlist_view' | t }}
+      </button>
+    {% endif %}
+  {% endif %}
+{% endif %}
+
+{% javascript %}
+  class SmellyProductWishlist extends HTMLElement {
+    static storagePrefix = 'smelly-af:wishlist:';
+    static observedAttributes = ['data-product-id'];
+
+    connectedCallback() {
+      this.container = this.closest('.smelly-product');
+      if (!this.container || typeof HTMLDialogElement.prototype.showModal !== 'function') return;
+
+      this.dialog = this.querySelector('dialog');
+      try {
+        this.sync(this.read());
+      } catch {
+        return;
+      }
+
+      this.listeners = new AbortController();
+      const { signal } = this.listeners;
+      this.container.addEventListener('click', this.handleClick, { signal });
+      window.addEventListener('storage', this.refresh, { signal });
+      window.addEventListener('pageshow', this.refresh, { signal });
+    }
+
+    disconnectedCallback() {
+      this.listeners?.abort();
+    }
+
+    attributeChangedCallback() {
+      if (this.isConnected && this.listeners) {
+        queueMicrotask(() => {
+          if (this.isConnected) this.refresh();
+        });
+      }
+    }
+
+    read() {
+      return Object.keys(localStorage).flatMap((key) => {
+        if (!key.startsWith(SmellyProductWishlist.storagePrefix)) return [];
+        try {
+          const item = JSON.parse(localStorage.getItem(key));
+          if (
+            key === SmellyProductWishlist.storagePrefix + item?.id &&
+            typeof item.title === 'string' &&
+            typeof item.url === 'string' &&
+            /^\/(?![/\\])/.test(item.url) &&
+            new URL(item.url, location.origin).origin === location.origin
+          ) return [item];
+        } catch {
+          return [];
+        }
+        return [];
+      }).sort((a, b) => a.title.localeCompare(b.title));
+    }
+
+    sync(items) {
+      const saved = items.some((item) => item.id === this.dataset.productId);
+      for (const toggle of this.container.querySelectorAll('[data-wishlist-toggle]')) {
+        toggle.dataset.saved = String(saved);
+        toggle.querySelector('span').textContent = saved ? this.dataset.remove : this.dataset.add;
+        toggle.hidden = false;
+      }
+      const openButton = this.container.querySelector('[data-wishlist-open]');
+      if (openButton) openButton.hidden = false;
+
+      if (!this.dialog.open) return;
+      const focusedId = this.dialog.querySelector('[data-wishlist-remove]:focus')?.dataset.wishlistRemove;
+      const template = this.querySelector('template');
+      const list = this.dialog.querySelector('[data-wishlist-items]');
+      const entries = items.map((item) => {
+        const entry = template.content.cloneNode(true);
+        const link = entry.querySelector('a');
+        link.textContent = item.title;
+        link.href = item.url;
+        const removeButton = entry.querySelector('button');
+        removeButton.dataset.wishlistRemove = item.id;
+        removeButton.setAttribute('aria-label', this.dataset.removeItem.replace('[product]', () => item.title));
+        return entry;
+      });
+      this.dialog.querySelector('[data-wishlist-empty]').hidden = items.length > 0;
+      list.replaceChildren(...entries);
+      if (focusedId) {
+        const removeButtons = [...list.querySelectorAll('button')];
+        const focusTarget = removeButtons.find((button) => button.dataset.wishlistRemove === focusedId)
+          ?? removeButtons[0]
+          ?? this.dialog.querySelector('.smelly-wishlist__close');
+        focusTarget.focus();
+      }
+    }
+
+    refresh = (event) => {
+      if (event?.type === 'storage' && event.key !== null && !event.key.startsWith(SmellyProductWishlist.storagePrefix)) return;
+      try {
+        this.sync(this.read());
+      } catch {
+        this.reportError();
+      }
+    };
+
+    handleClick = (event) => {
+      const button = event.target.closest('button');
+      if (!button) return;
+
+      if (button.hasAttribute('data-wishlist-open')) {
+        this.dialog.showModal();
+        this.refresh(event);
+        return;
+      }
+
+      const toggling = button.hasAttribute('data-wishlist-toggle');
+      const id = toggling ? this.dataset.productId : button.dataset.wishlistRemove;
+      if (!id) return;
+
+      try {
+        const key = SmellyProductWishlist.storagePrefix + id;
+        if (toggling && !this.read().some((item) => item.id === id)) {
+          localStorage.setItem(key, JSON.stringify({ id, title: this.dataset.productTitle, url: this.dataset.productUrl }));
+        } else {
+          localStorage.removeItem(key);
+        }
+        this.querySelector('[data-wishlist-status]').textContent = '';
+        this.dialog.querySelector('[data-wishlist-dialog-status]').textContent = '';
+        this.sync(this.read());
+      } catch {
+        this.reportError();
+      }
+    };
+
+    reportError() {
+      const status = this.dialog.open
+        ? this.dialog.querySelector('[data-wishlist-dialog-status]')
+        : this.querySelector('[data-wishlist-status]');
+      status.textContent = this.dataset.error;
+    }
+  }
+
+  if (!customElements.get('smelly-product-wishlist')) {
+    customElements.define('smelly-product-wishlist', SmellyProductWishlist);
+  }
+{% endjavascript %}
+
+{% stylesheet %}
+  .smelly-wishlist__toggle[hidden],
+  .smelly-wishlist__open[hidden] {
+    display: none;
+  }
+
+  .smelly-wishlist__toggle:not([hidden]) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    color: var(--smelly-ink);
+  }
+
+  .smelly-wishlist__toggle--gallery {
+    position: absolute;
+    z-index: 2;
+    inset-block-start: 12px;
+    inset-inline-end: 12px;
+    width: 46px;
+    border-radius: 50%;
+    background: var(--smelly-cream);
+  }
+
+  @media screen and (min-width: 750px) {
+    .product-information__media:has(slideshow-controls[thumbnails][pagination-position='right']) .smelly-wishlist__toggle--gallery {
+      inset-inline: 12px auto;
+    }
+  }
+
+  .smelly-wishlist__toggle--purchase {
+    width: 100%;
+    margin-block-start: 12px;
+    border: 1px solid var(--smelly-line);
+    border-radius: 999px;
+    padding-inline: 16px;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .smelly-wishlist__toggle:hover,
+  .smelly-wishlist__toggle[data-saved='true'] {
+    border-color: var(--smelly-pink);
+    color: var(--smelly-pink);
+  }
+
+  .smelly-wishlist__toggle[data-saved='true'] svg {
+    fill: currentColor;
+  }
+
+  .smelly-wishlist__open {
+    min-height: 44px;
+    padding-inline: 4px;
+    color: var(--smelly-ink);
+    font-size: 0.875rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .smelly-wishlist__dialog {
+    width: min(calc(100% - 32px), 480px);
+    max-height: calc(100% - 32px);
+    padding: 20px;
+    border: 1px solid var(--smelly-line);
+    border-radius: 18px;
+    background: var(--smelly-cream);
+    color: var(--smelly-ink);
+  }
+
+  .smelly-wishlist__dialog::backdrop {
+    background: rgb(38 26 33 / 48%);
+  }
+
+  .smelly-wishlist__heading,
+  .smelly-wishlist__dialog li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .smelly-wishlist__heading h2 {
+    margin: 0;
+    font: 700 1.75rem/1.1 var(--smelly-serif);
+  }
+
+  .smelly-wishlist__dialog ul {
+    margin: 0;
+    padding: 0;
+  }
+
+  .smelly-wishlist__dialog li {
+    border-block-start: 1px solid var(--smelly-line);
+  }
+
+  .smelly-wishlist__dialog li button,
+  .smelly-wishlist__dialog li a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .smelly-wishlist__close {
+    display: grid;
+    width: 44px;
+    height: 44px;
+    place-items: center;
+  }
+{% endstylesheet %}

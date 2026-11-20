@@ -3,13 +3,18 @@
   assign product = closest.product
   assign rating = product.metafields.reviews.rating.value.rating
   assign scale_max = product.metafields.reviews.rating.value.scale_max
-  assign rating_count = product.metafields.reviews.rating_count
+  assign rating_count = product.metafields.reviews.rating_count.value
 
   if request.visual_preview_mode and product == blank
     assign product = collections.all.products.first
-    assign rating = product.metafields.reviews.rating.value | default: 4
+    assign rating = product.metafields.reviews.rating.value.rating | default: 4
     assign scale_max = product.metafields.reviews.rating.value.scale_max | default: 5
-    assign rating_count = product.metafields.reviews.rating_count | default: 3
+    assign rating_count = product.metafields.reviews.rating_count.value | default: 3
+  endif
+
+  assign show_count = false
+  if block_settings.show_number and rating_count != blank
+    assign show_count = true
   endif
 -%}
 
@@ -96,17 +101,21 @@
       {% endif %}
     </div>
 
-    {%- if block_settings.show_number or block_settings.stars_style == 'single' -%}
+    {%- if show_count or block_settings.stars_style == 'single' -%}
       <p class="rating-count {{ block_settings.type_preset }}">
         {%- if block_settings.stars_style == 'single' -%}
           <span aria-hidden="true">{{- rating | round: 1 }}</span>
         {%- endif -%}
-        {%- if block_settings.stars_style == 'single' and block_settings.show_number -%}
+        {%- if block_settings.stars_style == 'single' and show_count -%}
           <span class="rating-count-separator">|</span>
         {%- endif -%}
-        {%- if block_settings.show_number -%}
-          {{- rating_count }}
-          {{ 'content.reviews' | t }}
+        {%- if show_count -%}
+          {% if section.settings.smelly_product_style %}
+            ({{ 'smelly.product.review_count' | t: count: rating_count }})
+          {% else %}
+            {{- rating_count }}
+            {{ 'content.reviews' | t }}
+          {% endif %}
         {%- endif -%}
       </p>
     {%- endif -%}

@@ -1,0 +1,136 @@
+{% doc %}
+  Renders the scent notes and benefits supplied for a product.
+  @param {product} product - The current product.
+{% enddoc %}
+
+{% liquid
+  assign fields = product.metafields.custom
+  assign tiers = 'top,heart,base' | split: ','
+  assign benefits = fields.benefits.value
+%}
+{% capture notes %}
+  {% for tier in tiers %}
+    {% liquid
+      assign note_key = 'scent_' | append: tier
+      assign note = fields[note_key].value | strip
+      assign image_key = note_key | append: '_image'
+      assign note_image = fields[image_key].value.preview_image
+      assign label_key = 'smelly.product.scent_' | append: tier
+    %}
+    {% if note != blank %}
+      <div class="smelly-product-highlights__note">
+        <dt>
+          {% if note_image != blank %}
+            {{ note_image | image_url: width: 144 | image_tag: widths: '48, 72, 96, 144', sizes: '64px', alt: '', loading: 'lazy' }}
+          {% endif %}
+          {{ label_key | t }}
+        </dt>
+        <dd>{{ note | escape }}</dd>
+      </div>
+    {% endif %}
+  {% endfor %}
+{% endcapture %}
+{% assign notes = notes | strip %}
+
+{% if notes != blank or benefits != blank %}
+  <div class="smelly-product-highlights">
+    {% if notes != blank %}
+      <section class="smelly-product-highlights__card smelly-product-highlights__card--notes">
+        <h2>{{ 'smelly.product.scent_notes' | t }}</h2>
+        <dl>{{ notes }}</dl>
+      </section>
+    {% endif %}
+    {% if benefits != blank %}
+      <section class="smelly-product-highlights__card">
+        <h2>{{ 'smelly.product.benefits' | t }}</h2>
+        <ul role="list">
+          {% for benefit in benefits %}
+            <li>
+              <span class="svg-wrapper" aria-hidden="true">{{ 'icon-checkmark.svg' | inline_asset_content }}</span>
+              {{ benefit | escape }}
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+    {% endif %}
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .smelly-product-highlights {
+    display: grid;
+    align-content: start;
+    gap: 16px;
+    min-width: 0;
+  }
+
+  .smelly-product-highlights__card {
+    padding: 18px;
+    border: 1px solid transparent;
+    border-radius: 18px;
+    background: color-mix(in srgb, var(--smelly-blush) 62%, var(--smelly-cream));
+    font-size: 0.9375rem;
+    line-height: 1.4;
+  }
+
+  .smelly-product-highlights__card--notes {
+    border-color: var(--smelly-line);
+    background: color-mix(in srgb, var(--smelly-blush) 28%, var(--smelly-cream));
+  }
+
+  .smelly-product-highlights h2 {
+    margin: 0 0 12px;
+    font: 700 1.5rem/1.1 var(--smelly-serif);
+    letter-spacing: -0.035em;
+  }
+
+  .smelly-product-highlights :is(dl, dd, ul) {
+    margin: 0;
+    padding: 0;
+  }
+
+  .smelly-product-highlights__note {
+    position: relative;
+    padding-block: 9px;
+  }
+
+  .smelly-product-highlights__note:has(img) {
+    align-content: center;
+    min-height: 60px;
+    padding-inline-start: 76px;
+  }
+
+  .smelly-product-highlights__note + .smelly-product-highlights__note {
+    border-block-start: 1px solid var(--smelly-line);
+  }
+
+  .smelly-product-highlights__note img {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 0;
+    translate: 0 -50%;
+    width: 64px;
+    height: 42px;
+    object-fit: contain;
+  }
+
+  .smelly-product-highlights dt {
+    font-weight: 700;
+  }
+
+  .smelly-product-highlights li {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    margin-block-start: 7px;
+  }
+
+  .smelly-product-highlights .svg-wrapper {
+    flex: 0 0 15px;
+    width: 15px;
+    height: 15px;
+    color: var(--smelly-pink);
+    align-self: start;
+    margin-block-start: 3px;
+  }
+{% endstylesheet %}

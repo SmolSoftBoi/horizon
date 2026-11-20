@@ -38,7 +38,20 @@ A Smelly A.F. storefront built on this checkout of Shopify Horizon. The theme us
 9. Review editable copy, set the shop’s name, upload a final logo/favicon if available, and configure the store’s policies and payment methods. Check email marketing settings and any confirmation flow required by the store.
 10. Preview a real product with variants, an unavailable product, search, Add to basket, basket quantity changes, contact submission and newsletter signup on desktop and mobile before publishing.
 
-The default product template enables **Use Smelly A.F. product styling** in **Smelly A.F. product**. The setting is off by default for other instances of Horizon’s Product information section. Product titles, prices, descriptions, media and availability come from the selected store product. Edit each product’s description in Shopify to supply its scent details. Edit or clear **Photograph caption** in the section settings, and use **Smelly A.F. care & info** inside Product details to edit the care heading/text or disable policy links. Clearing the care heading or text hides that row; clearing the policy heading hides the policy row. The care and policy rows use native disclosures and remain usable without JavaScript. Gallery settings and purchasing behaviour remain Horizon’s own; test variant changes, quantity rules, stock errors, image zoom, accelerated checkout and the sticky basket bar with real store data.
+The default product template uses the product’s media, description, prices, variants and availability from Shopify. The thumbnail position, gallery zoom and purchase controls are editable in **Smelly A.F. product**. **Smelly A.F. care & info** controls the fallback care copy and links to the shipping and refund policies configured in Shopify.
+
+Add the optional product metafield definitions under **Settings → Custom data → Products**. Enter the verified values on each relevant product. Omitted fields leave no gap on the page.
+
+| Metafield | Shopify type | Where it appears |
+| --- | --- | --- |
+| `custom.short_description` | Single line text | Introduction above the purchase controls. Falls back to an excerpt from the product description. |
+| `custom.scent_top`, `custom.scent_heart`, `custom.scent_base` | Single line text | Scent notes card |
+| `custom.scent_top_image`, `custom.scent_heart_image`, `custom.scent_base_image` | File, restricted to images | Image beside the corresponding scent note |
+| `custom.benefits` | List of single line text | “Why you’ll love it” card |
+| `custom.burn_time`, `custom.net_weight`, `custom.jar_size`, `custom.wax` | Single line text | Product facts. Include units as appropriate. Net weight also appears by the quantity selector on single-variant products. |
+| `custom.product_details`, `custom.care_instructions`, `custom.ingredients` | Rich text | Additional product information. Product care instructions take precedence over the template’s care copy. |
+
+The rating and review count come from Shopify’s standard `reviews.rating` and `reviews.rating_count` product metafields. In the theme editor, add your review app’s block to **Smelly A.F. related** for individual reviews and review submission. Related products come from Shopify recommendations, with available catalogue products as a fallback. **Show wishlist buttons** enables a wishlist stored in the shopper’s browser.
 
 ## Brand controls and content
 

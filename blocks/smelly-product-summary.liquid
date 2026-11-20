@@ -1,0 +1,26 @@
+{% liquid
+  assign summary = closest.product.metafields.custom.short_description.value | strip
+  if summary == blank
+    assign summary = closest.product.description | replace: '</p>', ' ' | strip_html | strip | truncatewords: 30
+  endif
+%}
+
+{% if summary != blank or request.design_mode %}
+  <p class="smelly-product__summary" {{ block.shopify_attributes }}>{{ summary | escape_once }}</p>
+{% endif %}
+
+{% stylesheet %}
+  .smelly-product__summary {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.45;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Smelly A.F. summary",
+  "tag": null,
+  "presets": [{ "name": "Smelly A.F. summary", "category": "t:categories.product" }]
+}
+{% endschema %}

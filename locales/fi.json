@@ -345,6 +345,38 @@
     }
   },
   "smelly": {
+    "product": {
+      "breadcrumbs": "Breadcrumbs",
+      "size": "Size",
+      "scent_notes": "Scent notes",
+      "scent_top": "Top",
+      "scent_heart": "Heart",
+      "scent_base": "Base",
+      "benefits": "Why you’ll love it",
+      "information": "Product information",
+      "description": "Description",
+      "details": "Details",
+      "care": "How to use",
+      "ingredients": "Ingredients",
+      "delivery": "Delivery & returns",
+      "burn_time": "Burn time",
+      "net_weight": "Net weight",
+      "jar_size": "Jar size",
+      "wax": "Wax",
+      "wishlist": "Wishlist",
+      "wishlist_add": "Add to wishlist",
+      "wishlist_remove": "Remove from wishlist",
+      "wishlist_view": "View wishlist",
+      "wishlist_empty": "Your wishlist is empty.",
+      "wishlist_error": "Your wishlist couldn’t be updated. Try again.",
+      "customer_reviews": "Customer reviews",
+      "rating": "{{ rating }} out of {{ scale }}",
+      "review_count": {
+        "one": "{{ count }} review",
+        "other": "{{ count }} reviews"
+      },
+      "related": "You might also like"
+    },
     "brand_name": "Smelly A.F.",
     "brand_descriptor": "Candle Co.",
     "home": "Smelly A.F. home",
