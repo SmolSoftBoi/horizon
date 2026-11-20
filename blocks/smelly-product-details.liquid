@@ -3,15 +3,21 @@
   assign product = closest.product
   assign fields = product.metafields.custom
   assign details_id = 'SmellyProductDetails-' | append: section.id | append: '-' | append: block.id
-  assign description_text = product.description | strip_html | replace: '&nbsp;', '' | strip
+  assign description = product.description | strip
   assign care_text = block_settings.care_text | strip_html | strip
-  assign care_key = 'smelly.product.care' | t
-  assign care_title = block_settings.care_heading | default: care_key
+  assign care_title = block_settings.care_heading
+  if care_title == blank or care_title == 'How to use' or care_title == 'Candle care'
+    assign care_title = 'smelly.product.care' | t
+  endif
+  assign policy_title = block_settings.policy_heading
+  if policy_title == 'Delivery & returns'
+    assign policy_title = 'smelly.product.delivery' | t
+  endif
   assign fact_keys = 'burn_time,net_weight,jar_size,wax' | split: ','
   assign fact_icons = 'stopwatch,box,ruler,leaf' | split: ','
   assign facts_in_details = false
   assign tabs = ''
-  if description_text != blank or product.description contains '<img'
+  if description != blank
     assign tabs = 'description,'
   endif
 %}
@@ -63,7 +69,7 @@
 %}
 
 {% if tabs.size > 0 or request.design_mode %}
-  <smelly-product-tabs class="smelly-product-details" {{ block.shopify_attributes }}>
+  <smelly-product-tabs id="{{ details_id }}-{{ product.id }}" class="smelly-product-details" {{ block.shopify_attributes }}>
     <nav class="smelly-product-details__nav" aria-label="{{ 'smelly.product.information' | t }}">
       {% for tab in tabs %}
         {% liquid
@@ -73,7 +79,7 @@
             when 'care'
               assign label = care_title
             when 'delivery'
-              assign label = block_settings.policy_heading
+              assign label = policy_title
           endcase
         %}
         <a id="{{ details_id }}-tab-{{ tab }}" href="#{{ details_id }}-{{ tab }}">{{ label | escape }}</a>

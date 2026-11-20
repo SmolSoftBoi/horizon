@@ -8,6 +8,7 @@
 {% if product.id != blank %}
   {% if placement == 'dialog' %}
     <smelly-product-wishlist
+      id="SmellyProductWishlist-{{ section_id }}-{{ product.id }}"
       data-product-id="{{ product.id }}"
       data-product-title="{{ product.title | escape }}"
       data-product-url="{{ product.url | escape }}"
@@ -15,6 +16,7 @@
       data-remove="{{ 'smelly.product.wishlist_remove' | t | escape }}"
       data-remove-item="{{ 'accessibility.remove_item' | t: title: '[product]' | escape }}"
       data-error="{{ 'smelly.product.wishlist_error' | t | escape }}"
+      data-unavailable="{{ 'smelly.product.wishlist_unavailable' | t | escape }}"
     >
       <p class="visually-hidden" role="status" data-wishlist-status></p>
       <dialog id="SmellyWishlist-{{ section_id }}" aria-labelledby="SmellyWishlistTitle-{{ section_id }}" class="smelly-wishlist__dialog">
@@ -48,6 +50,7 @@
       <button type="button" class="button-unstyled smelly-wishlist__open" aria-haspopup="dialog" aria-controls="SmellyWishlist-{{ section_id }}" data-wishlist-open hidden>
         {{ 'smelly.product.wishlist_view' | t }}
       </button>
+      <p class="smelly-wishlist__status" role="status" data-wishlist-purchase-status></p>
     {% endif %}
   {% endif %}
 {% endif %}
@@ -55,19 +58,18 @@
 {% javascript %}
   class SmellyProductWishlist extends HTMLElement {
     static storagePrefix = 'smelly-af:wishlist:';
-    static observedAttributes = ['data-product-id'];
 
     connectedCallback() {
       this.container = this.closest('.smelly-product');
-      if (!this.container || typeof HTMLDialogElement.prototype.showModal !== 'function') return;
+      if (!this.container) return;
 
       this.dialog = this.querySelector('dialog');
-      try {
-        this.sync(this.read());
-      } catch {
+      if (typeof this.dialog?.showModal !== 'function') {
+        this.showUnavailable();
         return;
       }
 
+      this.refresh();
       this.listeners = new AbortController();
       const { signal } = this.listeners;
       this.container.addEventListener('click', this.handleClick, { signal });
@@ -77,14 +79,6 @@
 
     disconnectedCallback() {
       this.listeners?.abort();
-    }
-
-    attributeChangedCallback() {
-      if (this.isConnected && this.listeners) {
-        queueMicrotask(() => {
-          if (this.isConnected) this.refresh();
-        });
-      }
     }
 
     read() {
@@ -111,10 +105,7 @@
       for (const toggle of this.container.querySelectorAll('[data-wishlist-toggle]')) {
         toggle.dataset.saved = String(saved);
         toggle.querySelector('span').textContent = saved ? this.dataset.remove : this.dataset.add;
-        toggle.hidden = false;
       }
-      const openButton = this.container.querySelector('[data-wishlist-open]');
-      if (openButton) openButton.hidden = false;
 
       if (!this.dialog.open) return;
       const focusedId = this.dialog.querySelector('[data-wishlist-remove]:focus')?.dataset.wishlistRemove;
@@ -145,10 +136,24 @@
       if (event?.type === 'storage' && event.key !== null && !event.key.startsWith(SmellyProductWishlist.storagePrefix)) return;
       try {
         this.sync(this.read());
+        this.setControlsAvailable(true);
+        this.reportError('');
       } catch {
-        this.reportError();
+        this.showUnavailable();
       }
     };
+
+    setControlsAvailable(available) {
+      for (const button of this.container.querySelectorAll('[data-wishlist-toggle], [data-wishlist-open]')) {
+        button.hidden = false;
+        button.disabled = !available;
+      }
+    }
+
+    showUnavailable() {
+      this.setControlsAvailable(false);
+      this.reportError(this.dataset.unavailable);
+    }
 
     handleClick = (event) => {
       const button = event.target.closest('button');
@@ -171,19 +176,18 @@
         } else {
           localStorage.removeItem(key);
         }
-        this.querySelector('[data-wishlist-status]').textContent = '';
-        this.dialog.querySelector('[data-wishlist-dialog-status]').textContent = '';
+        this.reportError('');
         this.sync(this.read());
       } catch {
         this.reportError();
       }
     };
 
-    reportError() {
-      const status = this.dialog.open
+    reportError(message = this.dataset.error) {
+      const status = this.dialog?.open
         ? this.dialog.querySelector('[data-wishlist-dialog-status]')
-        : this.querySelector('[data-wishlist-status]');
-      status.textContent = this.dataset.error;
+        : this.container.querySelector('[data-wishlist-purchase-status]') ?? this.querySelector('[data-wishlist-status]');
+      status.textContent = message;
     }
   }
 
@@ -193,6 +197,15 @@
 {% endjavascript %}
 
 {% stylesheet %}
+  .smelly-wishlist__status {
+    margin: 0;
+    font-size: 0.875rem;
+  }
+
+  .smelly-wishlist__status:not(:empty) {
+    margin-block-end: 8px;
+  }
+
   .smelly-wishlist__toggle[hidden],
   .smelly-wishlist__open[hidden] {
     display: none;

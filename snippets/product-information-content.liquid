@@ -134,6 +134,9 @@
       <div
         class="product-information__media"
         data-testid="product-information-media"
+        {% if settings.smelly_product_style %}
+          id="SmellyProductMedia-{{ section_id }}-{{ product.id }}"
+        {% endif %}
       >
         {{ media_gallery }}
         {% if settings.smelly_product_style and settings.smelly_wishlist %}

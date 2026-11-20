@@ -45,13 +45,15 @@
       {% endif %}
 
       <product-recommendations
+        id="SmellyProductRecommendations-{{ section.id }}-{{ product.id }}"
         class="smelly-product-related__recommendations"
         data-url="{{ routes.product_recommendations_url }}?limit={{ section.settings.max_products }}"
         data-section-id="{{ section.id }}"
         data-product-id="{{ product.id }}"
         data-intent="related"
         data-recommendations-performed="{{ recommendations.performed }}"
-        data-hydration-key="product-recommendations-{{ section.id }}"
+        data-hydration-key="product-recommendations-{{ section.id }}-{{ product.id }}"
+        data-refresh-on-cart-update
       >
         {% if related_products != blank %}
           <h2>{{ 'smelly.product.related' | t }}</h2>

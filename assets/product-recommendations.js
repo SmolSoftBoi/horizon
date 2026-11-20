@@ -1,5 +1,6 @@
 import { Component } from '@theme/component';
 import { morphSection } from '@theme/section-renderer';
+import { StandardEvents } from '@shopify/events';
 
 class ProductRecommendations extends Component {
   /**
@@ -56,6 +57,23 @@ class ProductRecommendations extends Component {
    */
   #activeFetch = null;
 
+  /** @param {import('@shopify/events').CartLinesUpdateEvent} event */
+  static refreshAfterCartUpdate = async (event) => {
+    if (!event.promise) return;
+
+    try {
+      const { detail } = await event.promise;
+      if (detail?.didError) return;
+    } catch {
+      return;
+    }
+
+    // Select the current elements after the update in case a product changed during it.
+    for (const element of document.querySelectorAll('product-recommendations[data-refresh-on-cart-update]')) {
+      if (element instanceof ProductRecommendations) element.#loadRecommendations(true);
+    }
+  };
+
   connectedCallback() {
     super.connectedCallback();
     this.#intersectionObserver.observe(this);
@@ -66,12 +84,17 @@ class ProductRecommendations extends Component {
     super.disconnectedCallback();
     this.#intersectionObserver.disconnect();
     this.#mutationObserver.disconnect();
+    this.#activeFetch?.abort();
+    this.#activeFetch = null;
   }
 
   /**
    * Load the product recommendations
+   * @param {boolean} [refresh] - Reload the section after a basket change.
    */
-  #loadRecommendations() {
+  #loadRecommendations(refresh = false) {
+    if (!this.isConnected) return;
+
     const { productId, recommendationsPerformed, sectionId, intent } = this.dataset;
 
     if (!productId || !sectionId) {
@@ -80,12 +103,25 @@ class ProductRecommendations extends Component {
 
     // If the recommendations have already been loaded, accounts for the case where the Theme Editor
     // is loaded the section from the editor's visual preview context.
-    if (recommendationsPerformed === 'true') {
+    if (recommendationsPerformed === 'true' && !refresh) {
       return;
     }
 
-    this.#fetchCachedRecommendations(productId, sectionId, intent)
+    this.#activeFetch?.abort();
+    const request = new AbortController();
+    this.#activeFetch = request;
+    const isCurrent = () =>
+      this.isConnected &&
+      this.#activeFetch === request &&
+      this.dataset.productId === productId &&
+      this.dataset.sectionId === sectionId;
+    const url = `${this.dataset.url}&product_id=${productId}&section_id=${sectionId}&intent=${intent}`;
+    const useCache = !this.hasAttribute('data-refresh-on-cart-update');
+
+    this.#fetchRecommendations(url, request.signal, useCache)
       .then((result) => {
+        if (!isCurrent()) return;
+
         if (!result.success) {
           // The Theme Editor will place a section element element in the DOM whose section_id is not available
           // to the Section Renderer API. In this case, we can safely ignore the error.
@@ -97,46 +133,40 @@ class ProductRecommendations extends Component {
 
         if (result.data?.trim().length) {
           this.dataset.recommendationsPerformed = 'true';
-          morphSection(sectionId, result.data, { mode: 'hydration', injectStylesheet: true });
+          return morphSection(sectionId, result.data, { mode: 'hydration', injectStylesheet: true });
         } else {
           this.#handleError(new Error('No recommendations available'));
         }
       })
       .catch((e) => {
-        this.#handleError(e);
+        if (isCurrent() && e?.name !== 'AbortError') this.#handleError(e);
+      })
+      .finally(() => {
+        if (this.#activeFetch === request) this.#activeFetch = null;
       });
   }
 
   /**
    * Fetches the recommendations and cached the result for future use
-   * @param {string} productId
-   * @param {string | undefined} sectionId
-   * @param {string | undefined} intent
+   * @param {string} url
+   * @param {AbortSignal} signal
+   * @param {boolean} useCache - Whether the rendered cards are independent of the basket.
    * @returns {Promise<{ success: true, data: string } | { success: false, status: number }>}
    */
-  async #fetchCachedRecommendations(productId, sectionId, intent) {
-    const url = `${this.dataset.url}&product_id=${productId}&section_id=${sectionId}&intent=${intent}`;
-
+  async #fetchRecommendations(url, signal, useCache) {
     const cachedResponse = this.#cachedRecommendations[url];
-    if (cachedResponse) {
+    if (useCache && cachedResponse) {
       return { success: true, data: cachedResponse };
     }
 
-    this.#activeFetch?.abort();
-    this.#activeFetch = new AbortController();
-
-    try {
-      const response = await fetch(url, { signal: this.#activeFetch.signal });
-      if (!response.ok) {
-        return { success: false, status: response.status };
-      }
-
-      const text = await response.text();
-      this.#cachedRecommendations[url] = text;
-      return { success: true, data: text };
-    } finally {
-      this.#activeFetch = null;
+    const response = await fetch(url, useCache ? { signal } : { signal, cache: 'no-store' });
+    if (!response.ok) {
+      return { success: false, status: response.status };
     }
+
+    const text = await response.text();
+    if (useCache && !signal.aborted) this.#cachedRecommendations[url] = text;
+    return { success: true, data: text };
   }
 
   /**
@@ -152,4 +182,5 @@ class ProductRecommendations extends Component {
 
 if (!customElements.get('product-recommendations')) {
   customElements.define('product-recommendations', ProductRecommendations);
+  document.addEventListener(StandardEvents.cartLinesUpdate, ProductRecommendations.refreshAfterCartUpdate);
 }

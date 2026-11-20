@@ -73,7 +73,7 @@ When the hero is the first section under a transparent header, it reserves the m
 
 Hand-poured soy wax and 150g are supported by the supplied labels. No mock prices, reviews, discounts, testimonials, burn times, delivery promises or vegan/plastic-free claims have been added. Replace the proposed brand copy where necessary before launch.
 
-New interface strings are in the `smelly` namespace in storefront locale files. The shared `shop_all` navigation label is translated in all 34 storefront locales. Other Smelly A.F. strings use UK English as an explicit fallback in the inherited languages; translate those remaining strings and editable content before enabling another storefront language. Existing Horizon translations are preserved.
+The shared `shop_all` label and product-page interface strings are translated across all 34 storefront locales under `smelly`. Other Smelly A.F. strings use UK English defaults. Translate those strings and merchant-entered content before enabling another storefront language.
 
 ## Local verification
 

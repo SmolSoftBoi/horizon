@@ -98,33 +98,40 @@
             endif
           -%}
 
-          {%- if net_weight != blank -%}
-            <div class="smelly-product__size">
-              <p class="smelly-product__size-label">{{ 'smelly.product.size' | t }}</p>
-              <p class="smelly-product__size-value">
-                <strong>{{ net_weight | escape }}</strong>
-                {% if burn_time != blank %}<span>({{ burn_time | escape }})</span>{% endif %}
-              </p>
-            </div>
-          {%- endif -%}
+          {% capture quantity_controls %}
+            {%- if net_weight != blank -%}
+              <div class="smelly-product__size">
+                <p class="smelly-product__size-label">{{ 'smelly.product.size' | t }}</p>
+                <p class="smelly-product__size-value">
+                  <strong>{{ net_weight | escape }}</strong>
+                  {% if burn_time != blank %}<span>({{ burn_time | escape }})</span>{% endif %}
+                </p>
+              </div>
+            {%- endif -%}
 
-          {%- if has_quantity_rules or section.settings.smelly_product_style -%}
-            {%- assign cart_quantity = cart | item_count_for_variant: variant.id -%}
-            <div
-              class="quantity-label{% unless has_quantity_rules %} quantity-label--smelly{% endunless %}"
-              ref="quantityLabel"
-            >
-              {{ 'products.product.quantity' | t }}
-              <span
-                class="quantity-label__cart-count{% if cart_quantity == 0 %} hidden{% endif %}"
-                ref="quantityLabelCartCount"
-                >({{ cart_quantity }}
-                {{ 'products.product.in_cart' | t }})</span
+            {%- if has_quantity_rules or section.settings.smelly_product_style -%}
+              {%- assign cart_quantity = cart | item_count_for_variant: variant.id -%}
+              <div
+                class="quantity-label{% unless has_quantity_rules %} quantity-label--smelly{% endunless %}"
+                ref="quantityLabel"
               >
-            </div>
-          {%- endif -%}
+                {{ 'products.product.quantity' | t }}
+                <span
+                  class="quantity-label__cart-count{% if cart_quantity == 0 %} hidden{% endif %}"
+                  ref="quantityLabelCartCount"
+                  >({{ cart_quantity }}
+                  {{ 'products.product.in_cart' | t }})</span
+                >
+              </div>
+            {%- endif -%}
 
-          {% content_for 'block', type: 'quantity', id: 'quantity' %}
+            {% content_for 'block', type: 'quantity', id: 'quantity' %}
+          {% endcapture %}
+          {% if net_weight != blank %}
+            <div class="smelly-product__size-controls">{{ quantity_controls }}</div>
+          {% else %}
+            {{ quantity_controls }}
+          {% endif %}
 
           {%- if has_quantity_rules -%}
             <div
@@ -405,6 +412,10 @@
 {% render 'buy-buttons-styles' %}
 
 {% stylesheet %}
+  .buy-buttons-block .smelly-product__size-controls {
+    display: contents;
+  }
+
   .buy-buttons-block :is(.smelly-product__size, .quantity-label--smelly) {
     display: none;
   }

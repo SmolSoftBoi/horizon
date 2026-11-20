@@ -29,6 +29,9 @@
     {% render 'variant-button-custom-styles', block_settings: block_settings, block_id: block.id %}
   {% endif %}
   <variant-picker
+    {% if section.settings.smelly_product_style and product.id == product_resource.id %}
+      id="SmellyVariantPicker-{{ section.id }}-{{ block.id }}-{{ product_resource.id }}"
+    {% endif %}
     class="variant-picker spacing-style variant-picker--{{ block_settings.alignment }}{% if has_custom_variant_buttons %} variant-picker--custom-{{ block.id }}{% endif %}"
     style="
       {% render 'spacing-style', settings: block_settings %}

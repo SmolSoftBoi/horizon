@@ -397,6 +397,7 @@
       "wishlist_view": "View wishlist",
       "wishlist_empty": "Your wishlist is empty.",
       "wishlist_error": "Your wishlist couldn’t be updated. Try again.",
+      "wishlist_unavailable": "Wishlist unavailable in this browser.",
       "customer_reviews": "Customer reviews",
       "rating": "{{ rating }} out of {{ scale }}",
       "review_count": {
