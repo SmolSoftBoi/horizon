@@ -164,8 +164,13 @@
   if block_settings.constrain_to_viewport
     assign product_media_container_class = product_media_container_class | append: ' constrain-height'
   endif
+  assign contain_smelly_photos = false
   if block_settings.aspect_ratio != 'adapt'
     assign product_media_container_class = product_media_container_class | append: ' media-fit-cover'
+    if section.settings.smelly_product_style and block_settings.media_fit == 'contain'
+      assign contain_smelly_photos = true
+      assign product_media_container_class = product_media_container_class | append: ' smelly-product-media--contain'
+    endif
   elsif block_settings.constrain_to_viewport
     assign product_media_container_class = product_media_container_class | append: ' media-fit-' | append: block_settings.media_fit
   else
@@ -329,7 +334,7 @@
       object-position: var(--gallery-media-focal-point, center);
     }
   {% endcapture %}
-  {% if block_settings.aspect_ratio == 'adapt' and block_settings.constrain_to_viewport == false %}
+  {% if contain_smelly_photos or block_settings.aspect_ratio == 'adapt' and block_settings.constrain_to_viewport == false %}
     {{ view_transition_styles_contain }}
   {% elsif block_settings.aspect_ratio == 'adapt' and block_settings.constrain_to_viewport == true and block_settings.media_fit == 'contain' %}
     {{ view_transition_styles_contain }}
@@ -595,7 +600,6 @@
                       media: media,
                       sizes: '100vw',
                       loading: 'lazy',
-                      is_main_product_media: forloop.first,
                       image_ref: 'image'
                     -%}
                   </drag-zoom-wrapper>
@@ -603,8 +607,7 @@
                   {%- render 'product-media',
                     media: media,
                     sizes: '100vw',
-                    loading: 'lazy',
-                    is_main_product_media: forloop.first
+                    loading: 'lazy'
                   -%}
                 {% endif %}
               </li>
@@ -660,6 +663,11 @@
 {% render 'product-media-gallery-content-styles' %}
 
 {% stylesheet %}
+  .smelly-product-media--contain.media-fit-cover.product-media-container--image .product-media__image {
+    object-fit: contain;
+    object-position: center;
+  }
+
   .dialog-thumbnails-list-container {
     position: fixed;
     width: 100%;

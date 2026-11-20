@@ -189,31 +189,61 @@
   }
 
   .smelly-product.section--page-width {
-    --page-width: calc(1240px + var(--page-margin) * 2);
+    --page-width: calc(1440px + var(--page-margin) * 2);
   }
 
   .smelly-product__navigation {
     grid-column: 2;
-    padding-block-end: 24px;
+    padding-block-end: 10px;
+    font-size: 0.875rem;
   }
 
-  .smelly-product__back-link {
+  .smelly-product__navigation ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 10px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .smelly-product__navigation li {
     display: inline-flex;
     align-items: center;
     gap: 10px;
+    min-width: 0;
+  }
+
+  .smelly-product__navigation li + li::before {
+    content: '';
+    flex: 0 0 5px;
+    height: 5px;
+    border-block-start: 1px solid currentColor;
+    border-inline-end: 1px solid currentColor;
+    rotate: 45deg;
+    opacity: 0.5;
+  }
+
+  .smelly-product__navigation:dir(rtl) li + li::before {
+    rotate: -45deg;
+  }
+
+  .smelly-product__navigation a {
+    display: inline-flex;
+    align-items: center;
     min-height: 44px;
-    color: var(--smelly-ink);
-    font-size: 14px;
-    text-decoration: underline;
-    text-underline-offset: 4px;
+    color: inherit;
+    text-decoration: none;
   }
 
-  .smelly-product__back-link:hover {
+  .smelly-product__navigation a:hover {
     color: var(--smelly-pink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
-  [dir='rtl'] .smelly-product__back-link span {
-    transform: scaleX(-1);
+  .smelly-product__navigation [aria-current='page'] {
+    font-weight: 700;
   }
 
   .smelly-product .product-details,
@@ -224,7 +254,7 @@
   .smelly-product .product-details h1 {
     margin: 0;
     font-family: var(--smelly-serif);
-    font-size: clamp(36px, 4.2vw, 60px);
+    font-size: clamp(34px, 3.25vw, 52px);
     font-weight: 700;
     line-height: 1.05;
     letter-spacing: -0.045em;
@@ -232,8 +262,12 @@
   }
 
   .smelly-product .product-details .price {
-    font-size: 22px;
-    font-weight: 600;
+    font: 700 clamp(1.625rem, 2.7vw, 2.375rem)/1.15 var(--smelly-serif);
+    letter-spacing: -0.035em;
+  }
+
+  .smelly-product .product-details .rating-count {
+    color: var(--smelly-ink);
   }
 
   .smelly-product .product-details .rte {
@@ -249,6 +283,14 @@
   .smelly-product .product-media-container {
     background: var(--smelly-blush);
     overflow: clip;
+  }
+
+  .smelly-product .product-information__media {
+    position: relative;
+  }
+
+  .smelly-product .slideshow-controls__thumbnail[aria-selected='true'] {
+    outline-color: var(--smelly-pink);
   }
 
   .smelly-product__caption {
@@ -279,7 +321,80 @@
   }
 
   .smelly-product .quantity-selector {
-    border-radius: 100px;
+    border: 1px solid var(--smelly-line);
+    border-radius: 12px;
+  }
+
+  .smelly-product .product-form-buttons > .quantity-selector-wrapper {
+    flex-basis: 100%;
+  }
+
+  .smelly-product .product-form-buttons > .smelly-product__size-controls {
+    display: grid;
+    flex: 0 1 100%;
+    grid-template-columns: minmax(0, 1fr) max-content;
+    gap: 8px 16px;
+    min-width: 0;
+  }
+
+  .smelly-product .smelly-product__size-controls > .quantity-label {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .smelly-product .smelly-product__size-controls > .quantity-selector-wrapper {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .smelly-product .smelly-product__size-controls > .smelly-product__size {
+    display: grid;
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    grid-template-rows: subgrid;
+  }
+
+  .smelly-product .product-form-buttons .quantity-label--smelly {
+    display: block;
+  }
+
+  .smelly-product :is(.quantity-label, .smelly-product__size-label) {
+    margin: 0;
+    font-size: 0.9375rem;
+    font-weight: 700;
+  }
+
+  .smelly-product__size-value {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 4px;
+    align-self: end;
+    min-width: 0;
+    min-height: var(--height-buy-buttons);
+    margin: 0;
+    padding: 6px 12px;
+    border: 1px solid var(--smelly-pink);
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--smelly-blush) 69%, var(--smelly-cream));
+    font-size: 0.875rem;
+    overflow-wrap: anywhere;
+  }
+
+  .smelly-product__size-value > * {
+    min-width: 0;
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  .smelly-product .smelly-product-highlights {
+    grid-column: 1 / -1;
+    order: 2;
+    margin-block-start: 24px;
+  }
+
+  .product-information.smelly-product .product-information--media-none > .product-details {
+    width: min(100%, var(--narrow-content-width));
   }
 
   .smelly-product :is(a, button, input, summary, label:has(input)):focus-visible {
@@ -288,12 +403,53 @@
   }
 
   @media screen and (max-width: 749px) {
-    .smelly-product .product-details > .group-block {
-      padding-block-start: 28px;
+    .smelly-product.section--page-width .product-information__grid {
+      grid-column: 2;
+      grid-template-columns: minmax(0, 1fr);
     }
 
-    .smelly-product__navigation {
-      padding-block-end: 12px;
+    .smelly-product .product-information__grid > .product-details {
+      grid-column: 1 / -1;
+    }
+
+    .smelly-product .product-details > .group-block {
+      padding-block-start: 16px;
+    }
+  }
+
+  @media screen and (750px <= width < 1200px) {
+    .smelly-product .smelly-product-highlights {
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    }
+
+    .smelly-product .product-information__grid--half:not(.product-information--media-none) .smelly-product-highlights {
+      grid-column: 2 / -2;
+    }
+  }
+
+  @media screen and (min-width: 1200px) {
+    .product-information.smelly-product .smelly-product__grid--highlights:not(.product-information--media-none, :has(.media-gallery--extend)) {
+      grid-column: 2;
+      grid-template-columns: minmax(0, 1.58fr) minmax(0, 1fr) minmax(0, 0.69fr);
+      align-items: start;
+      gap: var(--gap);
+    }
+
+    .product-information.smelly-product .smelly-product__grid--highlights.product-information--media-right:not(:has(.media-gallery--extend)) {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 0.69fr) minmax(0, 1.58fr);
+    }
+
+    .product-information.smelly-product
+      .product-information__grid.smelly-product__grid--highlights:is(.product-information--media-left, .product-information--media-right):not(:has(.media-gallery--extend))
+      > :is(.product-information__media, .product-details, .smelly-product-highlights) {
+      grid-column: auto;
+      margin: 0;
+      padding-inline: 0;
+    }
+
+    .product-information.smelly-product .smelly-product__grid--highlights.product-information--media-right:not(:has(.media-gallery--extend))
+      > .smelly-product-highlights {
+      order: 0;
     }
   }
 
@@ -515,6 +671,14 @@
       "id": "smelly_caption",
       "label": "Photograph caption",
       "default": "Small jar. Big mood.",
+      "visible_if": "{{ section.settings.smelly_product_style }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "smelly_wishlist",
+      "label": "Show wishlist buttons",
+      "default": false,
+      "info": "Saves products in the shopper’s browser.",
       "visible_if": "{{ section.settings.smelly_product_style }}"
     },
     {

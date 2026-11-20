@@ -1,0 +1,253 @@
+{% liquid
+  assign product = closest.product | default: product
+  assign related_products = recommendations.products
+  if related_products == blank
+    assign related_products = collections.all.products | reject: 'id', product.id | where: 'available', true
+  endif
+
+  assign rating = product.metafields.reviews.rating.value
+  assign review_count = product.metafields.reviews.rating_count.value | plus: 0
+  assign has_rating = false
+  if section.settings.show_review_summary and review_count > 0 and rating.rating > 0 and rating.scale_max > 0
+    assign has_rating = true
+    assign rating_fill = rating.rating | times: 100.0 | divided_by: rating.scale_max | at_most: 100
+  endif
+
+  capture review_blocks
+    content_for 'blocks'
+  endcapture
+  assign review_blocks = review_blocks | strip
+  assign image_sizes = '(min-width: 1520px) 350px, (min-width: 750px) 24vw, 46vw'
+  if has_rating or review_blocks != blank
+    assign image_sizes = '(min-width: 1520px) 220px, (min-width: 1200px) 15vw, (min-width: 750px) 24vw, 46vw'
+  endif
+%}
+
+{% if product.id != blank %}
+  <script src="{{ 'product-recommendations.js' | asset_url }}" type="module" fetchpriority="low"></script>
+  <div class="section-background" style="--color-background: var(--smelly-cream);"></div>
+  <div class="section section--page-width smelly-product-related">
+    <div class="smelly-product-related__inner">
+      {% if has_rating or review_blocks != blank %}
+        <section class="smelly-product-related__reviews">
+          <h2>{{ 'smelly.product.customer_reviews' | t }}</h2>
+          {% if has_rating %}
+            <p class="smelly-product-related__rating">
+              <span class="smelly-product-related__stars" aria-hidden="true" style="--rating-fill: {{ rating_fill }}%;">
+                ★★★★★<span>★★★★★</span>
+              </span>
+              <strong>{{ 'smelly.product.rating' | t: rating: rating.rating, scale: rating.scale_max }}</strong>
+              <span>({{ 'smelly.product.review_count' | t: count: review_count }})</span>
+            </p>
+          {% endif %}
+          {{ review_blocks }}
+        </section>
+      {% endif %}
+
+      <product-recommendations
+        id="SmellyProductRecommendations-{{ section.id }}-{{ product.id }}"
+        class="smelly-product-related__recommendations"
+        data-url="{{ routes.product_recommendations_url }}?limit={{ section.settings.max_products }}"
+        data-section-id="{{ section.id }}"
+        data-product-id="{{ product.id }}"
+        data-intent="related"
+        data-recommendations-performed="{{ recommendations.performed }}"
+        data-hydration-key="product-recommendations-{{ section.id }}-{{ product.id }}"
+        data-refresh-on-cart-update
+      >
+        {% if related_products != blank %}
+          <h2>{{ 'smelly.product.related' | t }}</h2>
+          <ul class="smelly-product-related__cards" role="list">
+            {% for related_product in related_products limit: section.settings.max_products %}
+              <li>
+                {% render 'smelly-product-card',
+                  card_product: related_product,
+                  section_id: section.id,
+                  image_sizes: image_sizes,
+                  product_view_context: 'recommendation',
+                  compact_add: true
+                %}
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </product-recommendations>
+    </div>
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .smelly-product-related {
+    --page-width: calc(1440px + var(--page-margin) * 2);
+    color: var(--smelly-ink);
+    overflow-wrap: anywhere;
+  }
+
+  .smelly-product-related__inner {
+    display: grid;
+    align-items: start;
+    gap: 24px 32px;
+  }
+
+  .smelly-product-related__inner:has(.smelly-product-related__reviews, .smelly-product-related__cards) {
+    padding-block: 18px 44px;
+    border-block-start: 1px solid var(--smelly-line);
+  }
+
+  .smelly-product-related :is(.smelly-product-related__reviews, .smelly-product-related__recommendations) {
+    display: block;
+    min-width: 0;
+  }
+
+  .smelly-product-related__recommendations[data-error]:has(.smelly-product-related__cards) {
+    display: block !important;
+  }
+
+  .smelly-product-related__reviews {
+    padding: 18px;
+    border-radius: 18px;
+    background: color-mix(in srgb, var(--smelly-blush) 55%, var(--smelly-cream));
+  }
+
+  .smelly-product-related :is(.smelly-product-related__reviews, .smelly-product-related__recommendations) > h2 {
+    margin: 0 0 12px;
+    font: 700 clamp(1.5rem, 2.2vw, 1.875rem)/1.1 var(--smelly-serif);
+    letter-spacing: -0.035em;
+  }
+
+  .smelly-product-related__rating {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 8px;
+    margin: 0;
+  }
+
+  .smelly-product-related__stars {
+    position: relative;
+    color: #dfc8b4;
+    font-size: 1.25rem;
+    white-space: nowrap;
+  }
+
+  .smelly-product-related__stars > span {
+    position: absolute;
+    inset: 0 auto 0 0;
+    inset-inline: 0 auto;
+    width: var(--rating-fill);
+    overflow: hidden;
+    color: #a56b00;
+  }
+
+  .smelly-product-related__cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .smelly-product-related .smelly-product-card__view {
+    display: block;
+    height: 100%;
+  }
+
+  .smelly-product-related .smelly-product-card {
+    display: grid;
+    grid-template: auto 1fr auto / minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 6px;
+    height: 100%;
+  }
+
+  .smelly-product-related .smelly-product-card__image {
+    grid-column: 1 / -1;
+    aspect-ratio: 1.38;
+    border-radius: 12px;
+  }
+
+  .smelly-product-related .smelly-product-card__details {
+    grid-row: 2;
+    padding-block: 0;
+    grid-column: 1 / -1;
+  }
+
+  .smelly-product-related .smelly-product-card:has(.smelly-product-card__icon-add) .smelly-product-card__details {
+    grid-column: 1;
+  }
+
+  .smelly-product-related .smelly-product-card__details h3 {
+    font: 700 0.9375rem/1.25 var(--font-body--family);
+    letter-spacing: normal;
+  }
+
+  .smelly-product-related .smelly-product-card__price {
+    margin-block-start: 3px !important;
+  }
+
+  .smelly-product-related .smelly-product-card > :is(a, form):not(.smelly-product-card__image) {
+    grid-column: 1 / -1;
+    margin: 0;
+  }
+
+  .smelly-product-related .smelly-product-card > form:has(.smelly-product-card__icon-add):not(:has(.errors)) {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .smelly-product-related .smelly-product-card:has(.errors) .smelly-product-card__details {
+    grid-column: 1 / -1;
+  }
+
+  .smelly-product-related .smelly-button.smelly-product-card__icon-add {
+    width: 44px;
+    min-height: 44px;
+    padding: 0;
+    border-radius: 12px;
+  }
+
+  .smelly-product-card__icon-add .svg-wrapper {
+    width: 20px;
+    height: 20px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .smelly-product-related__cards {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  @media screen and (min-width: 1200px) {
+    .smelly-product-related__inner:has(.smelly-product-related__reviews):has(.smelly-product-related__cards) {
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Smelly A.F. related",
+  "enabled_on": { "templates": ["product"] },
+  "blocks": [{ "type": "@app" }],
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_review_summary",
+      "label": "Show Shopify review summary",
+      "default": true,
+      "info": "Uses the product’s rating and review count. Add a review app block here to show individual reviews."
+    },
+    {
+      "type": "range",
+      "id": "max_products",
+      "label": "Maximum related products",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 4
+    }
+  ],
+  "presets": [{ "name": "Smelly A.F. related" }]
+}
+{% endschema %}

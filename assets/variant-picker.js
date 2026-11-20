@@ -333,24 +333,37 @@ export default class VariantPicker extends Component {
     );
 
     fetch(requestUrl, { signal: this.#abortController.signal })
-      .then((response) => response.text())
+      .then((response) => {
+        if (!response.ok) throw new Error(`Product selection returned ${response.status}`);
+        return response.text();
+      })
       .then((responseText) => {
         this.#pendingRequestUrl = undefined;
         const html = new DOMParser().parseFromString(responseText, 'text/html');
         // Defer is only useful for the initial rendering of the page. Remove it here.
         html.querySelector('overflow-list[defer]')?.removeAttribute('defer');
 
-        const variantPickerJsonScript = html.querySelector(`variant-picker script[type="application/json"]`);
+        const updatesMain = morphElementSelector === 'main';
+        const previousProductId = this.dataset.productId ?? '';
+        const variantPickerJsonScript = html.querySelector(
+          updatesMain
+            ? 'main variant-picker[data-template-product-match="true"] script[type="application/json"]'
+            : 'variant-picker script[type="application/json"]'
+        );
         const textContent = variantPickerJsonScript?.textContent;
+        const updatedProductId = variantPickerJsonScript?.closest('variant-picker')?.getAttribute('data-product-id');
+
+        // A combined-listing child can render without a variant picker.
+        if (updatesMain) this.updateMain(html);
 
         if (!textContent) {
           deferredEventPromise.resolve({
             variant: null,
             detail: {
               html,
-              productId: this.dataset.productId ?? '',
-              sourceId: this.selectedOptionId,
-              resource: null,
+              productId: previousProductId,
+              sourceId: updatesMain ? optionValueId : this.selectedOptionId,
+              resource: updatesMain ? undefined : null,
             },
           });
           return;
@@ -358,11 +371,9 @@ export default class VariantPicker extends Component {
 
         let newProduct;
 
-        if (morphElementSelector === 'main') {
-          this.updateMain(html);
-        } else if (morphElementSelector) {
+        if (morphElementSelector && !updatesMain) {
           this.updateElement(html, morphElementSelector);
-        } else {
+        } else if (!updatesMain) {
           const { overflowList } = this.refs;
           const wasSwatchesExpanded =
             overflowList instanceof OverflowList && overflowList.getAttribute('disabled') === 'true';
@@ -377,8 +388,11 @@ export default class VariantPicker extends Component {
           }
         }
 
-        // Resolve the ProductSelectEvent promise with all data needed by listeners
-        if (this.selectedOptionId) {
+        const sourceId = updatesMain ? optionValueId : this.selectedOptionId;
+        const productId = (updatesMain && updatedProductId) || this.dataset.productId || '';
+
+        // The returned picker describes the selected variant after a combined-listing switch.
+        if (sourceId || updatesMain) {
           const variantData = JSON.parse(textContent);
 
           if (variantData && typeof variantData === 'object') {
@@ -391,9 +405,9 @@ export default class VariantPicker extends Component {
               variant: (productViewAttr && JSON.parse(productViewAttr))?.product?.selectedVariant ?? null,
               detail: {
                 html,
-                productId: this.dataset.productId ?? '',
+                productId,
                 newProduct,
-                sourceId: this.selectedOptionId,
+                sourceId,
                 resource: variantData,
               },
             });
@@ -408,9 +422,9 @@ export default class VariantPicker extends Component {
           variant: null,
           detail: {
             html,
-            productId: this.dataset.productId ?? '',
+            productId,
             newProduct,
-            sourceId: this.selectedOptionId,
+            sourceId,
             resource: null,
           },
         });

@@ -157,6 +157,7 @@
   text-underline-offset: 0.15em;
 }
 .smelly-section :is(a, button, input, summary):focus-visible,
+.smelly-product-related .smelly-button:focus-visible,
 .smelly-footer :is(a, button, input):focus-visible { outline: 3px solid var(--smelly-pink); outline-offset: 5px; }
 .smelly-handwritten { font-family: 'Segoe Print', 'Bradley Hand', 'Comic Sans MS', cursive; font-size: 22px; line-height: 1.4; font-weight: 400; letter-spacing: -0.5px; }
 .smelly-section .smelly-handwritten { color: var(--smelly-pink); }
@@ -191,8 +192,7 @@
 .smelly-hero__heart .smelly-illustration,
 .smelly-story__signature .smelly-illustration { stroke-width: 4.5; }
 
-.smelly-section .smelly-button,
-.smelly-footer .smelly-button {
+:is(.smelly-section, .smelly-footer, .smelly-product-related) .smelly-button {
   appearance: none;
   display: inline-flex;
   align-items: center;
@@ -210,12 +210,11 @@
   transition: background-color 150ms, border-color 150ms;
 }
 .smelly-button > span[aria-hidden] { font-size: 22px; font-weight: 400; line-height: 1; }
-.smelly-section .smelly-button:hover,
-.smelly-footer .smelly-button:hover { background: #a51240; border-color: #a51240; }
-.smelly-section .smelly-button--outline { color: var(--smelly-ink); border-color: var(--smelly-ink); background: transparent; }
-.smelly-section .smelly-button--outline:hover { color: #fff; background: var(--smelly-ink); }
-.smelly-section .smelly-button--small { min-height: 44px; padding: 11px 18px; width: 100%; font-size: 13px; }
-.smelly-section .smelly-button:disabled { cursor: default; background: #e4dcd8; border-color: #e4dcd8; color: #65595e; }
+:is(.smelly-section, .smelly-footer, .smelly-product-related) .smelly-button:hover { background: #a51240; border-color: #a51240; }
+:is(.smelly-section, .smelly-product-related) .smelly-button--outline { color: var(--smelly-ink); border-color: var(--smelly-ink); background: transparent; }
+:is(.smelly-section, .smelly-product-related) .smelly-button--outline:hover { color: #fff; background: var(--smelly-ink); }
+:is(.smelly-section, .smelly-product-related) .smelly-button--small { min-height: 44px; padding: 11px 18px; width: 100%; font-size: 13px; }
+:is(.smelly-section, .smelly-product-related) .smelly-button:disabled { cursor: default; background: #e4dcd8; border-color: #e4dcd8; color: #65595e; }
 .smelly-text-link { display: inline-flex; gap: 16px; align-items: center; font-size: 14px; font-weight: 600; border-bottom: 1px solid currentColor; padding-block: 5px; }
 .smelly-text-link:hover { color: var(--smelly-pink); }
 .smelly-text-link span[aria-hidden] { font-size: 22px; }

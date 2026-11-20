@@ -1,110 +1,288 @@
 {% liquid
   assign block_settings = block.settings
-  assign care_content = block_settings.care_text | strip_html | strip
-  assign has_care = false
-  if block_settings.care_heading != blank and care_content != blank
-    assign has_care = true
+  assign product = closest.product
+  assign fields = product.metafields.custom
+  assign details_id = 'SmellyProductDetails-' | append: section.id | append: '-' | append: block.id
+  assign description = product.description | strip
+  assign care_text = block_settings.care_text | strip_html | strip
+  assign care_title = block_settings.care_heading
+  if care_title == blank or care_title == 'How to use' or care_title == 'Candle care'
+    assign care_title = 'smelly.product.care' | t
   endif
-
-  assign has_policies = false
-  if block_settings.show_policies and block_settings.policy_heading != blank
-    if shop.shipping_policy.body != blank or shop.refund_policy.body != blank
-      assign has_policies = true
-    endif
+  assign policy_title = block_settings.policy_heading
+  if policy_title == 'Delivery & returns'
+    assign policy_title = 'smelly.product.delivery' | t
+  endif
+  assign fact_keys = 'burn_time,net_weight,jar_size,wax' | split: ','
+  assign fact_icons = 'stopwatch,box,ruler,leaf' | split: ','
+  assign facts_in_details = false
+  assign tabs = ''
+  if description != blank
+    assign tabs = 'description,'
   endif
 %}
 
-{% if has_care or has_policies or request.design_mode %}
-  <div class="smelly-product-details" {{ block.shopify_attributes }}>
-    {% if has_care %}
-      <details class="smelly-product-details__row">
-        <summary>
-          {{ block_settings.care_heading | escape }}
-          <span class="svg-wrapper" aria-hidden="true">{{ 'icon-plus.svg' | inline_asset_content }}</span>
-        </summary>
-        <div class="smelly-product-details__content rte">{{ block_settings.care_text }}</div>
-      </details>
+{% capture facts %}
+  {% for fact_key in fact_keys %}
+    {% assign fact = fields[fact_key].value | strip %}
+    {% if fact != blank %}
+      {% assign label_key = 'smelly.product.' | append: fact_key %}
+      <div class="smelly-product-details__fact">
+        <dt>
+          <svg width="26" height="26" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            {% render 'icon', icon: fact_icons[forloop.index0] %}
+          </svg>
+          {{ label_key | t }}
+        </dt>
+        <dd>{{ fact | escape }}</dd>
+      </div>
     {% endif %}
+  {% endfor %}
+{% endcapture %}
 
-    {% if has_policies %}
-      <details class="smelly-product-details__row">
-        <summary>
-          {{ block_settings.policy_heading | escape }}
-          <span class="svg-wrapper" aria-hidden="true">{{ 'icon-plus.svg' | inline_asset_content }}</span>
-        </summary>
-        <div class="smelly-product-details__content rte">
-          <ul role="list">
-            {% if shop.shipping_policy.body != blank %}
-              <li><a href="{{ shop.shipping_policy.url }}">{{ shop.shipping_policy.title | escape }}</a></li>
-            {% endif %}
-            {% if shop.refund_policy.body != blank %}
-              <li><a href="{{ shop.refund_policy.url }}">{{ shop.refund_policy.title | escape }}</a></li>
-            {% endif %}
-          </ul>
-        </div>
-      </details>
-    {% endif %}
-  </div>
+{% liquid
+  assign facts = facts | strip
+  if fields.product_details.value != blank
+    assign tabs = tabs | append: 'details,'
+  elsif tabs == blank and facts != blank
+    assign tabs = 'details,'
+    assign facts_in_details = true
+  endif
+
+  if fields.care_instructions.value != blank
+    assign tabs = tabs | append: 'care,'
+  elsif product.gift_card? != true and care_text != blank and block_settings.care_heading != blank
+    assign tabs = tabs | append: 'care,'
+  endif
+
+  if fields.ingredients.value != blank
+    assign tabs = tabs | append: 'ingredients,'
+  endif
+
+  if block_settings.show_policies and block_settings.policy_heading != blank
+    if shop.shipping_policy.body != blank or shop.refund_policy.body != blank
+      assign tabs = tabs | append: 'delivery,'
+    endif
+  endif
+
+  assign tabs = tabs | split: ','
+%}
+
+{% if tabs.size > 0 or request.design_mode %}
+  <smelly-product-tabs id="{{ details_id }}-{{ product.id }}" class="smelly-product-details" {{ block.shopify_attributes }}>
+    <nav class="smelly-product-details__nav" aria-label="{{ 'smelly.product.information' | t }}">
+      {% for tab in tabs %}
+        {% liquid
+          assign label_key = 'smelly.product.' | append: tab
+          assign label = label_key | t
+          case tab
+            when 'care'
+              assign label = care_title
+            when 'delivery'
+              assign label = policy_title
+          endcase
+        %}
+        <a id="{{ details_id }}-tab-{{ tab }}" href="#{{ details_id }}-{{ tab }}">{{ label | escape }}</a>
+      {% endfor %}
+    </nav>
+
+    <div class="smelly-product-details__body">
+      <div class="smelly-product-details__panels">
+        {% for tab in tabs %}
+          <section id="{{ details_id }}-{{ tab }}" class="smelly-product-details__panel rte" aria-labelledby="{{ details_id }}-tab-{{ tab }}">
+            {% case tab %}
+              {% when 'description' %}
+                {{ product.description }}
+              {% when 'details' %}
+                {% if facts_in_details %}
+                  <dl class="smelly-product-details__facts">{{ facts }}</dl>
+                {% else %}
+                  {{ fields.product_details | metafield_tag }}
+                {% endif %}
+              {% when 'care' %}
+                {% if fields.care_instructions.value != blank %}
+                  {{ fields.care_instructions | metafield_tag }}
+                {% else %}
+                  {{ block_settings.care_text }}
+                {% endif %}
+              {% when 'ingredients' %}
+                {{ fields.ingredients | metafield_tag }}
+              {% when 'delivery' %}
+                <ul role="list">
+                  {% if shop.shipping_policy.body != blank %}
+                    <li><a href="{{ shop.shipping_policy.url }}">{{ shop.shipping_policy.title | escape }}</a></li>
+                  {% endif %}
+                  {% if shop.refund_policy.body != blank %}
+                    <li><a href="{{ shop.refund_policy.url }}">{{ shop.refund_policy.title | escape }}</a></li>
+                  {% endif %}
+                </ul>
+            {% endcase %}
+          </section>
+        {% endfor %}
+      </div>
+      {% if facts != blank and facts_in_details == false %}
+        <dl class="smelly-product-details__facts">{{ facts }}</dl>
+      {% endif %}
+    </div>
+  </smelly-product-tabs>
 {% endif %}
+
+{% javascript %}
+  class SmellyProductTabs extends HTMLElement {
+    connectedCallback() {
+      this.navigation = this.querySelector('nav');
+      this.tabs = [...this.navigation.querySelectorAll('a')];
+      if (this.tabs.length < 2) return;
+
+      this.listeners = new AbortController();
+      const { signal } = this.listeners;
+      this.navigation.setAttribute('role', 'tablist');
+
+      for (const tab of this.tabs) {
+        const panel = this.querySelector(tab.hash);
+        tab.setAttribute('role', 'tab');
+        tab.setAttribute('aria-controls', panel.id);
+        panel.setAttribute('role', 'tabpanel');
+        panel.tabIndex = 0;
+      }
+
+      this.selectTab(this.tabs.find((tab) => tab.hash === location.hash) ?? this.tabs[0]);
+      this.navigation.addEventListener('click', this.handleClick, { signal });
+      this.navigation.addEventListener('keydown', this.handleKeydown, { signal });
+    }
+
+    disconnectedCallback() {
+      this.listeners?.abort();
+    }
+
+    selectTab(selected) {
+      for (const tab of this.tabs) {
+        const active = tab === selected;
+        tab.setAttribute('aria-selected', String(active));
+        tab.tabIndex = active ? 0 : -1;
+        this.querySelector(tab.hash).hidden = !active;
+      }
+    }
+
+    handleClick = (event) => {
+      const tab = event.target.closest('[role="tab"]');
+      if (!tab) return;
+
+      event.preventDefault();
+      this.selectTab(tab);
+    };
+
+    handleKeydown = (event) => {
+      const current = this.tabs.indexOf(event.target);
+      const step = getComputedStyle(this).direction === 'rtl' ? -1 : 1;
+      let next;
+      switch (event.key) {
+        case 'ArrowLeft': next = current - step; break;
+        case 'ArrowRight': next = current + step; break;
+        case 'Home': next = 0; break;
+        case 'End': next = this.tabs.length - 1; break;
+        default: return;
+      }
+
+      event.preventDefault();
+      const tab = this.tabs[(next + this.tabs.length) % this.tabs.length];
+      this.selectTab(tab);
+      tab.focus();
+    };
+  }
+
+  if (!customElements.get('smelly-product-tabs')) customElements.define('smelly-product-tabs', SmellyProductTabs);
+{% endjavascript %}
 
 {% stylesheet %}
   .smelly-product-details {
-    width: 100%;
+    display: block;
+    min-width: 0;
+    margin-block-start: 22px;
     color: var(--smelly-ink);
     overflow-wrap: anywhere;
   }
 
-  .smelly-product-details__row {
-    border-block-start: 1px solid var(--smelly-line);
-  }
-
-  .smelly-product-details__row:last-child {
+  .smelly-product-details__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 clamp(4px, 1vw, 16px);
     border-block-end: 1px solid var(--smelly-line);
   }
 
-  .smelly-product-details__row summary {
-    display: flex;
+  .smelly-product-details__nav a {
+    display: inline-flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    min-height: 56px;
-    padding-block: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    list-style: none;
+    min-height: 44px;
+    padding-inline: 12px;
+    border-block-end: 2px solid transparent;
+    color: inherit;
+    font-size: 0.9375rem;
+    text-decoration: none;
   }
 
-  .smelly-product-details__row summary::-webkit-details-marker {
-    display: none;
+  .smelly-product-details__nav a:is(:hover, [aria-selected='true'], :only-child) {
+    border-block-end-color: var(--smelly-pink);
+    color: var(--smelly-pink);
   }
 
-  .smelly-product-details__row summary .svg-wrapper {
-    flex: 0 0 16px;
-    width: 16px;
-    height: 16px;
+  .smelly-product-details__body {
+    display: grid;
+    gap: 20px clamp(24px, 5vw, 120px);
+    padding-block-start: 16px;
   }
 
-  .smelly-product-details__row[open] summary .svg-wrapper {
-    transform: rotate(45deg);
+  .smelly-product-details__panel {
+    scroll-margin-block-start: calc(var(--sticky-header-offset, 0px) + 12px);
   }
 
-  .smelly-product-details__content {
-    padding-block-end: 20px;
-    font-size: 14px;
-    line-height: 1.65;
+  .smelly-product-details__panel + .smelly-product-details__panel:not([role='tabpanel']) {
+    margin-block-start: 20px;
   }
 
-  .smelly-product-details__content > :first-child {
-    margin-block-start: 0;
+  .smelly-product-details__panel > :first-child { margin-block-start: 0; }
+  .smelly-product-details__panel > :last-child { margin-block-end: 0; }
+
+  .smelly-product-details__facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 136px), 1fr));
+    gap: 12px;
+    align-self: start;
+    margin: 0;
   }
 
-  .smelly-product-details__content > :last-child {
-    margin-block-end: 0;
+  .smelly-product-details__fact {
+    position: relative;
+    padding-block: 4px;
+    padding-inline-start: 36px;
+    font-size: 0.875rem;
   }
 
-  .smelly-product-details :is(summary, a):focus-visible {
-    outline: 2px solid var(--smelly-pink);
-    outline-offset: 4px;
+  .smelly-product-details__fact + .smelly-product-details__fact {
+    margin-inline-start: 6px;
+    padding-inline-start: 44px;
+    border-inline-start: 1px solid var(--smelly-line);
+  }
+
+  .smelly-product-details__fact svg {
+    position: absolute;
+    inset-block-start: 6px;
+    inset-inline-start: 0;
+    width: 26px;
+    height: 26px;
+  }
+
+  .smelly-product-details__fact + .smelly-product-details__fact svg {
+    inset-inline-start: 8px;
+  }
+
+  .smelly-product-details__fact dt { font-weight: 700; }
+  .smelly-product-details__fact dd { margin: 0; }
+
+  @media screen and (min-width: 1050px) {
+    .smelly-product-details__body:has(> .smelly-product-details__facts) {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    }
   }
 {% endstylesheet %}
 

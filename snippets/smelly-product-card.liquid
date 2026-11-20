@@ -6,6 +6,7 @@
   @param {string} [image_loading] - Image loading strategy; defaults to lazy.
   @param {string} [image_priority] - Image fetch priority; defaults to auto.
   @param {string} [product_view_context] - Context for Horizon's standard product view event.
+  @param {boolean} [compact_add] - Show an icon on the direct add button.
 {% enddoc %}
 
 {% liquid
@@ -86,8 +87,17 @@
       <input type="hidden" name="id" value="{{ product_variant.id }}">
       <input type="hidden" name="quantity" value="{{ quantity_to_add }}">
       <input type="hidden" name="return_to" value="{{ routes.cart_url }}">
-      <button class="smelly-button smelly-button--small" type="submit" {% unless can_add_to_cart %}disabled{% endunless %}>
-        {{ add_to_cart_text }}{% if can_add_to_cart %}<span class="visually-hidden"> — {{ card_product.title | escape }}</span>{% endif %}
+      <button
+        class="smelly-button smelly-button--small{% if compact_add and can_add_to_cart %} smelly-product-card__icon-add{% endif %}"
+        type="submit"
+        {% unless can_add_to_cart %}disabled{% endunless %}
+      >
+        {% if compact_add and can_add_to_cart %}
+          <span class="svg-wrapper" aria-hidden="true">{{ 'icon-add-to-cart.svg' | inline_asset_content }}</span>
+          <span class="visually-hidden">{{ add_to_cart_text }} — {{ card_product.title | escape }}</span>
+        {% else %}
+          {{ add_to_cart_text }}{% if can_add_to_cart %}<span class="visually-hidden"> — {{ card_product.title | escape }}</span>{% endif %}
+        {% endif %}
       </button>
       {{ form.errors | default_errors }}
     {% endform %}
