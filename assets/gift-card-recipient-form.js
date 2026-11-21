@@ -216,8 +216,6 @@ class GiftCardRecipientForm extends Component {
     for (const field of this.#inputFields) {
       field.disabled = true;
       field.removeAttribute('required');
-      field.removeAttribute('aria-invalid');
-      field.removeAttribute('aria-describedby');
     }
 
     // Remove control field when sending to self
@@ -364,8 +362,10 @@ class GiftCardRecipientForm extends Component {
         if (inputElement && inputElement instanceof HTMLElement) {
           // Set ARIA attributes for accessibility
           inputElement.setAttribute('aria-invalid', 'true');
-          const errorId = `RecipientForm-${field}-error-${this.dataset.sectionId || 'default'}`;
-          inputElement.setAttribute('aria-describedby', errorId);
+          if (errorContainer?.id) {
+            const descriptions = [inputElement.getAttribute('aria-describedby'), errorContainer.id].filter(Boolean);
+            inputElement.setAttribute('aria-describedby', descriptions.join(' '));
+          }
         }
       }
     }
@@ -395,10 +395,14 @@ class GiftCardRecipientForm extends Component {
       }
     }
 
-    // Remove ARIA attributes from all input fields
+    const messageCountId = this.refs.characterCount?.id;
     for (const field of this.#inputFields) {
       field.removeAttribute('aria-invalid');
-      field.removeAttribute('aria-describedby');
+      if (field === this.refs.recipientMessage && messageCountId) {
+        field.setAttribute('aria-describedby', messageCountId);
+      } else {
+        field.removeAttribute('aria-describedby');
+      }
     }
 
     // Clear live region announcement
@@ -412,7 +416,11 @@ class GiftCardRecipientForm extends Component {
    */
   #handleCartAdd(event) {
     if (event.action !== 'add') return;
-    event.promise?.then(() => this.#clearErrorMessages()).catch(() => {});
+    event.promise
+      ?.then((result) => {
+        if (!result.detail?.didError) this.#clearErrorMessages();
+      })
+      .catch(() => {});
   }
 }
 

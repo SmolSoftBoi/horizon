@@ -1,3 +1,9 @@
+{% doc %}
+  Renders the product form, quantity selector and purchase buttons.
+
+  @param {boolean} [gift_card_purchase] - Use the dedicated gift card layout with a quantity label, basket errors and standard checkout.
+{% enddoc %}
+
 {% render 'theme-drawer-styles' %}
 {% liquid
   assign block_settings = block.settings
@@ -80,7 +86,7 @@
           style="{% render 'spacing-style', settings: block_settings %}"
           ref="productFormButtons"
         >
-          {%- unless block_settings.gift_card_form and product.gift_card? -%}
+          {%- unless block_settings.gift_card_form and product.gift_card? and gift_card_purchase != true -%}
             <span
               class="product-form-text__error hidden"
               ref="addToCartTextError"
@@ -109,10 +115,10 @@
               </div>
             {%- endif -%}
 
-            {%- if has_quantity_rules or section.settings.smelly_product_style -%}
+            {%- if has_quantity_rules or section.settings.smelly_product_style or gift_card_purchase -%}
               {%- assign cart_quantity = cart | item_count_for_variant: variant.id -%}
               <div
-                class="quantity-label{% unless has_quantity_rules %} quantity-label--smelly{% endunless %}"
+                class="quantity-label{% unless has_quantity_rules or gift_card_purchase %} quantity-label--smelly{% endunless %}"
                 ref="quantityLabel"
               >
                 {{ 'products.product.quantity' | t }}
@@ -252,12 +258,14 @@
             add_to_cart_text: add_to_cart_text
           %}
 
-          {% content_for 'block',
-            type: 'accelerated-checkout',
-            id: 'accelerated-checkout',
-            can_add_to_cart: can_add_to_cart,
-            form_obj: form
-          %}
+          {% unless gift_card_purchase %}
+            {% content_for 'block',
+              type: 'accelerated-checkout',
+              id: 'accelerated-checkout',
+              can_add_to_cart: can_add_to_cart,
+              form_obj: form
+            %}
+          {% endunless %}
         </div>
         {%- if block_settings.gift_card_form and product.gift_card? -%}
           </span>
