@@ -11,16 +11,15 @@
   "sections": {
     "main": {
       "type": "smelly-all-scents",
-      "settings": {
-        "note": "Hand-poured\nwith A.F. attitude.",
-        "heading": "All Candles",
-        "text": "Our full collection of hand-poured soy wax candles.\nFrom sweet and fruity favourites to cosy and seasonal classics.",
-        "all_label": "All Candles",
-        "show_wishlist": true,
-        "products_per_page": 12,
-        "empty_text": "There are no scents in this collection yet. Explore another range or check back soon."
-      },
       "blocks": {
+        "range_3": {
+          "type": "range",
+          "settings": {
+            "heading": "Sweet A.F.",
+            "collection": "sweet-a-f",
+            "motif": "candy"
+          }
+        },
         "range_1": {
           "type": "range",
           "settings": {
@@ -37,16 +36,9 @@
             "motif": "festive"
           }
         },
-        "range_3": {
-          "type": "range",
-          "settings": {
-            "heading": "Sweet A.F.",
-            "collection": "sweet-a-f",
-            "motif": "candy"
-          }
-        },
         "range_4": {
           "type": "range",
+          "disabled": true,
           "settings": {
             "heading": "Fresh A.F.",
             "collection": "fresh-a-f",
@@ -59,7 +51,16 @@
         "range_1",
         "range_2",
         "range_4"
-      ]
+      ],
+      "settings": {
+        "note": "Hand-poured\nwith A.F. attitude.",
+        "heading": "All Candles",
+        "text": "Our full collection of hand-poured soy wax candles.\nFrom sweet and fruity favourites to cosy and seasonal classics.",
+        "all_label": "All Candles",
+        "show_wishlist": true,
+        "products_per_page": 12,
+        "empty_text": "There are no scents in this collection yet. Explore another range or check back soon."
+      }
     }
   },
   "order": [
