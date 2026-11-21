@@ -361,6 +361,11 @@
     }
   },
   "smelly": {
+    "catalogue": {
+      "product_view": "Affichage des produits",
+      "grid_view": "Vue en grille",
+      "list_view": "Vue en liste"
+    },
     "product": {
       "breadcrumbs": "Fil d’Ariane",
       "size": "Taille",

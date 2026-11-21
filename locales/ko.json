@@ -354,6 +354,11 @@
     }
   },
   "smelly": {
+    "catalogue": {
+      "product_view": "상품 보기",
+      "grid_view": "격자 보기",
+      "list_view": "목록 보기"
+    },
     "product": {
       "breadcrumbs": "현재 위치",
       "size": "크기",

@@ -354,6 +354,11 @@
     }
   },
   "smelly": {
+    "catalogue": {
+      "product_view": "Productweergave",
+      "grid_view": "Rasterweergave",
+      "list_view": "Lijstweergave"
+    },
     "product": {
       "breadcrumbs": "Broodkruimelpad",
       "size": "Maat",

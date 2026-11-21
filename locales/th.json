@@ -354,6 +354,11 @@
     }
   },
   "smelly": {
+    "catalogue": {
+      "product_view": "มุมมองสินค้า",
+      "grid_view": "มุมมองตาราง",
+      "list_view": "มุมมองรายการ"
+    },
     "product": {
       "breadcrumbs": "เส้นทางการนำทาง",
       "size": "ขนาด",

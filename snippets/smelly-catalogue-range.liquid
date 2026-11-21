@@ -1,0 +1,30 @@
+{% doc %}
+  Renders a collection link with optional artwork and a Shopify product count.
+  @param {string} label - Visible collection label.
+  @param {string} [url] - Collection link. An unassigned block appears disabled in the theme editor.
+  @param {image} [image] - Decorative range photo.
+  @param {number} [count] - Total unfiltered products in the collection.
+  @param {string} motif - Illustration and colour for the tile.
+  @param {boolean} [current] - Whether the link matches the current collection.
+{% enddoc %}
+
+{% capture tile_content %}
+  {% if image != blank %}
+    {{ image | image_url: width: 320 | image_tag: widths: '120, 240, 320', sizes: '130px', loading: 'lazy', class: 'smelly-catalogue__range-photo', alt: '' }}
+  {% endif %}
+  <span class="smelly-catalogue__range-icon">{% render 'smelly-illustration', kind: motif %}</span>
+  <span class="smelly-catalogue__range-name">
+    <strong>{{ label | escape }}</strong>
+    {% if count != nil %}<small>({{ count }})</small>{% endif %}
+  </span>
+{% endcapture %}
+
+{% if url != blank %}
+  <a class="smelly-catalogue__range smelly-catalogue__range--{{ motif | escape }}" href="{{ url | escape }}"{% if current %} aria-current="page"{% endif %}>
+    {{ tile_content }}
+  </a>
+{% else %}
+  <span class="smelly-catalogue__range smelly-catalogue__range--{{ motif | escape }}" aria-disabled="true">
+    {{ tile_content }}
+  </span>
+{% endif %}

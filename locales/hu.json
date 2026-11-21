@@ -354,6 +354,11 @@
     }
   },
   "smelly": {
+    "catalogue": {
+      "product_view": "Terméknézet",
+      "grid_view": "Rácsnézet",
+      "list_view": "Listanézet"
+    },
     "product": {
       "breadcrumbs": "Útvonaljelző",
       "size": "Méret",

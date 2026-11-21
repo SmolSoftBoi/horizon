@@ -354,6 +354,11 @@
     }
   },
   "smelly": {
+    "catalogue": {
+      "product_view": "商品表示",
+      "grid_view": "グリッド表示",
+      "list_view": "リスト表示"
+    },
     "product": {
       "breadcrumbs": "パンくずリスト",
       "size": "サイズ",

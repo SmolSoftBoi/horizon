@@ -354,6 +354,11 @@
     }
   },
   "smelly": {
+    "catalogue": {
+      "product_view": "Tuotenäkymä",
+      "grid_view": "Ruudukkonäkymä",
+      "list_view": "Luettelonäkymä"
+    },
     "product": {
       "breadcrumbs": "Murupolku",
       "size": "Koko",

@@ -368,6 +368,11 @@
     }
   },
   "smelly": {
+    "catalogue": {
+      "product_view": "Widok produktów",
+      "grid_view": "Widok siatki",
+      "list_view": "Widok listy"
+    },
     "product": {
       "breadcrumbs": "Ścieżka nawigacji",
       "size": "Rozmiar",

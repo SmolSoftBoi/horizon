@@ -368,6 +368,11 @@
     }
   },
   "smelly": {
+    "catalogue": {
+      "product_view": "תצוגת מוצרים",
+      "grid_view": "תצוגת רשת",
+      "list_view": "תצוגת רשימה"
+    },
     "product": {
       "breadcrumbs": "נתיב ניווט",
       "size": "גודל",

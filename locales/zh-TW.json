@@ -354,6 +354,11 @@
     }
   },
   "smelly": {
+    "catalogue": {
+      "product_view": "商品檢視",
+      "grid_view": "格狀檢視",
+      "list_view": "清單檢視"
+    },
     "product": {
       "breadcrumbs": "麵包屑導覽",
       "size": "尺寸",

@@ -354,6 +354,11 @@
     }
   },
   "smelly": {
+    "catalogue": {
+      "product_view": "Produktansicht",
+      "grid_view": "Rasteransicht",
+      "list_view": "Listenansicht"
+    },
     "product": {
       "breadcrumbs": "Brotkrümelnavigation",
       "size": "Größe",

@@ -1,57 +1,69 @@
 {% doc %}
-  Renders controls or the browser-local wishlist dialog for a product.
-  @param {product} product - The product to save.
-  @param {string} section_id - The product section ID.
-  @param {string} placement - Gallery, purchase, or dialog.
+  Renders controls or the browser-local wishlist dialog.
+  @param {product} [product] - The product to save when rendering a toggle.
+  @param {string} section_id - ID of the product or collection section.
+  @param {string} placement - Gallery, purchase, card, catalogue, or dialog.
 {% enddoc %}
 
-{% if product.id != blank %}
-  {% if placement == 'dialog' %}
-    <smelly-product-wishlist
-      id="SmellyProductWishlist-{{ section_id }}-{{ product.id }}"
-      data-product-id="{{ product.id }}"
-      data-product-title="{{ product.title | escape }}"
-      data-product-url="{{ product.url | escape }}"
-      data-add="{{ 'smelly.product.wishlist_add' | t | escape }}"
-      data-remove="{{ 'smelly.product.wishlist_remove' | t | escape }}"
-      data-remove-item="{{ 'accessibility.remove_item' | t: title: '[product]' | escape }}"
-      data-error="{{ 'smelly.product.wishlist_error' | t | escape }}"
-      data-unavailable="{{ 'smelly.product.wishlist_unavailable' | t | escape }}"
-    >
-      <p class="visually-hidden" role="status" data-wishlist-status></p>
-      <dialog id="SmellyWishlist-{{ section_id }}" aria-labelledby="SmellyWishlistTitle-{{ section_id }}" class="smelly-wishlist__dialog">
-        <div class="smelly-wishlist__heading">
-          <h2 id="SmellyWishlistTitle-{{ section_id }}">{{ 'smelly.product.wishlist' | t }}</h2>
-          <form method="dialog">
-            <button type="submit" class="button-unstyled smelly-wishlist__close" autofocus aria-label="{{ 'accessibility.close_dialog' | t }}">
-              <span class="svg-wrapper" aria-hidden="true">{{ 'icon-close.svg' | inline_asset_content }}</span>
-            </button>
-          </form>
-        </div>
-        <p data-wishlist-empty>{{ 'smelly.product.wishlist_empty' | t }}</p>
-        <p role="status" data-wishlist-dialog-status></p>
-        <ul role="list" data-wishlist-items></ul>
-        <template>
-          <li>
-            <a></a>
-            <button type="button" class="button-unstyled" data-wishlist-remove>{{ 'accessibility.remove' | t }}</button>
-          </li>
-        </template>
-      </dialog>
-    </smelly-product-wishlist>
-  {% else %}
-    <button type="button" class="button-unstyled smelly-wishlist__toggle smelly-wishlist__toggle--{{ placement }}" data-wishlist-toggle hidden>
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
-        <path d="M12 20.5 4.3 13a4.9 4.9 0 0 1 7-6.9l.7.7.7-.7a4.9 4.9 0 0 1 7 6.9Z" stroke-linejoin="round"/>
-      </svg>
-      <span{% if placement == 'gallery' %} class="visually-hidden"{% endif %}>{{ 'smelly.product.wishlist_add' | t }}</span>
+{% capture heart %}
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+    <path d="M12 20.5 4.3 13a4.9 4.9 0 0 1 7-6.9l.7.7.7-.7a4.9 4.9 0 0 1 7 6.9Z" stroke-linejoin="round"/>
+  </svg>
+{% endcapture %}
+
+{% if placement == 'dialog' %}
+  <smelly-product-wishlist
+    id="SmellyProductWishlist-{{ section_id }}{% if product.id != blank %}-{{ product.id }}{% endif %}"
+    data-add="{{ 'smelly.product.wishlist_add' | t | escape }}"
+    data-remove="{{ 'smelly.product.wishlist_remove' | t | escape }}"
+    data-remove-item="{{ 'accessibility.remove_item' | t: title: '[product]' | escape }}"
+    data-error="{{ 'smelly.product.wishlist_error' | t | escape }}"
+    data-unavailable="{{ 'smelly.product.wishlist_unavailable' | t | escape }}"
+  >
+    <p class="visually-hidden" role="status" data-wishlist-status></p>
+    <dialog id="SmellyWishlist-{{ section_id }}" aria-labelledby="SmellyWishlistTitle-{{ section_id }}" class="smelly-wishlist__dialog">
+      <div class="smelly-wishlist__heading">
+        <h2 id="SmellyWishlistTitle-{{ section_id }}">{{ 'smelly.product.wishlist' | t }}</h2>
+        <form method="dialog">
+          <button type="submit" class="button-unstyled smelly-wishlist__close" autofocus aria-label="{{ 'accessibility.close_dialog' | t }}">
+            <span class="svg-wrapper" aria-hidden="true">{{ 'icon-close.svg' | inline_asset_content }}</span>
+          </button>
+        </form>
+      </div>
+      <p data-wishlist-empty>{{ 'smelly.product.wishlist_empty' | t }}</p>
+      <p role="status" data-wishlist-dialog-status></p>
+      <ul role="list" data-wishlist-items></ul>
+      <template>
+        <li>
+          <a></a>
+          <button type="button" class="button-unstyled" data-wishlist-remove>{{ 'accessibility.remove' | t }}</button>
+        </li>
+      </template>
+    </dialog>
+  </smelly-product-wishlist>
+{% elsif placement == 'catalogue' %}
+  <button type="button" class="button-unstyled smelly-wishlist__open smelly-catalogue__wishlist" aria-haspopup="dialog" aria-controls="SmellyWishlist-{{ section_id }}" data-wishlist-open hidden>
+    {{ heart }}
+    <span class="visually-hidden">{{ 'smelly.product.wishlist_view' | t }}</span>
+  </button>
+{% elsif product.id != blank %}
+  <button
+    type="button"
+    class="button-unstyled smelly-wishlist__toggle smelly-wishlist__toggle--{{ placement }}"
+    data-wishlist-toggle
+    data-product-id="{{ product.id }}"
+    data-product-title="{{ product.title | escape }}"
+    data-product-url="{{ product.url | escape }}"
+    hidden
+  >
+    {{ heart }}
+    <span{% unless placement == 'purchase' %} class="visually-hidden"{% endunless %}>{{ 'smelly.product.wishlist_add' | t }}</span>
+  </button>
+  {% if placement == 'purchase' %}
+    <button type="button" class="button-unstyled smelly-wishlist__open" aria-haspopup="dialog" aria-controls="SmellyWishlist-{{ section_id }}" data-wishlist-open hidden>
+      {{ 'smelly.product.wishlist_view' | t }}
     </button>
-    {% if placement == 'purchase' %}
-      <button type="button" class="button-unstyled smelly-wishlist__open" aria-haspopup="dialog" aria-controls="SmellyWishlist-{{ section_id }}" data-wishlist-open hidden>
-        {{ 'smelly.product.wishlist_view' | t }}
-      </button>
-      <p class="smelly-wishlist__status" role="status" data-wishlist-purchase-status></p>
-    {% endif %}
+    <p class="smelly-wishlist__status" role="status" data-wishlist-purchase-status></p>
   {% endif %}
 {% endif %}
 
@@ -60,7 +72,7 @@
     static storagePrefix = 'smelly-af:wishlist:';
 
     connectedCallback() {
-      this.container = this.closest('.smelly-product');
+      this.container = this.closest('.smelly-product, .smelly-catalogue');
       if (!this.container) return;
 
       this.dialog = this.querySelector('dialog');
@@ -75,6 +87,7 @@
       this.container.addEventListener('click', this.handleClick, { signal });
       window.addEventListener('storage', this.refresh, { signal });
       window.addEventListener('pageshow', this.refresh, { signal });
+      window.addEventListener('smelly:wishlist-change', this.refresh, { signal });
     }
 
     disconnectedCallback() {
@@ -101,10 +114,15 @@
     }
 
     sync(items) {
-      const saved = items.some((item) => item.id === this.dataset.productId);
+      const savedIds = new Set(items.map((item) => item.id));
       for (const toggle of this.container.querySelectorAll('[data-wishlist-toggle]')) {
+        const saved = savedIds.has(toggle.dataset.productId);
+        const label = saved ? this.dataset.remove : this.dataset.add;
         toggle.dataset.saved = String(saved);
-        toggle.querySelector('span').textContent = saved ? this.dataset.remove : this.dataset.add;
+        toggle.querySelector('span').textContent = label;
+        if (toggle.classList.contains('smelly-wishlist__toggle--card')) {
+          toggle.setAttribute('aria-label', `${label} — ${toggle.dataset.productTitle}`);
+        }
       }
 
       if (!this.dialog.open) return;
@@ -156,8 +174,9 @@
     }
 
     handleClick = (event) => {
+      if (!(event.target instanceof Element)) return;
       const button = event.target.closest('button');
-      if (!button) return;
+      if (!button || button.disabled) return;
 
       if (button.hasAttribute('data-wishlist-open')) {
         this.dialog.showModal();
@@ -166,18 +185,17 @@
       }
 
       const toggling = button.hasAttribute('data-wishlist-toggle');
-      const id = toggling ? this.dataset.productId : button.dataset.wishlistRemove;
+      const id = toggling ? button.dataset.productId : button.dataset.wishlistRemove;
       if (!id) return;
 
       try {
         const key = SmellyProductWishlist.storagePrefix + id;
         if (toggling && !this.read().some((item) => item.id === id)) {
-          localStorage.setItem(key, JSON.stringify({ id, title: this.dataset.productTitle, url: this.dataset.productUrl }));
+          localStorage.setItem(key, JSON.stringify({ id, title: button.dataset.productTitle, url: button.dataset.productUrl }));
         } else {
           localStorage.removeItem(key);
         }
-        this.reportError('');
-        this.sync(this.read());
+        window.dispatchEvent(new Event('smelly:wishlist-change'));
       } catch {
         this.reportError();
       }

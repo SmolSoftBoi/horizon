@@ -354,6 +354,11 @@
     }
   },
   "smelly": {
+    "catalogue": {
+      "product_view": "Produktvy",
+      "grid_view": "Rutnätsvy",
+      "list_view": "Listvy"
+    },
     "product": {
       "breadcrumbs": "Brödsmulenavigering",
       "size": "Storlek",

@@ -354,6 +354,11 @@
     }
   },
   "smelly": {
+    "catalogue": {
+      "product_view": "مصنوعات کی نمائش",
+      "grid_view": "گرڈ کی صورت میں",
+      "list_view": "فہرست کی صورت میں"
+    },
     "product": {
       "breadcrumbs": "صفحے تک رسائی کا راستہ",
       "size": "سائز",

@@ -1,18 +1,41 @@
+{{ 'smelly-catalogue.css' | asset_url | stylesheet_tag }}
+
 {% liquid
   assign current_sort = collection.sort_by | default: collection.default_sort_by
   assign clear_url = collection.url | sort_by: current_sort
   assign collection_query = collection.current_vendor | default: collection.current_type
+  assign form_url = request.path | default: collection.url
   if collection_query != blank
     assign encoded_query = collection_query | url_encode
     assign encoded_sort = current_sort | url_encode
-    assign clear_url = request.path | default: collection.url | split: '?' | first | append: '?q=' | append: encoded_query | append: '&sort_by=' | append: encoded_sort
+    assign clear_url = form_url | split: '?' | first | append: '?q=' | append: encoded_query | append: '&sort_by=' | append: encoded_sort
   endif
+  assign clear_url = clear_url | escape
+
+  assign is_all = false
+  assign all_collection = collections.all
   assign all_label = 'smelly.shop_all' | t
   assign all_label = section.settings.all_label | default: all_label
   assign heading = collection.title
+  assign banner_image = collection.image | default: section.settings.banner_image
   if collection.handle == 'all'
+    assign is_all = true
+    assign all_collection = collection
     assign heading = section.settings.heading | default: collection.title
+    assign banner_image = section.settings.banner_image | default: collection.image
   endif
+
+  assign show_filters = false
+  assign show_sort = false
+  if collection.all_products_count > 0
+    if collection.filters.size > 0
+      assign show_filters = true
+    endif
+    if collection.sort_options.size > 0
+      assign show_sort = true
+    endif
+  endif
+
   assign active_filter_count = 0
   for filter in collection.filters
     assign active_filter_count = active_filter_count | plus: filter.active_values.size
@@ -22,170 +45,255 @@
       endif
     endif
   endfor
+
+  assign filter_form_id = 'SmellyFilters-' | append: section.id
 %}
 
-<collection-component
-  class="smelly-shell smelly-section-space smelly-catalogue"
-  view-event-payload="{{ collection | standard_event_data: 'view' | escape }}"
->
-  <header class="smelly-catalogue__intro">
-    {% if section.settings.note != blank %}
-      <p class="smelly-handwritten">{{ section.settings.note | escape }}</p>
+<collection-component class="smelly-catalogue" view-event-payload="{{ collection | standard_event_data: 'view' | escape }}">
+  <header class="smelly-catalogue__hero{% if banner_image == blank %} smelly-catalogue__hero--default{% endif %}">
+    {% if banner_image != blank %}
+      {{ banner_image | image_url: width: 2400 | image_tag: widths: '480, 750, 1100, 1500, 2000, 2400', sizes: '100vw', loading: 'eager', fetchpriority: 'high', class: 'smelly-catalogue__banner-photo', alt: '' }}
+    {% else %}
+      <picture class="smelly-catalogue__banner-photo">
+        <source media="(max-width: 1099px)" srcset="{{ 'smelly-collection-hero-small.webp' | asset_url }}">
+        <img
+          src="{{ 'smelly-collection-hero.webp' | asset_url }}"
+          alt=""
+          width="2000"
+          height="667"
+          loading="eager"
+          fetchpriority="high"
+        >
+      </picture>
     {% endif %}
-    <h1>{{ heading | escape }}</h1>
-    {% if collection.description != blank %}
-      <div class="smelly-catalogue__description rte">{{ collection.description }}</div>
-    {% elsif section.settings.text != blank %}
-      <p class="smelly-catalogue__description">{{ section.settings.text | escape }}</p>
-    {% endif %}
+    <div class="smelly-catalogue__hero-inner smelly-catalogue__shell">
+      <div class="smelly-catalogue__intro">
+        <nav class="smelly-catalogue__breadcrumbs" aria-label="{{ 'smelly.product.breadcrumbs' | t }}">
+          <ol role="list">
+            <li>
+              <a href="{{ routes.root_url }}" aria-label="{{ 'smelly.home' | t }}">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="m3 10 9-7 9 7m-16-1v11h5v-6h4v6h5V9"/>
+                </svg>
+              </a>
+            </li>
+            {% unless is_all %}
+              <li><a href="{{ routes.all_products_collection_url }}">{{ all_label | escape }}</a></li>
+            {% endunless %}
+            <li aria-current="page">{{ heading | escape }}</li>
+          </ol>
+        </nav>
+        <h1>{{ heading | escape }}</h1>
+        {% if collection.description != blank %}
+          <div class="smelly-catalogue__description rte">{{ collection.description }}</div>
+        {% elsif section.settings.text != blank %}
+          <p class="smelly-catalogue__description">{{ section.settings.text | escape | newline_to_br }}</p>
+        {% endif %}
+      </div>
+      {% if section.settings.note != blank %}
+        <p class="smelly-catalogue__note smelly-handwritten">
+          {{ section.settings.note | escape | newline_to_br }}
+          <span>{% render 'smelly-illustration', kind: 'heart' %}</span>
+        </p>
+      {% endif %}
+    </div>
   </header>
 
-  <nav class="smelly-catalogue__ranges" aria-label="{{ 'smelly.explore_range' | t }}">
-    <ul role="list">
-      <li>
-        <a href="{{ routes.all_products_collection_url }}" {% if collection.handle == 'all' %}aria-current="page"{% endif %}>
-          {{ all_label | escape }}
-        </a>
-      </li>
-      {% for block in section.blocks %}
-        {% assign range_collection = block.settings.collection %}
-        {% if range_collection != blank or request.design_mode %}
-          <li {{ block.shopify_attributes }}>
-            {% if range_collection != blank %}
-              <a href="{{ range_collection.url }}" {% if collection.id == range_collection.id %}aria-current="page"{% endif %}>
-                {{ block.settings.heading | default: range_collection.title | escape }}
-              </a>
-            {% else %}
-              <span aria-disabled="true">{{ block.settings.heading | escape }}</span>
-            {% endif %}
-          </li>
-        {% endif %}
-      {% endfor %}
-    </ul>
-  </nav>
-
-  {% if collection.all_products_count > 0 %}
-    <form class="smelly-catalogue__controls" action="{{ request.path | default: collection.url }}" method="get" aria-label="{{ 'accessibility.filters' | t }}">
-      {% if collection_query != blank %}
-        <input type="hidden" name="q" value="{{ collection_query | escape }}">
-      {% endif %}
-      <p class="smelly-catalogue__count">{{ 'content.item_count' | t: count: collection.products_count }}</p>
-      <div class="smelly-catalogue__filters">
-        {% for filter in collection.filters %}
-          <details class="smelly-catalogue__filter">
-            <summary>
-              {{ filter.label | escape }}
-              {% if filter.active_values.size > 0 %}({{ filter.active_values.size }}){% endif %}
-              <span aria-hidden="true">+</span>
-            </summary>
-            <div class="smelly-catalogue__filter-options">
-              {% case filter.type %}
-                {% when 'boolean', 'list' %}
-                  <fieldset>
-                    <legend class="visually-hidden">{{ filter.label | escape }}</legend>
-                    {% for value in filter.values %}
-                      <label class="smelly-catalogue__checkbox">
-                        <input type="checkbox" name="{{ value.param_name | escape }}" value="{{ value.value | escape }}" {% if value.active %}checked{% elsif value.count == 0 %}disabled{% endif %}>
-                        <span>{{ value.label | escape }} ({{ value.count }})</span>
-                      </label>
-                    {% endfor %}
-                  </fieldset>
-                {% when 'price_range' %}
-                  {% assign highest_price = filter.range_max | money %}
-                  <p>{{ 'content.price_filter_html' | t: price: highest_price }}</p>
-                  <div class="smelly-catalogue__price-range">
-                    <label>
-                      <span>{{ 'accessibility.price_filter_low' | t }} ({{ cart.currency.iso_code | escape }})</span>
-                      <input type="number" name="{{ filter.min_value.param_name | escape }}" min="0" max="{{ filter.range_max | divided_by: 100.0 }}" step="any" placeholder="0" {% if filter.min_value.value != blank %}value="{{ filter.min_value.value | divided_by: 100.0 }}"{% endif %}>
-                    </label>
-                    <label>
-                      <span>{{ 'accessibility.price_filter_high' | t }} ({{ cart.currency.iso_code | escape }})</span>
-                      <input type="number" name="{{ filter.max_value.param_name | escape }}" min="0" max="{{ filter.range_max | divided_by: 100.0 }}" step="any" placeholder="{{ filter.range_max | divided_by: 100.0 }}" {% if filter.max_value.value != blank %}value="{{ filter.max_value.value | divided_by: 100.0 }}"{% endif %}>
-                    </label>
-                  </div>
-              {% endcase %}
-            </div>
-          </details>
-        {% endfor %}
-      </div>
-      {% if collection.sort_options.size > 0 %}
-        <div class="smelly-catalogue__sort">
-          <label for="SmellySort-{{ section.id }}">{{ 'actions.sort' | t }}</label>
-          <select id="SmellySort-{{ section.id }}" name="sort_by">
-            {% for option in collection.sort_options %}
-              <option value="{{ option.value | escape }}" {% if option.value == current_sort %}selected{% endif %}>{{ option.name | escape }}</option>
-            {% endfor %}
-          </select>
-        </div>
-      {% endif %}
-      {% if collection.filters.size > 0 or collection.sort_options.size > 0 %}
-        <button class="smelly-button smelly-button--small" type="submit">{{ 'actions.apply' | t }}</button>
-      {% endif %}
-    </form>
-  {% endif %}
-
-  {% if active_filter_count > 0 %}
-    <div class="smelly-catalogue__active" role="group" aria-label="{{ 'accessibility.active_filters' | t }}">
-      <a class="smelly-text-link" href="{{ clear_url }}">{{ 'actions.clear_all' | t }}</a>
-      {% for filter in collection.filters %}
-        {% if filter.type == 'price_range' %}
-          {% if filter.min_value.value != blank or filter.max_value.value != blank %}
-            <a href="{{ filter.url_to_remove | escape }}">
-              <span class="visually-hidden">{{ 'actions.remove' | t }}: </span>
-              {{ filter.label | escape }}:
-              {{ filter.min_value.value | default: 0 | money }}–{{ filter.max_value.value | default: filter.range_max | money }}
-              <span aria-hidden="true">×</span>
-            </a>
-          {% endif %}
-        {% else %}
-          {% for value in filter.active_values %}
-            <a href="{{ value.url_to_remove | escape }}">
-              <span class="visually-hidden">{{ 'actions.remove' | t }}: </span>
-              {{ filter.label | escape }}: {{ value.label | escape }}<span aria-hidden="true">×</span>
-            </a>
-          {% endfor %}
-        {% endif %}
-      {% endfor %}
-    </div>
-  {% endif %}
-
-  {% paginate collection.products by section.settings.products_per_page %}
-    {% if collection.products.size > 0 %}
-      <ul class="smelly-product-grid smelly-catalogue__grid" role="list">
-        {% for card_product in collection.products %}
+  <div class="smelly-catalogue__shell">
+    <nav class="smelly-catalogue__ranges" aria-label="{{ 'smelly.explore_range' | t }}">
+      <ul role="list">
+        <li>
+          {% render 'smelly-catalogue-range',
+            label: all_label,
+            url: routes.all_products_collection_url,
+            image: all_collection.featured_image,
+            count: all_collection.all_products_count,
+            motif: 'jar',
+            current: is_all
+          %}
+        </li>
+        {% for block in section.blocks %}
           {% liquid
-            assign image_loading = 'lazy'
-            assign image_priority = 'auto'
-            if forloop.first
-              assign image_loading = 'eager'
-              assign image_priority = 'high'
+            assign range_collection = block.settings.collection
+            assign range_label = block.settings.heading | default: range_collection.title
+            assign range_image = block.settings.artwork | default: range_collection.featured_image
+            assign is_current_range = false
+            if range_collection != blank and collection.id == range_collection.id
+              assign is_current_range = true
             endif
           %}
-          <li>
-            {% render 'smelly-product-card',
-              card_product: card_product,
-              section_id: section.id,
-              image_sizes: '(min-width: 1440px) 312px, (min-width: 990px) 25vw, (min-width: 375px) 50vw, 100vw',
-              image_loading: image_loading,
-              image_priority: image_priority,
-              product_view_context: 'collection'
-            %}
-          </li>
+          {% if range_collection != blank or request.design_mode %}
+            <li {{ block.shopify_attributes }}>
+              {% render 'smelly-catalogue-range',
+                label: range_label,
+                url: range_collection.url,
+                image: range_image,
+                count: range_collection.all_products_count,
+                motif: block.settings.motif,
+                current: is_current_range
+              %}
+            </li>
+          {% endif %}
         {% endfor %}
       </ul>
-      {% render 'pagination-controls', paginate: paginate %}
-    {% else %}
-      <div class="smelly-catalogue__empty">
-        <h2>{{ 'content.no_products_found' | t }}</h2>
-        {% if active_filter_count > 0 %}
-          <p>{{ 'content.use_fewer_filters_html' | t: link: clear_url, class: 'smelly-text-link' }}</p>
-        {% elsif section.settings.empty_text != blank %}
-          <p>{{ section.settings.empty_text | escape }}</p>
-        {% endif %}
-        <a class="smelly-button smelly-button--outline" href="{{ routes.root_url }}">{{ 'actions.continue_shopping' | t }}</a>
+    </nav>
+
+    <div class="smelly-catalogue__browse{% if show_filters %} smelly-catalogue__browse--facets{% endif %}">
+      <div class="smelly-catalogue__toolbar">
+        <p class="smelly-catalogue__count">{{ 'content.item_count' | t: count: collection.products_count }}</p>
+        <div class="smelly-catalogue__tools">
+          {% if show_filters %}
+            <input id="SmellyFilterToggle-{{ section.id }}" class="smelly-catalogue__filter-toggle" type="checkbox" aria-controls="{{ filter_form_id }}">
+            <label class="smelly-catalogue__filter-label" for="SmellyFilterToggle-{{ section.id }}">
+              {{- 'icon-filter.svg' | inline_asset_content -}}
+              <span>{{ 'content.filters' | t }}{% if active_filter_count > 0 %} ({{ active_filter_count }}){% endif %}</span>
+            </label>
+          {% endif %}
+          {% if show_sort %}
+            <div class="smelly-catalogue__sort">
+              <label for="SmellySort-{{ section.id }}">{{ 'actions.sort' | t }}</label>
+              <select id="SmellySort-{{ section.id }}" form="{{ filter_form_id }}" name="sort_by">
+                {% for option in collection.sort_options %}
+                  <option value="{{ option.value | escape }}"{% if option.value == current_sort %} selected{% endif %}>{{ option.name | escape }}</option>
+                {% endfor %}
+              </select>
+              <button class="smelly-catalogue__sort-submit" type="submit" form="{{ filter_form_id }}">{{ 'actions.apply' | t }}</button>
+            </div>
+          {% endif %}
+          {% if collection.products_count > 0 %}
+            <fieldset class="smelly-catalogue__view">
+              <legend class="visually-hidden">{{ 'smelly.catalogue.product_view' | t }}</legend>
+              <label title="{{ 'smelly.catalogue.grid_view' | t | escape }}">
+                <input type="radio" name="view-{{ section.id }}" value="grid" checked>
+                <span>
+                  {{- 'icon-grid-default.svg' | inline_asset_content -}}
+                  <span class="visually-hidden">{{ 'smelly.catalogue.grid_view' | t }}</span>
+                </span>
+              </label>
+              <label title="{{ 'smelly.catalogue.list_view' | t | escape }}">
+                <input type="radio" name="view-{{ section.id }}" value="list">
+                <span>
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+                    <path d="M3 5h1m3 0h10M3 10h1m3 0h10M3 15h1m3 0h10"/>
+                  </svg>
+                  <span class="visually-hidden">{{ 'smelly.catalogue.list_view' | t }}</span>
+                </span>
+              </label>
+            </fieldset>
+          {% endif %}
+          {% if section.settings.show_wishlist %}
+            {% render 'smelly-product-wishlist', section_id: section.id, placement: 'catalogue' %}
+          {% endif %}
+        </div>
       </div>
-    {% endif %}
-  {% endpaginate %}
+
+      {% if show_filters or show_sort %}
+        <form id="{{ filter_form_id }}" class="smelly-catalogue__facets" action="{{ form_url | escape }}" method="get" aria-label="{{ 'accessibility.filters' | t }}"{% unless show_filters %} hidden{% endunless %}>
+          {% if collection_query != blank %}
+            <input type="hidden" name="q" value="{{ collection_query | escape }}">
+          {% endif %}
+          {% if show_filters %}
+            <h2>{{ 'content.filters' | t }}</h2>
+            {% for filter in collection.filters %}
+              <details class="smelly-catalogue__filter" open>
+                <summary>
+                  <span>
+                    {{ filter.label | escape }}
+                    {% if filter.active_values.size > 0 %}({{ filter.active_values.size }}){% endif %}
+                  </span>
+                  {{- 'icon-caret.svg' | inline_asset_content -}}
+                </summary>
+                <div class="smelly-catalogue__filter-options">
+                  {% case filter.type %}
+                    {% when 'boolean', 'list' %}
+                      <fieldset>
+                        <legend class="visually-hidden">{{ filter.label | escape }}</legend>
+                        {% for value in filter.values %}
+                          <label class="smelly-catalogue__checkbox">
+                            <input type="checkbox" name="{{ value.param_name | escape }}" value="{{ value.value | escape }}"{% if value.active %} checked{% elsif value.count == 0 %} disabled{% endif %}>
+                            <span>{{ value.label | escape }} ({{ value.count }})</span>
+                          </label>
+                        {% endfor %}
+                      </fieldset>
+                    {% when 'price_range' %}
+                      {% render 'smelly-catalogue-price', filter: filter %}
+                  {% endcase %}
+                </div>
+              </details>
+            {% endfor %}
+            <div class="smelly-catalogue__filter-actions">
+              <button class="smelly-button smelly-button--small" type="submit">{{ 'actions.apply' | t }}</button>
+              <a class="smelly-button smelly-button--small smelly-catalogue__clear" href="{{ clear_url }}">
+                {{- 'icon-reset.svg' | inline_asset_content -}}
+                {{ 'actions.clear_all' | t }}
+              </a>
+            </div>
+          {% endif %}
+        </form>
+      {% endif %}
+
+      <div class="smelly-catalogue__results">
+        {% if active_filter_count > 0 %}
+          <div class="smelly-catalogue__active" role="group" aria-label="{{ 'accessibility.active_filters' | t }}">
+            <a class="smelly-text-link" href="{{ clear_url }}">{{ 'actions.clear_all' | t }}</a>
+            {% for filter in collection.filters %}
+              {% if filter.type == 'price_range' %}
+                {% if filter.min_value.value != blank or filter.max_value.value != blank %}
+                  <a href="{{ filter.url_to_remove | escape }}">
+                    <span class="visually-hidden">{{ 'actions.remove' | t }}: </span>
+                    {{ filter.label | escape }}:
+                    {{ filter.min_value.value | default: 0 | money }}–{{ filter.max_value.value | default: filter.range_max | money }}
+                    <span aria-hidden="true">×</span>
+                  </a>
+                {% endif %}
+              {% else %}
+                {% for value in filter.active_values %}
+                  <a href="{{ value.url_to_remove | escape }}">
+                    <span class="visually-hidden">{{ 'actions.remove' | t }}: </span>
+                    {{ filter.label | escape }}: {{ value.label | escape }}<span aria-hidden="true">×</span>
+                  </a>
+                {% endfor %}
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% paginate collection.products by section.settings.products_per_page %}
+          {% if collection.products.size > 0 %}
+            <ul class="smelly-catalogue__grid" role="list">
+              {% for card_product in collection.products %}
+                <li>
+                  {% render 'smelly-product-card',
+                    card_product: card_product,
+                    section_id: section.id,
+                    image_sizes: '(min-width: 1600px) 210px, (min-width: 1440px) 14vw, (min-width: 1200px) 16vw, (min-width: 750px) 23vw, 46vw',
+                    product_view_context: 'collection',
+                    compact_add: true,
+                    catalogue_layout: true,
+                    show_wishlist: section.settings.show_wishlist
+                  %}
+                </li>
+              {% endfor %}
+            </ul>
+            {% render 'pagination-controls', paginate: paginate %}
+          {% else %}
+            <div class="smelly-catalogue__empty">
+              <h2>{{ 'content.no_products_found' | t }}</h2>
+              {% if active_filter_count > 0 %}
+                <p>{{ 'content.use_fewer_filters_html' | t: link: clear_url, class: 'smelly-text-link' }}</p>
+              {% elsif section.settings.empty_text != blank %}
+                <p>{{ section.settings.empty_text | escape }}</p>
+              {% endif %}
+              <a class="smelly-button smelly-button--outline" href="{{ routes.root_url }}">{{ 'actions.continue_shopping' | t }}</a>
+            </div>
+          {% endif %}
+        {% endpaginate %}
+      </div>
+    </div>
+  </div>
+  {% if section.settings.show_wishlist %}
+    {% render 'smelly-product-wishlist', section_id: section.id, placement: 'dialog' %}
+  {% endif %}
 </collection-component>
 
 {% schema %}
@@ -195,23 +303,40 @@
   "class": "smelly-section smelly-catalogue-section",
   "enabled_on": { "templates": ["collection"] },
   "settings": [
-    { "type": "text", "id": "note", "label": "Handwritten note", "default": "Small jars. Every kind of A.F." },
-    { "type": "text", "id": "heading", "label": "All scents heading", "default": "All scents.", "info": "Used for the all-products collection. Other collections show their own title." },
-    { "type": "textarea", "id": "text", "label": "Introduction", "default": "From sweet-shop nostalgia to seasonal favourites, find a little jar that feels like you.", "info": "Shown when the collection has no description." },
-    { "type": "text", "id": "all_label", "label": "All scents link label", "default": "All scents" },
+    { "type": "textarea", "id": "note", "label": "Handwritten note", "default": "Hand-poured\nwith A.F. attitude." },
+    { "type": "text", "id": "heading", "label": "All candles heading", "default": "All Candles", "info": "Used for the all-products collection. Other collections show their own title." },
+    { "type": "textarea", "id": "text", "label": "Introduction", "default": "Our full collection of hand-poured soy wax candles.\nFrom sweet and fruity favourites to cosy and seasonal classics.", "info": "Shown when the collection has no description." },
+    { "type": "image_picker", "id": "banner_image", "label": "Catalogue banner", "info": "Named collections use their own collection image when available." },
+    { "type": "text", "id": "all_label", "label": "All candles link label", "default": "All Candles" },
+    { "type": "checkbox", "id": "show_wishlist", "label": "Show wishlist buttons", "default": true },
     { "type": "range", "id": "products_per_page", "label": "Products per page", "min": 8, "max": 36, "step": 4, "default": 12 },
     { "type": "textarea", "id": "empty_text", "label": "Empty collection message", "default": "There are no scents in this collection yet. Explore another range or check back soon." }
   ],
-  "max_blocks": 4,
+  "max_blocks": 5,
   "blocks": [{ "type": "range", "name": "Range link", "settings": [
     { "type": "text", "id": "heading", "label": "Label", "default": "Sweet A.F." },
-    { "type": "collection", "id": "collection", "label": "Collection", "info": "Unassigned links stay hidden from shoppers and remain visible in the editor." }
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "image_picker", "id": "artwork", "label": "Range photo", "info": "Defaults to the collection's featured image." },
+    {
+      "type": "select",
+      "id": "motif",
+      "label": "Illustration",
+      "options": [
+        { "value": "heart", "label": "Heart" },
+        { "value": "candy", "label": "Sweet" },
+        { "value": "pumpkin", "label": "Pumpkin" },
+        { "value": "festive", "label": "Festive" },
+        { "value": "flower", "label": "Flower" },
+        { "value": "soy", "label": "Leaves" }
+      ],
+      "default": "heart"
+    }
   ] }],
   "presets": [{ "name": "Smelly A.F. all scents", "blocks": [
-    { "type": "range", "settings": { "heading": "Spooky A.F." } },
-    { "type": "range", "settings": { "heading": "Festive A.F." } },
-    { "type": "range", "settings": { "heading": "Sweet A.F." } },
-    { "type": "range", "settings": { "heading": "Fresh A.F." } }
+    { "type": "range", "settings": { "heading": "Sweet A.F.", "motif": "candy" } },
+    { "type": "range", "settings": { "heading": "Spooky A.F.", "motif": "pumpkin" } },
+    { "type": "range", "settings": { "heading": "Festive A.F.", "motif": "festive" } },
+    { "type": "range", "settings": { "heading": "Fresh A.F.", "motif": "flower" } }
   ] }]
 }
 {% endschema %}
