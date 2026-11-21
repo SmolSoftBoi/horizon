@@ -1,0 +1,77 @@
+{% doc %}
+  Renders a collection directory card with Shopify catalogue data.
+  @param {collection} [card_collection] - Storefront collection to display.
+  @param {string} action - Collection link text.
+  @param {boolean} [all_products] - Use the All Candles layout and the native catalogue link.
+  @param {string} [heading] - Custom All Candles title.
+  @param {string} [text] - Custom All Candles description.
+  @param {image} [image] - Custom All Candles artwork.
+{% enddoc %}
+
+{% liquid
+  assign title = heading | default: card_collection.title
+  assign description = text | strip
+  if description != blank
+    assign description = description | truncatewords: 18 | escape
+  elsif card_collection.description != blank
+    assign description = card_collection.description
+    # Keep neighbouring blocks separate while preserving words split by inline markup.
+    assign text_boundaries = '<br|<hr|</p>|</div>|</li>|</blockquote>|</h1>|</h2>|</h3>|</h4>|</h5>|</h6>|</td>|</th>' | split: '|'
+    for boundary in text_boundaries
+      assign uppercase_boundary = boundary | upcase
+      assign spaced_boundary = boundary | prepend: ' '
+      assign description = description | replace: boundary, spaced_boundary | replace: uppercase_boundary, spaced_boundary
+    endfor
+    assign description = description | strip_html | replace: '&nbsp;', ' ' | strip | truncatewords: 18 | escape_once
+  endif
+  assign count = card_collection.all_products_count
+  assign url = card_collection.url
+  assign artwork = card_collection.featured_image
+  assign motif = 'jar'
+
+  if all_products
+    assign url = routes.all_products_collection_url
+    assign artwork = image | default: card_collection.image
+  else
+    case card_collection.handle
+      when 'sweet-a-f'
+        assign motif = 'candy'
+      when 'spooky-a-f'
+        assign motif = 'pumpkin'
+      when 'festive-a-f'
+        assign motif = 'festive'
+      when 'fresh-a-f'
+        assign motif = 'flower'
+    endcase
+  endif
+%}
+
+<li class="smelly-collection-card smelly-collection-card--{{ motif }}">
+  <div class="smelly-collection-card__art{% if all_products and artwork == blank %} smelly-collection-card__art--panorama{% endif %}" aria-hidden="true">
+    {% if artwork != blank %}
+      {{ artwork | image_url: width: 900 | image_tag: widths: '240, 360, 480, 640, 900', sizes: '(min-width: 1566px) 320px, (min-width: 1024px) 22vw, (min-width: 680px) 33vw, 67vw', loading: 'lazy', alt: '' }}
+    {% elsif all_products %}
+      <img src="{{ 'smelly-collections-all.webp' | asset_url }}" alt="" width="1200" height="400" loading="lazy">
+    {% else %}
+      <div class="smelly-collection-card__illustration">
+        {% render 'smelly-illustration', kind: motif %}
+      </div>
+    {% endif %}
+  </div>
+  <div class="smelly-collection-card__content">
+    <h2>{{ title | escape }}</h2>
+    {% if count != nil %}
+      <p class="smelly-collection-card__count">
+        {% render 'smelly-illustration', kind: motif %}
+        {{ 'content.item_count' | t: count: count }}
+      </p>
+    {% endif %}
+    {% if description != blank %}
+      <p class="smelly-collection-card__description">{{ description }}</p>
+    {% endif %}
+    <a class="smelly-button smelly-collection-card__link" href="{{ url | escape }}" aria-label="{{ action | escape }} – {{ title | escape }}">
+      {{ action | escape }}
+      <span aria-hidden="true">→</span>
+    </a>
+  </div>
+</li>

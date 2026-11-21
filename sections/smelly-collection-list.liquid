@@ -1,0 +1,85 @@
+{{ 'smelly-catalogue.css' | asset_url | stylesheet_tag }}
+{{ 'smelly-collection-list.css' | asset_url | stylesheet_tag }}
+
+{% liquid
+  assign heading = section.settings.heading | default: page_title
+  assign all_label = 'smelly.shop_all' | t
+  assign all_label = section.settings.all_label | default: all_label
+  assign action = 'smelly.explore_range' | t
+  assign action = section.settings.button_label | default: action
+%}
+
+<div class="smelly-section smelly-catalogue smelly-collection-list">
+  {% render 'smelly-catalogue-hero',
+    heading: heading,
+    text: section.settings.text,
+    note: section.settings.note,
+    banner_image: section.settings.banner_image
+  %}
+
+  <div class="smelly-collection-list__content">
+    {% paginate collections by 24 %}
+      {% liquid
+        assign all_collection = collections.all
+        assign show_all_card = false
+
+        if paginate.pages <= 1
+          assign show_all_card = true
+        endif
+
+        # A published All collection fills its own pagination slot.
+        for catalogue_collection in collections
+          if catalogue_collection.handle == 'all'
+            assign all_collection = catalogue_collection
+            assign show_all_card = true
+            break
+          endif
+        endfor
+      %}
+
+      {% unless show_all_card %}
+        <a class="smelly-text-link smelly-collection-list__all-link" href="{{ routes.all_products_collection_url | escape }}">
+          {{ all_label | escape }}
+        </a>
+      {% endunless %}
+
+      <ul class="smelly-collection-list__grid" role="list" aria-label="{{ 'content.search_results_resource_collections' | t }}">
+        {% if show_all_card %}
+          {% render 'smelly-collection-list-card',
+            card_collection: all_collection,
+            all_products: true,
+            heading: all_label,
+            text: section.settings.all_text,
+            image: section.settings.all_image,
+            action: action
+          %}
+        {% endif %}
+        {% for catalogue_collection in collections %}
+          {% if catalogue_collection.handle != 'all' %}
+            {% render 'smelly-collection-list-card', card_collection: catalogue_collection, action: action %}
+          {% endif %}
+        {% endfor %}
+      </ul>
+      {% render 'pagination-controls', paginate: paginate %}
+    {% endpaginate %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Smelly A.F. collections",
+  "enabled_on": { "templates": ["list-collections"] },
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Candle Collections" },
+    { "type": "textarea", "id": "text", "label": "Introduction", "default": "Explore our hand-poured candle collections and find a scent for every mood, season and space." },
+    { "type": "textarea", "id": "note", "label": "Handwritten note", "default": "Hand-poured\ncollections." },
+    { "type": "image_picker", "id": "banner_image", "label": "Banner image" },
+    { "type": "header", "content": "Collection cards" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "View collection" },
+    { "type": "text", "id": "all_label", "label": "All Candles title", "default": "All Candles" },
+    { "type": "textarea", "id": "all_text", "label": "All Candles description", "default": "The complete Smelly A.F. range in one place." },
+    { "type": "image_picker", "id": "all_image", "label": "All Candles image" }
+  ],
+  "presets": [{ "name": "Smelly A.F. collections" }]
+}
+{% endschema %}

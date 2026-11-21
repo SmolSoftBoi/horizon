@@ -16,6 +16,7 @@
   assign all_collection = collections.all
   assign all_label = 'smelly.shop_all' | t
   assign all_label = section.settings.all_label | default: all_label
+  assign collections_label = 'content.search_results_resource_collections' | t
   assign heading = collection.title
   assign banner_image = collection.image | default: section.settings.banner_image
   if collection.handle == 'all'
@@ -50,54 +51,15 @@
 %}
 
 <collection-component class="smelly-catalogue" view-event-payload="{{ collection | standard_event_data: 'view' | escape }}">
-  <header class="smelly-catalogue__hero{% if banner_image == blank %} smelly-catalogue__hero--default{% endif %}">
-    {% if banner_image != blank %}
-      {{ banner_image | image_url: width: 2400 | image_tag: widths: '480, 750, 1100, 1500, 2000, 2400', sizes: '100vw', loading: 'eager', fetchpriority: 'high', class: 'smelly-catalogue__banner-photo', alt: '' }}
-    {% else %}
-      <picture class="smelly-catalogue__banner-photo">
-        <source media="(max-width: 1099px)" srcset="{{ 'smelly-collection-hero-small.webp' | asset_url }}">
-        <img
-          src="{{ 'smelly-collection-hero.webp' | asset_url }}"
-          alt=""
-          width="2000"
-          height="667"
-          loading="eager"
-          fetchpriority="high"
-        >
-      </picture>
-    {% endif %}
-    <div class="smelly-catalogue__hero-inner smelly-catalogue__shell">
-      <div class="smelly-catalogue__intro">
-        <nav class="smelly-catalogue__breadcrumbs" aria-label="{{ 'smelly.product.breadcrumbs' | t }}">
-          <ol role="list">
-            <li>
-              <a href="{{ routes.root_url }}" aria-label="{{ 'smelly.home' | t }}">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="m3 10 9-7 9 7m-16-1v11h5v-6h4v6h5V9"/>
-                </svg>
-              </a>
-            </li>
-            {% unless is_all %}
-              <li><a href="{{ routes.all_products_collection_url }}">{{ all_label | escape }}</a></li>
-            {% endunless %}
-            <li aria-current="page">{{ heading | escape }}</li>
-          </ol>
-        </nav>
-        <h1>{{ heading | escape }}</h1>
-        {% if collection.description != blank %}
-          <div class="smelly-catalogue__description rte">{{ collection.description }}</div>
-        {% elsif section.settings.text != blank %}
-          <p class="smelly-catalogue__description">{{ section.settings.text | escape | newline_to_br }}</p>
-        {% endif %}
-      </div>
-      {% if section.settings.note != blank %}
-        <p class="smelly-catalogue__note smelly-handwritten">
-          {{ section.settings.note | escape | newline_to_br }}
-          <span>{% render 'smelly-illustration', kind: 'heart' %}</span>
-        </p>
-      {% endif %}
-    </div>
-  </header>
+  {% render 'smelly-catalogue-hero',
+    heading: heading,
+    description_html: collection.description,
+    text: section.settings.text,
+    note: section.settings.note,
+    banner_image: banner_image,
+    parent_url: routes.collections_url,
+    parent_label: collections_label
+  %}
 
   <div class="smelly-catalogue__shell">
     <nav class="smelly-catalogue__ranges" aria-label="{{ 'smelly.explore_range' | t }}">
