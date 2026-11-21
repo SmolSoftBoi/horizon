@@ -1,0 +1,245 @@
+.page-wrapper:has(.smelly-collection-list) {
+  --collection-list-width: min(1500px, calc(100% - clamp(32px, 4.3vw, 66px)));
+}
+
+.smelly-section.smelly-collection-list { padding-block-end: 22px; }
+
+.smelly-collection-list .smelly-catalogue__hero::after {
+  background: linear-gradient(var(--catalogue-direction), #25150ee6, #25150eb3);
+}
+
+.smelly-collection-list .smelly-catalogue__description { max-inline-size: 36rem; }
+
+.smelly-collection-list__content {
+  width: var(--collection-list-width);
+  margin-inline: auto;
+  padding-block-start: 22px;
+}
+
+.smelly-collection-list__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(14px, 1.3vw, 20px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.smelly-collection-card {
+  --collection-card-tint: #462719;
+
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  min-block-size: 218px;
+  overflow: clip;
+  border-radius: 18px;
+  background: var(--collection-card-tint);
+  color: var(--smelly-cream);
+}
+
+.smelly-collection-card--candy { --collection-card-tint: #661b32; }
+.smelly-collection-card--pumpkin { --collection-card-tint: #582c17; }
+.smelly-collection-card--festive { --collection-card-tint: #512227; }
+.smelly-collection-card--flower { --collection-card-tint: #303b22; }
+
+.smelly-collection-card::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(
+    var(--catalogue-direction),
+    var(--collection-card-tint) 27%,
+    color-mix(in srgb, var(--collection-card-tint) 74%, transparent) 64%,
+    transparent 89%
+  );
+  content: '';
+}
+
+.smelly-collection-card__art {
+  position: absolute;
+  z-index: -2;
+  inset-block: 0;
+  inset-inline-end: 0;
+  width: 68%;
+}
+
+.smelly-collection-card__art--panorama { width: 100%; }
+
+.smelly-collection-card__art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.smelly-collection-card__art--panorama img { object-position: right center; }
+.smelly-collection-card__art--panorama:dir(rtl) img { object-position: center; }
+
+.smelly-collection-card__illustration {
+  display: grid;
+  height: 100%;
+  padding: 18px;
+  place-items: center;
+  background: radial-gradient(ellipse at 65% 65%, #fff5e441, transparent 74%);
+  color: #fff5e4c7;
+}
+
+.smelly-collection-card__illustration .smelly-illustration { max-width: 220px; }
+
+.smelly-collection-card__content {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 8px;
+  width: 65%;
+  padding-block: 16px;
+  padding-inline: clamp(16px, 2vw, 32px) 12px;
+  overflow-wrap: anywhere;
+}
+
+.smelly-collection-list .smelly-collection-card h2 {
+  max-width: 100%;
+  font-size: clamp(1.75rem, 2.75vw, 2.625rem);
+  line-height: 1.06;
+  letter-spacing: -0.037em;
+  text-wrap: pretty;
+}
+
+.smelly-collection-card__count {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  padding: 3px 12px 3px 8px;
+  border-radius: 99px;
+  background: var(--smelly-cream);
+  color: var(--smelly-ink);
+  font-size: 0.875rem;
+  font-weight: 650;
+  line-height: 1.25;
+}
+
+.smelly-collection-card__count .smelly-illustration {
+  flex: 0 0 28px;
+  width: 28px;
+  height: 25px;
+  stroke-width: 6;
+}
+
+.smelly-collection-card__description {
+  display: -webkit-box;
+  max-width: 23ch;
+  overflow: hidden;
+  font-size: clamp(0.875rem, 1.12vw, 1rem);
+  line-height: 1.32;
+  text-wrap: pretty;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.smelly-collection-list .smelly-collection-card__link {
+  gap: 10px;
+  max-width: 100%;
+  min-height: 44px;
+  margin-block-start: auto;
+  padding: 8px 15px;
+  text-align: start;
+}
+
+.smelly-collection-card__link::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+}
+
+.smelly-collection-card__link:dir(rtl) > span { transform: scaleX(-1); }
+
+.smelly-collection-list .smelly-collection-card__link:focus-visible {
+  outline-color: var(--smelly-cream);
+  outline-offset: 2px;
+}
+
+/* Use the existing details and subscription form in the collections layout. */
+.page-wrapper:has(.smelly-collection-list) .smelly-benefits {
+  width: var(--collection-list-width);
+  padding-block: 12px;
+}
+
+.page-wrapper:has(.smelly-collection-list) .smelly-benefits__icon {
+  flex-basis: 46px;
+  width: 46px;
+  height: 40px;
+}
+
+.page-wrapper:has(.smelly-collection-list) .smelly-benefits__heading {
+  font: 700 1rem/1.2 var(--font-body--family, sans-serif);
+  letter-spacing: 0;
+}
+
+.page-wrapper:has(.smelly-collection-list) .smelly-benefits__text { margin-block-start: 3px; }
+
+.page-wrapper:has(.smelly-collection-list) .smelly-newsletter {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(16px, 3vw, 48px);
+  width: var(--collection-list-width);
+  margin-block-start: 20px;
+  padding: clamp(18px, 2.4vw, 36px);
+  border: 0;
+  border-radius: 18px;
+  background: linear-gradient(115deg, #ffdeea, #fcecf1 46%, #f8c4d8);
+  overflow-wrap: anywhere;
+}
+
+.page-wrapper:has(.smelly-collection-list) .smelly-newsletter h2 {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  margin-block-end: 6px;
+}
+
+.page-wrapper:has(.smelly-collection-list) .smelly-newsletter__input-row { background: #fffafb; }
+
+@media (max-width: 749px) {
+  .page-wrapper:has(.smelly-collection-list) .smelly-benefits__item {
+    flex-direction: row;
+    padding-block: 12px;
+    text-align: start;
+  }
+
+  .page-wrapper:has(.smelly-collection-list) .smelly-newsletter { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 430px) {
+  .page-wrapper:has(.smelly-collection-list) .smelly-newsletter__input-row {
+    flex-direction: column;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .page-wrapper:has(.smelly-collection-list) .smelly-newsletter__input-row input {
+    min-height: 44px;
+    padding-inline: 14px;
+    border: 1px solid #a58a95;
+    border-radius: 100px;
+    background: #fffafb;
+  }
+}
+
+@media (min-width: 680px) {
+  .smelly-collection-list__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 990px) {
+  .smelly-collection-list .smelly-catalogue__hero--default::after {
+    background: linear-gradient(var(--catalogue-direction), #25150ee6, #25150eb3 57%, #25150e18 70%, #25150eb3 82%);
+  }
+
+  .smelly-collection-list .smelly-catalogue__hero .smelly-catalogue__intro {
+    max-inline-size: min(56%, 48rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  .smelly-collection-list__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
