@@ -5,13 +5,16 @@
   @param {string} [text] - Plain text shown when there is no collection description.
   @param {string} [note] - Handwritten note beside the headline.
   @param {image} [banner_image] - Image to show in place of the bundled banner.
+  @param {string} [fallback_banner] - Responsive banner markup for this page when no image is selected.
   @param {string} [parent_url] - Optional intermediate breadcrumb destination.
   @param {string} [parent_label] - Label for the intermediate breadcrumb.
 {% enddoc %}
 
-<header class="smelly-catalogue__hero{% if banner_image == blank %} smelly-catalogue__hero--default{% endif %}">
+<header class="smelly-catalogue__hero{% if banner_image == blank and fallback_banner == blank %} smelly-catalogue__hero--default{% endif %}">
   {% if banner_image != blank %}
     {{ banner_image | image_url: width: 2400 | image_tag: widths: '480, 750, 1100, 1500, 2000, 2400', sizes: '100vw', loading: 'eager', fetchpriority: 'high', class: 'smelly-catalogue__banner-photo', alt: '' }}
+  {% elsif fallback_banner != blank %}
+    {{ fallback_banner }}
   {% else %}
     <picture class="smelly-catalogue__banner-photo">
       <source media="(max-width: 1099px)" srcset="{{ 'smelly-collection-hero-small.webp' | asset_url }}">

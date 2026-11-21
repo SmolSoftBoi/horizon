@@ -1,0 +1,110 @@
+{
+  "sections": {
+    "main": {
+      "type": "smelly-gift-card",
+      "blocks": {
+        "amount": {
+          "type": "variant-picker",
+          "static": true,
+          "settings": {
+            "variant_style": "buttons",
+            "show_swatches": false
+          }
+        },
+        "price": {
+          "type": "price",
+          "static": true,
+          "settings": {}
+        },
+        "purchase": {
+          "type": "buy-buttons",
+          "static": true,
+          "settings": {
+            "gift_card_form": true,
+            "show_pickup_availability": false
+          },
+          "blocks": {
+            "add-to-cart": {
+              "type": "add-to-cart",
+              "static": true,
+              "settings": { "style_class": "button" }
+            }
+          }
+        },
+        "faq": {
+          "type": "accordion",
+          "static": true,
+          "settings": { "dividers": false },
+          "blocks": {
+            "delivery": {
+              "type": "_accordion-row",
+              "settings": { "heading": "How are gift cards delivered?" },
+              "blocks": {
+                "answer": {
+                  "type": "text",
+                  "settings": { "text": "<p>We send gift cards by email. Choose your inbox or the recipient’s. If you send it directly to them, you can add a message and choose a delivery date.</p>" }
+                }
+              },
+              "block_order": ["answer"]
+            },
+            "amounts": {
+              "type": "_accordion-row",
+              "settings": { "heading": "Can I choose a different amount?" },
+              "blocks": {
+                "answer": {
+                  "type": "text",
+                  "settings": { "text": "<p>Choose from the amounts shown on this page.</p>" }
+                }
+              },
+              "block_order": ["answer"]
+            },
+            "expiry": {
+              "type": "_accordion-row",
+              "settings": { "heading": "Do gift cards expire?" },
+              "blocks": {
+                "answer": {
+                  "type": "text",
+                  "settings": { "text": "<p>Open the gift card from its email to check for an expiry date.</p>" }
+                }
+              },
+              "block_order": ["answer"]
+            },
+            "discounts": {
+              "type": "_accordion-row",
+              "settings": { "heading": "Can I use a gift card with a discount code?" },
+              "blocks": {
+                "answer": {
+                  "type": "text",
+                  "settings": { "text": "<p>Yes. You can apply an eligible discount code at checkout and use your gift card balance to pay for your order.</p>" }
+                }
+              },
+              "block_order": ["answer"]
+            }
+          },
+          "block_order": ["delivery", "amounts", "expiry", "discounts"]
+        }
+      },
+      "settings": {}
+    },
+    "details": {
+      "type": "smelly-benefits",
+      "blocks": {
+        "hand_poured": {
+          "type": "detail",
+          "settings": { "icon": "pour", "heading": "Hand-poured", "text": "A personal touch in every jar" }
+        },
+        "soy_wax": {
+          "type": "detail",
+          "settings": { "icon": "soy", "heading": "Soy wax candles", "text": "Colourful wax. Characterful scents." }
+        },
+        "candle_size": {
+          "type": "detail",
+          "settings": { "icon": "jar", "heading": "150g of personality", "text": "Your shelf’s new favourite" }
+        }
+      },
+      "block_order": ["hand_poured", "soy_wax", "candle_size"],
+      "settings": {}
+    }
+  },
+  "order": ["main", "details"]
+}

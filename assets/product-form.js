@@ -193,6 +193,9 @@ if (!customElements.get('add-to-cart-component')) {
  * @property {string | null} intendedVariantId - The selected option's data-variant-id, when present.
  * @property {Promise<unknown> | null} pendingVariantChange - The server-side section fetch for the clicked selection.
  * @property {string | null} variantResolutionUrl - A section-rendering URL that resolves the clicked selection.
+ * @property {Record<string, string> | undefined} properties - Text line item properties captured when Add was clicked.
+ *
+ * @typedef {{variantId: string, quantity: number, properties?: Record<string, string>}} ResolvedAddToCartItem
  *
  * @typedef {object} QuantityConstraints
  * @property {string} min
@@ -342,6 +345,13 @@ class ProductFormComponent extends Component {
   #createQueuedAddToCartItem() {
     const picker = this.#getVariantPicker();
     const selectedOption = picker?.selectedOption;
+    const formData = new FormData(this.querySelector('form') ?? undefined);
+    /** @type {Array<[string, string]>} */
+    const properties = [];
+    for (const [name, value] of formData) {
+      const property = name.match(/^properties\[(.+)\]$/);
+      if (property && typeof value === 'string') properties.push([property[1], value]);
+    }
 
     return {
       quantity: this.#getQuantity(),
@@ -349,6 +359,7 @@ class ProductFormComponent extends Component {
       intendedVariantId: selectedOption?.dataset.variantId ?? null,
       pendingVariantChange: this.#pendingVariantChange,
       variantResolutionUrl: picker && selectedOption ? picker.buildRequestUrl(selectedOption) : null,
+      properties: properties.length ? Object.fromEntries(properties) : undefined,
     };
   }
 
@@ -583,7 +594,7 @@ class ProductFormComponent extends Component {
       });
   }
 
-  /** @param {Array<{variantId: string, quantity: number}>} items */
+  /** @param {ResolvedAddToCartItem[]} items */
   #processBatchAddToCart(items) {
     if (items.length === 0) return;
 
@@ -618,6 +629,7 @@ class ProductFormComponent extends Component {
       items: items.map((item) => ({
         id: Number(item.variantId),
         quantity: item.quantity,
+        properties: item.properties,
       })),
       sections: cartItemComponentsSectionIds.join(','),
     };
@@ -923,6 +935,8 @@ class ProductFormComponent extends Component {
 
       // Fetch and update cart quantity for the new variant
       this.#refreshCart().then((cart) => this.#updateCartQuantity(cart));
+    } catch (error) {
+      if (error?.name !== 'AbortError') throw error;
     } finally {
       // Only clear the flag if no newer variant selection has started
       if (generation === this.#variantChangeGeneration) {
@@ -948,7 +962,7 @@ class ProductFormComponent extends Component {
     const queuedItems = [...this.#addToCartQueue];
     this.#addToCartQueue = [];
 
-    /** @type {Array<{variantId: string, quantity: number}>} */
+    /** @type {ResolvedAddToCartItem[]} */
     const resolvedItems = [];
     for (const item of queuedItems) {
       const resolvedItem = await this.#resolveQueuedAddToCartItem(item);
@@ -962,7 +976,7 @@ class ProductFormComponent extends Component {
 
   /**
    * @param {QueuedAddToCartItem} item
-   * @returns {Promise<{variantId: string, quantity: number} | null>}
+   * @returns {Promise<ResolvedAddToCartItem | null>}
    */
   async #resolveQueuedAddToCartItem(item) {
     const { variantId, quantityConstraints } = await this.#resolveQueuedVariant(item);
@@ -971,6 +985,7 @@ class ProductFormComponent extends Component {
     return {
       variantId,
       quantity: this.#normalizeQueuedQuantity(item.quantity, quantityConstraints),
+      properties: item.properties,
     };
   }
 
