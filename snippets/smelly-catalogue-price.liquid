@@ -1,0 +1,100 @@
+{% doc %}
+  Renders Shopify's price filter with editable bounds and an enhanced slider.
+  @param {filter} filter - Shopify price range filter.
+{% enddoc %}
+
+{% liquid
+  assign maximum = filter.range_max | divided_by: 100.0
+  assign low_label = 'accessibility.price_filter_low' | t
+  assign high_label = 'accessibility.price_filter_high' | t
+  assign currency = cart.currency.iso_code
+%}
+
+<smelly-catalogue-price data-locale="{{ request.locale.iso_code | escape }}" data-currency="{{ currency | escape }}">
+  {% if filter.range_max > 0 %}
+    <div class="smelly-catalogue__slider" hidden>
+      <input type="range" aria-label="{{ low_label | escape }}" min="0" max="{{ maximum }}" step="any" value="0">
+      <input type="range" aria-label="{{ high_label | escape }}" min="0" max="{{ maximum }}" step="any" value="{{ maximum }}">
+    </div>
+  {% endif %}
+  <div class="smelly-catalogue__price-range">
+    <label>
+      <span>{{ low_label }}{% if currency != blank %} ({{ currency | escape }}){% endif %}</span>
+      <input type="number" name="{{ filter.min_value.param_name | escape }}" min="0" max="{{ maximum }}" step="any" placeholder="0"{% if filter.min_value.value != blank %} value="{{ filter.min_value.value | divided_by: 100.0 }}"{% endif %}>
+    </label>
+    <label>
+      <span>{{ high_label }}{% if currency != blank %} ({{ currency | escape }}){% endif %}</span>
+      <input type="number" name="{{ filter.max_value.param_name | escape }}" min="0" max="{{ maximum }}" step="any" placeholder="{{ maximum }}"{% if filter.max_value.value != blank %} value="{{ filter.max_value.value | divided_by: 100.0 }}"{% endif %}>
+    </label>
+  </div>
+</smelly-catalogue-price>
+
+{% javascript %}
+  class SmellyCataloguePrice extends HTMLElement {
+    connectedCallback() {
+      this.addEventListener('invalid', this.revealInvalidPrice, true);
+      this.slider = this.querySelector('.smelly-catalogue__slider');
+      if (!this.slider) return;
+
+      [this.low, this.high] = this.querySelectorAll('input[type="number"]');
+      [this.lowThumb, this.highThumb] = this.slider.querySelectorAll('input');
+      this.maximum = Number(this.highThumb.max);
+      const locale = this.dataset.locale || document.documentElement.lang || undefined;
+      const currency = this.dataset.currency;
+      this.money = new Intl.NumberFormat(locale, currency ? { style: 'currency', currency } : undefined);
+
+      this.updateSlider();
+      this.slider.hidden = false;
+      this.addEventListener('input', this.handleInput);
+      window.addEventListener('pageshow', this.updateSlider);
+    }
+
+    disconnectedCallback() {
+      this.removeEventListener('invalid', this.revealInvalidPrice, true);
+      this.removeEventListener('input', this.handleInput);
+      window.removeEventListener('pageshow', this.updateSlider);
+    }
+
+    revealInvalidPrice = () => {
+      const filterToggle = this.closest('.smelly-catalogue__browse')?.querySelector('.smelly-catalogue__filter-toggle');
+      if (filterToggle) filterToggle.checked = true;
+      const priceFilter = this.closest('details');
+      if (priceFilter) priceFilter.open = true;
+    };
+
+    readBound(input, fallback) {
+      const amount = input.valueAsNumber;
+      return Number.isFinite(amount) ? Math.min(this.maximum, Math.max(0, amount)) : fallback;
+    }
+
+    updateSlider = () => {
+      const high = this.readBound(this.high, this.maximum);
+      const low = this.readBound(this.low, 0);
+      this.low.max = high;
+      this.high.min = low;
+      this.lowThumb.value = Math.min(low, high);
+      this.highThumb.value = high;
+      this.lowThumb.setAttribute('aria-valuetext', this.money.format(this.lowThumb.valueAsNumber));
+      this.highThumb.setAttribute('aria-valuetext', this.money.format(high));
+      this.slider.style.setProperty('--range-start', `${Math.min(low, high) / this.maximum * 100}%`);
+      this.slider.style.setProperty('--range-end', `${high / this.maximum * 100}%`);
+    };
+
+    handleInput = (event) => {
+      if (event.target === this.lowThumb) {
+        const amount = Number(this.lowThumb.valueAsNumber.toFixed(2));
+        const low = Math.min(this.readBound(this.high, this.maximum), amount);
+        this.low.value = low > 0 ? String(low) : '';
+      } else if (event.target === this.highThumb) {
+        const amount = Number(this.highThumb.valueAsNumber.toFixed(2));
+        const high = Math.max(this.readBound(this.low, 0), amount);
+        this.high.value = high < this.maximum ? String(high) : '';
+      }
+      this.updateSlider();
+    };
+  }
+
+  if (!customElements.get('smelly-catalogue-price')) {
+    customElements.define('smelly-catalogue-price', SmellyCataloguePrice);
+  }
+{% endjavascript %}

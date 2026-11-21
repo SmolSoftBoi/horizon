@@ -354,6 +354,11 @@
     }
   },
   "smelly": {
+    "catalogue": {
+      "product_view": "Изглед на продуктите",
+      "grid_view": "Изглед в мрежа",
+      "list_view": "Изглед като списък"
+    },
     "product": {
       "breadcrumbs": "Навигационен път",
       "size": "Размер",

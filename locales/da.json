@@ -354,6 +354,11 @@
     }
   },
   "smelly": {
+    "catalogue": {
+      "product_view": "Produktvisning",
+      "grid_view": "Gittervisning",
+      "list_view": "Listevisning"
+    },
     "product": {
       "breadcrumbs": "Brødkrummesti",
       "size": "Størrelse",

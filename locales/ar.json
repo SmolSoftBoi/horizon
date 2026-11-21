@@ -382,6 +382,11 @@
     }
   },
   "smelly": {
+    "catalogue": {
+      "product_view": "طريقة عرض المنتجات",
+      "grid_view": "عرض الشبكة",
+      "list_view": "عرض القائمة"
+    },
     "product": {
       "breadcrumbs": "مسار التنقل",
       "size": "الحجم",

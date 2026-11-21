@@ -354,6 +354,11 @@
     }
   },
   "smelly": {
+    "catalogue": {
+      "product_view": "Προβολή προϊόντων",
+      "grid_view": "Προβολή πλέγματος",
+      "list_view": "Προβολή λίστας"
+    },
     "product": {
       "breadcrumbs": "Διαδρομή πλοήγησης",
       "size": "Μέγεθος",

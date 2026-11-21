@@ -354,6 +354,11 @@
     }
   },
   "smelly": {
+    "catalogue": {
+      "product_view": "Tampilan produk",
+      "grid_view": "Tampilan kisi",
+      "list_view": "Tampilan daftar"
+    },
     "product": {
       "breadcrumbs": "Jalur navigasi",
       "size": "Ukuran",

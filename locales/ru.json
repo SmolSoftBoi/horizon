@@ -368,6 +368,11 @@
     }
   },
   "smelly": {
+    "catalogue": {
+      "product_view": "Вид товаров",
+      "grid_view": "Вид сеткой",
+      "list_view": "Вид списком"
+    },
     "product": {
       "breadcrumbs": "Навигационная цепочка",
       "size": "Размер",

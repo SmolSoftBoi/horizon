@@ -354,6 +354,11 @@
     }
   },
   "smelly": {
+    "catalogue": {
+      "product_view": "Produktvisning",
+      "grid_view": "Rutenettvisning",
+      "list_view": "Listevisning"
+    },
     "product": {
       "breadcrumbs": "Brødsmulesti",
       "size": "Størrelse",

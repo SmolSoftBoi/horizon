@@ -354,6 +354,11 @@
     }
   },
   "smelly": {
+    "catalogue": {
+      "product_view": "Ürün görünümü",
+      "grid_view": "Izgara görünümü",
+      "list_view": "Liste görünümü"
+    },
     "product": {
       "breadcrumbs": "Gezinme yolu",
       "size": "Boyut",

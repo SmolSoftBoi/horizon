@@ -361,6 +361,11 @@
     }
   },
   "smelly": {
+    "catalogue": {
+      "product_view": "Afișarea produselor",
+      "grid_view": "Vizualizare grilă",
+      "list_view": "Vizualizare listă"
+    },
     "product": {
       "breadcrumbs": "Traseu de navigare",
       "size": "Dimensiune",

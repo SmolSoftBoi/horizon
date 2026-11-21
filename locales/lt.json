@@ -368,6 +368,11 @@
     }
   },
   "smelly": {
+    "catalogue": {
+      "product_view": "Produktų rodinys",
+      "grid_view": "Tinklelio rodinys",
+      "list_view": "Sąrašo rodinys"
+    },
     "product": {
       "breadcrumbs": "Naršymo kelias",
       "size": "Dydis",

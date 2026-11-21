@@ -368,6 +368,11 @@
     }
   },
   "smelly": {
+    "catalogue": {
+      "product_view": "Zobrazení produktů",
+      "grid_view": "Mřížkové zobrazení",
+      "list_view": "Zobrazení seznamu"
+    },
     "product": {
       "breadcrumbs": "Drobečková navigace",
       "size": "Velikost",

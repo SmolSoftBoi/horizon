@@ -361,6 +361,11 @@
     }
   },
   "smelly": {
+    "catalogue": {
+      "product_view": "Prikaz proizvoda",
+      "grid_view": "Mrežni prikaz",
+      "list_view": "Prikaz popisa"
+    },
     "product": {
       "breadcrumbs": "Navigacijska putanja",
       "size": "Veličina",

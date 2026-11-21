@@ -7,6 +7,8 @@
   @param {string} [image_priority] - Image fetch priority; defaults to auto.
   @param {string} [product_view_context] - Context for Horizon's standard product view event.
   @param {boolean} [compact_add] - Show an icon on the direct add button.
+  @param {boolean} [catalogue_layout] - Show the collection card layout and product summary.
+  @param {boolean} [show_wishlist] - Enable the collection card wishlist toggle.
 {% enddoc %}
 
 {% liquid
@@ -50,38 +52,72 @@
   if card_product.requires_selling_plan or card_product.selling_plan_groups.size > 0
     assign uses_selling_plans = true
   endif
+  if catalogue_layout
+    assign description = card_product.description | replace: '</p>', ' ' | strip_html | strip | truncatewords: 24
+    assign rating = card_product.metafields.reviews.rating.value
+    assign review_count = card_product.metafields.reviews.rating_count.value | plus: 0
+    if review_count > 0 and rating.rating > 0 and rating.scale_max > 0
+      assign rating_fill = rating.rating | times: 100.0 | divided_by: rating.scale_max | at_most: 100
+    endif
+  endif
 %}
+{% capture price %}
+  <p class="smelly-product-card__price">
+    {% if card_product.price_varies %}{{ 'smelly.price_from' | t }} {% endif %}
+    {% if settings.currency_code_enabled_product_cards %}{{ card_product.price | money_with_currency }}{% else %}{{ card_product.price | money }}{% endif %}
+    {% if price_variant.compare_at_price > card_product.price %}
+      <s>{% if settings.currency_code_enabled_product_cards %}{{ price_variant.compare_at_price | money_with_currency }}{% else %}{{ price_variant.compare_at_price | money }}{% endif %}</s>
+    {% endif %}
+    {% if price_variant.unit_price and price_variant.unit_price_measurement %}
+      {% liquid
+        assign unit_price = price_variant.unit_price | money
+        if settings.currency_code_enabled_product_cards
+          assign unit_price = price_variant.unit_price | money_with_currency
+        endif
+      %}
+      {% render 'unit-price', price: unit_price, measurement: price_variant.unit_price_measurement %}
+    {% endif %}
+  </p>
+{% endcapture %}
+
 {% if product_view_context != blank %}
   <product-component class="smelly-product-card__view" view-event-payload="{{ card_product | standard_event_data: 'view', context: product_view_context | escape }}">
 {% endif %}
 <article class="smelly-product-card">
-  <a class="smelly-product-card__image" href="{{ card_product.url }}" aria-label="{{ card_product.title | escape }}">
-    {% if card_product.featured_image != blank %}
-      {{ card_product.featured_image | image_url: width: 1600 | image_tag: widths: '240, 400, 600, 800, 1200, 1600', sizes: product_image_sizes, loading: product_image_loading, fetchpriority: product_image_priority, alt: product_image_alt }}
-    {% else %}
-      {{ 'product-1' | placeholder_svg_tag: 'smelly-product-card__placeholder' }}
-    {% endif %}
-    {% unless card_product.available %}<span class="smelly-product-card__badge">{{ 'smelly.sold_out' | t }}</span>{% endunless %}
-  </a>
+  {% if catalogue_layout %}<div class="smelly-product-card__media">{% endif %}
+    <a class="smelly-product-card__image" href="{{ card_product.url }}" aria-label="{{ card_product.title | escape }}">
+      {% if card_product.featured_image != blank %}
+        {{ card_product.featured_image | image_url: width: 1600 | image_tag: widths: '240, 400, 600, 800, 1200, 1600', sizes: product_image_sizes, loading: product_image_loading, fetchpriority: product_image_priority, alt: product_image_alt }}
+      {% else %}
+        {{ 'product-1' | placeholder_svg_tag: 'smelly-product-card__placeholder' }}
+      {% endif %}
+      {% unless card_product.available %}<span class="smelly-product-card__badge">{{ 'smelly.sold_out' | t }}</span>{% endunless %}
+    </a>
+  {% if catalogue_layout %}
+      {% if show_wishlist %}
+        {% render 'smelly-product-wishlist', product: card_product, section_id: section_id, placement: 'card' %}
+      {% endif %}
+    </div>
+  {% endif %}
   <div class="smelly-product-card__details">
-    <h3><a href="{{ card_product.url }}">{{ card_product.title | escape }}</a></h3>
-    <p class="smelly-product-card__price">
-      {% if card_product.price_varies %}{{ 'smelly.price_from' | t }} {% endif %}
-      {% if settings.currency_code_enabled_product_cards %}{{ card_product.price | money_with_currency }}{% else %}{{ card_product.price | money }}{% endif %}
-      {% if price_variant.compare_at_price > card_product.price %}
-        <s>{% if settings.currency_code_enabled_product_cards %}{{ price_variant.compare_at_price | money_with_currency }}{% else %}{{ price_variant.compare_at_price | money }}{% endif %}</s>
+    {% if catalogue_layout %}
+      <h2><a href="{{ card_product.url }}">{{ card_product.title | escape }}</a></h2>
+      {% if description != blank %}
+        <p class="smelly-product-card__description">{{ description | escape_once }}</p>
       {% endif %}
-      {% if price_variant.unit_price and price_variant.unit_price_measurement %}
-        {% liquid
-          assign unit_price = price_variant.unit_price | money
-          if settings.currency_code_enabled_product_cards
-            assign unit_price = price_variant.unit_price | money_with_currency
-          endif
-        %}
-        {% render 'unit-price', price: unit_price, measurement: price_variant.unit_price_measurement %}
+      {% if rating_fill != blank %}
+        <p class="smelly-product-card__rating">
+          <span class="smelly-product-card__stars" style="--rating-fill: {{ rating_fill }}%;" aria-hidden="true">★★★★★<span>★★★★★</span></span>
+          <span class="visually-hidden">{{ 'smelly.product.rating' | t: rating: rating.rating, scale: rating.scale_max }}. {{ 'smelly.product.review_count' | t: count: review_count }}</span>
+          <span aria-hidden="true">({{ review_count }})</span>
+        </p>
       {% endif %}
-    </p>
+    {% else %}
+      <h3><a href="{{ card_product.url }}">{{ card_product.title | escape }}</a></h3>
+      {{ price }}
+    {% endif %}
   </div>
+  {% if catalogue_layout %}{{ price }}{% endif %}
   {% if card_product.has_only_default_variant and uses_selling_plans == false %}
     {% form 'product', card_product, id: product_form_id, class: 'smelly-product-form' %}
       <input type="hidden" name="id" value="{{ product_variant.id }}">
