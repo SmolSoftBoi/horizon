@@ -142,6 +142,7 @@
 
     <div>
       {%- assign max_chars_message = 200 -%}
+      {%- assign message_count_id = 'Recipient-message-count-' | append: block.id -%}
       {%- assign current_chars = form.message | size -%}
       {%- assign max_chars_message_rendered = 'content.recipient_form_characters_used'
         | t: used_chars: current_chars, max_chars: max_chars_message
@@ -157,10 +158,10 @@
           maxlength="{{ max_chars_message }}"
           placeholder="{{ 'content.recipient_form_message' | t }}"
           aria-label="{{ message_label_rendered }}"
+          aria-describedby="{{ message_count_id }}{% if form.errors contains 'message' %} RecipientForm-message-error-{{ block.id }}{% endif %}"
           disabled
           {% if form.errors contains 'message' %}
             aria-invalid="true"
-            aria-describedby="RecipientForm-message-error-{{ block.id }}"
           {% endif %}
         >{{ form.message | escape }}</textarea>
 
@@ -169,6 +170,7 @@
           class="recipient-form-field-label"
         >
           <span
+            id="{{ message_count_id }}"
             ref="characterCount"
             data-template="{{ 'content.recipient_form_characters_used' | t: used_chars: '[current]', max_chars: '[max]' }}"
             data-max="{{ max_chars_message }}"

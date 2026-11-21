@@ -11,6 +11,11 @@
             "show_swatches": false
           }
         },
+        "price": {
+          "type": "price",
+          "static": true,
+          "settings": {}
+        },
         "purchase": {
           "type": "buy-buttons",
           "static": true,

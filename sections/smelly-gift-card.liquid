@@ -7,7 +7,6 @@
     assign shop_label = 'smelly.shop_all' | t
     assign card_image = section.settings.card_image
     assign card_alt = card_image.alt | default: product.title
-    assign variant = product.selected_or_first_available_variant
   %}
 
   {% capture fallback_banner %}
@@ -38,7 +37,10 @@
       parent_label: shop_label
     %}
 
-    <div class="smelly-gift-card__layout">
+    <product-component
+      class="smelly-gift-card__layout"
+      view-event-payload="{{ product | standard_event_data: 'view' | escape }}"
+    >
       <section
         class="smelly-gift-card__purchase"
         {% if section.settings.purchase_heading != blank %}
@@ -66,15 +68,13 @@
             <p>{{ section.settings.purchase_intro | escape }}</p>
           {% endif %}
 
-          {% if product.has_only_default_variant %}
-            {% if variant != blank %}
-              <p class="smelly-gift-card__amount">
-                {{ 'content.price' | t }} <bdi>{{ variant.price | money_without_trailing_zeros }}</bdi>
-              </p>
-            {% endif %}
-          {% else %}
+          {% unless product.has_only_default_variant %}
             {% content_for 'block', type: 'variant-picker', id: 'amount', closest.product: product %}
-          {% endif %}
+          {% endunless %}
+
+          <div class="smelly-gift-card__amount" role="status" aria-label="{{ 'content.price' | t }}">
+            {% content_for 'block', type: 'price', id: 'price', closest.product: product %}
+          </div>
 
           {% content_for 'block', type: 'buy-buttons', id: 'purchase', closest.product: product, gift_card_purchase: true %}
         </div>
@@ -122,7 +122,7 @@
           </div>
         {% endif %}
       </div>
-    </div>
+    </product-component>
   </div>
 {% elsif request.design_mode %}
   <div class="smelly-section smelly-shell">
@@ -133,6 +133,7 @@
 {% schema %}
 {
   "name": "Smelly A.F. gift cards",
+  "class": "smelly-catalogue-section",
   "enabled_on": { "templates": ["product"] },
   "settings": [
     { "type": "text", "id": "heading", "label": "Page heading", "default": "Gift Cards" },
