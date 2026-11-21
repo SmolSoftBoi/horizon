@@ -2,7 +2,7 @@
   Renders a collection directory card with Shopify catalogue data.
   @param {collection} [card_collection] - Storefront collection to display.
   @param {string} action - Collection link text.
-  @param {boolean} [all_products] - Use the All Candles layout and the native catalogue link.
+  @param {boolean} [is_all_candles_card] - Use the All Candles layout and the native catalogue link.
   @param {string} [heading] - Custom All Candles title.
   @param {string} [text] - Custom All Candles description.
   @param {image} [image] - Custom All Candles artwork.
@@ -29,7 +29,7 @@
   assign artwork = card_collection.featured_image
   assign motif = 'jar'
 
-  if all_products
+  if is_all_candles_card
     assign url = routes.all_products_collection_url
     assign artwork = image | default: card_collection.image
   else
@@ -47,10 +47,10 @@
 %}
 
 <li class="smelly-collection-card smelly-collection-card--{{ motif }}">
-  <div class="smelly-collection-card__art{% if all_products and artwork == blank %} smelly-collection-card__art--panorama{% endif %}" aria-hidden="true">
+  <div class="smelly-collection-card__art{% if is_all_candles_card and artwork == blank %} smelly-collection-card__art--panorama{% endif %}" aria-hidden="true">
     {% if artwork != blank %}
       {{ artwork | image_url: width: 900 | image_tag: widths: '240, 360, 480, 640, 900', sizes: '(min-width: 1566px) 320px, (min-width: 1024px) 22vw, (min-width: 680px) 33vw, 67vw', loading: 'lazy', alt: '' }}
-    {% elsif all_products %}
+    {% elsif is_all_candles_card %}
       <img src="{{ 'smelly-collections-all.webp' | asset_url }}" alt="" width="1200" height="400" loading="lazy">
     {% else %}
       <div class="smelly-collection-card__illustration">
