@@ -124,9 +124,13 @@
 }
 
 .smelly-gift-card__controls .variant-option--buttons:not(.variant-option--swatches) {
+  --gift-card-option-gap: 8px;
+  /* Keep up to three columns with room for each amount and its padding. */
+  --gift-card-option-min-width: max(5em, calc((100% - 2 * var(--gift-card-option-gap)) / 3));
+
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--gift-card-option-min-width)), 1fr));
+  gap: var(--gift-card-option-gap);
 }
 
 .smelly-gift-card__controls .variant-option__button-label {
