@@ -32,6 +32,7 @@
 {% javascript %}
   class SmellyCataloguePrice extends HTMLElement {
     connectedCallback() {
+      this.addEventListener('invalid', this.revealInvalidPrice, true);
       this.slider = this.querySelector('.smelly-catalogue__slider');
       if (!this.slider) return;
 
@@ -49,9 +50,17 @@
     }
 
     disconnectedCallback() {
+      this.removeEventListener('invalid', this.revealInvalidPrice, true);
       this.removeEventListener('input', this.handleInput);
       window.removeEventListener('pageshow', this.updateSlider);
     }
+
+    revealInvalidPrice = () => {
+      const filterToggle = this.closest('.smelly-catalogue__browse')?.querySelector('.smelly-catalogue__filter-toggle');
+      if (filterToggle) filterToggle.checked = true;
+      const priceFilter = this.closest('details');
+      if (priceFilter) priceFilter.open = true;
+    };
 
     readBound(input, fallback) {
       const amount = input.valueAsNumber;

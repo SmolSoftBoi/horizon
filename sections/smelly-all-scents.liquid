@@ -260,12 +260,21 @@
 
         {% paginate collection.products by section.settings.products_per_page %}
           {% if collection.products.size > 0 %}
+            {% assign first_photo_pending = true %}
             <ul class="smelly-catalogue__grid" role="list">
               {% for card_product in collection.products %}
+                {% liquid
+                  assign image_loading = 'lazy'
+                  if first_photo_pending and card_product.featured_image != blank
+                    assign image_loading = 'eager'
+                    assign first_photo_pending = false
+                  endif
+                %}
                 <li>
                   {% render 'smelly-product-card',
                     card_product: card_product,
                     section_id: section.id,
+                    image_loading: image_loading,
                     image_sizes: '(min-width: 1600px) 210px, (min-width: 1440px) 14vw, (min-width: 1200px) 16vw, (min-width: 750px) 23vw, 46vw',
                     product_view_context: 'collection',
                     compact_add: true,
@@ -295,6 +304,34 @@
     {% render 'smelly-product-wishlist', section_id: section.id, placement: 'dialog' %}
   {% endif %}
 </collection-component>
+
+{% javascript %}
+  const catalogueViewKey = 'smelly-af:catalogue-view';
+
+  function restoreCatalogueView(scope = document) {
+    try {
+      const view = sessionStorage.getItem(catalogueViewKey);
+      if (view !== 'grid' && view !== 'list') return;
+      for (const radio of scope.querySelectorAll(`.smelly-catalogue__view input[value="${view}"]`)) {
+        radio.checked = true;
+      }
+    } catch {
+      // The radios still work when storage is unavailable.
+    }
+  }
+
+  restoreCatalogueView();
+  window.addEventListener('pageshow', () => restoreCatalogueView());
+  document.addEventListener('shopify:section:load', (event) => restoreCatalogueView(event.target));
+  document.addEventListener('change', ({ target }) => {
+    if (!(target instanceof HTMLInputElement) || !target.checked || !target.closest('.smelly-catalogue__view')) return;
+    try {
+      sessionStorage.setItem(catalogueViewKey, target.value);
+    } catch {
+      // Keep the current selection even if it cannot be saved.
+    }
+  });
+{% endjavascript %}
 
 {% schema %}
 {

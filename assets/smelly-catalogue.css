@@ -16,6 +16,7 @@
 .smelly-catalogue__hero {
   position: relative;
   isolation: isolate;
+  padding-block-start: var(--smelly-hero-header-offset, 0px);
   background: #392319;
   color: #fffaf5;
 }
@@ -437,17 +438,18 @@
   font-size: 1rem;
 }
 
+/* Separate hit areas keep both thumbs reachable when the bounds meet. */
 .smelly-catalogue__slider:not([hidden]) {
   position: relative;
   display: grid;
-  align-items: center;
-  height: 32px;
+  gap: 4px;
   margin-block: 2px 5px;
 }
 
 .smelly-catalogue__slider::before {
   position: absolute;
-  inset-inline: 10px;
+  inset-block-start: calc(50% - 2px);
+  inset-inline: 12px;
   height: 4px;
   border-radius: 4px;
   background: linear-gradient(
@@ -460,11 +462,9 @@
 }
 
 .smelly-catalogue__slider input {
-  position: absolute;
   appearance: none;
-  inset-inline: 0;
   width: 100%;
-  height: 26px;
+  height: 24px;
   margin: 0;
   padding: 0;
   border: 0;

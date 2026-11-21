@@ -173,7 +173,7 @@
       this.reportError(this.dataset.unavailable);
     }
 
-    handleClick = (event) => {
+    handleClick = async (event) => {
       if (!(event.target instanceof Element)) return;
       const button = event.target.closest('button');
       if (!button || button.disabled) return;
@@ -188,12 +188,19 @@
       const id = toggling ? button.dataset.productId : button.dataset.wishlistRemove;
       if (!id) return;
 
-      try {
-        const key = SmellyProductWishlist.storagePrefix + id;
+      const key = SmellyProductWishlist.storagePrefix + id;
+      const update = () => {
         if (toggling && !this.read().some((item) => item.id === id)) {
           localStorage.setItem(key, JSON.stringify({ id, title: button.dataset.productTitle, url: button.dataset.productUrl }));
         } else {
           localStorage.removeItem(key);
+        }
+      };
+      try {
+        if (navigator.locks) {
+          await navigator.locks.request(key, update);
+        } else {
+          update();
         }
         window.dispatchEvent(new Event('smelly:wishlist-change'));
       } catch {

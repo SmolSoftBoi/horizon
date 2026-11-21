@@ -309,11 +309,11 @@
 
 /* Header measurements exclude the floating header unless another section follows it. */
 #header-group:has(> .header-section > #header-component[transparent])
-  ~ #MainContent > .smelly-hero-section:first-child {
+  ~ #MainContent > :is(.smelly-hero-section, .smelly-catalogue-section):first-child {
   --smelly-hero-header-offset: calc(var(--header-group-height, 0px) + var(--header-height, 0px));
 }
 #header-group:has(> .header-section > #header-component[transparent]):has(> .header-section + .shopify-section)
-  ~ #MainContent > .smelly-hero-section:first-child {
+  ~ #MainContent > :is(.smelly-hero-section, .smelly-catalogue-section):first-child {
   --smelly-hero-header-offset: var(--header-group-height, 0px);
 }
 
