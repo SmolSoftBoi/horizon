@@ -301,6 +301,15 @@
   },
   "gift_cards": {
     "issued": {
+      "balance": "Dobroimetje",
+      "use_online": "Uporaba na spletu",
+      "online_instructions": "Pri plačilu na našem spletnem mestu vnesite kodo darilnega bona.",
+      "use_in_store": "Uporaba v trgovini",
+      "scan_instructions": "Pokažite to kodo QR pri blagajni, da uporabite darilni bon.",
+      "in_store_fallback": "Pokažite kodo darilnega bona pri blagajni, da ga uporabite.",
+      "copy_code_error": "Označite in ročno kopirajte kodo.",
+      "inactive": "Ta darilni bon ni aktiven.",
+      "empty_balance": "Na tem darilnem bonu ni več dobroimetja.",
       "how_to_use_gift_card": "Uporabite kodo darilnega bona v spletu ali kodo QR v trgovini",
       "title": "To je darilni bon v vrednosti {{ value }} za trgovino {{ shop }}!",
       "subtext": "Vaš darilni bon",

@@ -289,6 +289,15 @@
   },
   "gift_cards": {
     "issued": {
+      "balance": "Egyenleg",
+      "use_online": "Online beváltás",
+      "online_instructions": "Fizetéskor add meg az ajándékkártya kódját webáruházunkban.",
+      "use_in_store": "Bolti beváltás",
+      "scan_instructions": "A pénztárnál mutasd meg ezt a QR-kódot az ajándékkártya beváltásához.",
+      "in_store_fallback": "A pénztárnál mutasd meg az ajándékkártya kódját a beváltáshoz.",
+      "copy_code_error": "Jelöld ki és másold ki a kódot kézzel.",
+      "inactive": "Ez az ajándékkártya inaktív.",
+      "empty_balance": "Ezen az ajándékkártyán nincs felhasználható egyenleg.",
       "how_to_use_gift_card": "Az ajándékkártya kódja online, a QR-kód pedig az üzletben használható fel",
       "title": "Íme a(z) {{ shop }} üzletben levásárolható, {{ value }} értékű ajándékkártyád!",
       "subtext": "Ajándékkártya",

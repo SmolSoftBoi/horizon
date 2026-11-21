@@ -295,6 +295,15 @@
   },
   "gift_cards": {
     "issued": {
+      "balance": "Saldo",
+      "use_online": "Usar online",
+      "online_instructions": "Insira o código do cartão-presente ao finalizar a compra em nosso site.",
+      "use_in_store": "Usar na loja",
+      "scan_instructions": "Mostre este código QR no caixa para usar seu cartão-presente.",
+      "in_store_fallback": "Mostre o código do cartão-presente no caixa para usá-lo.",
+      "copy_code_error": "Selecione e copie o código manualmente.",
+      "inactive": "Este cartão-presente está inativo.",
+      "empty_balance": "Não há saldo disponível neste cartão-presente.",
       "how_to_use_gift_card": "Use o código do cartão-presente online ou o código QR na loja",
       "title": "O saldo no cartão-presente da loja {{ shop }} é de {{ value }}.",
       "subtext": "Seu cartão-presente",

@@ -289,6 +289,15 @@
   },
   "gift_cards": {
     "issued": {
+      "balance": "Saldo",
+      "use_online": "Bruk på nett",
+      "online_instructions": "Skriv inn gavekortkoden når du betaler i nettbutikken vår.",
+      "use_in_store": "Bruk i butikk",
+      "scan_instructions": "Vis denne QR-koden i kassen for å bruke gavekortet.",
+      "in_store_fallback": "Vis gavekortkoden i kassen for å bruke gavekortet.",
+      "copy_code_error": "Marker og kopier koden manuelt.",
+      "inactive": "Dette gavekortet er ikke aktivt.",
+      "empty_balance": "Det er ingen saldo igjen på dette gavekortet.",
       "how_to_use_gift_card": "Bruk gavekortet på nettet eller QR-koden i butikken",
       "title": "Her er gavekortsaldoen {{ value }} for {{ shop }}.",
       "subtext": "Ditt gavekort",

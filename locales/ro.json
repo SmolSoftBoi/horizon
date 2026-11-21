@@ -295,6 +295,15 @@
   },
   "gift_cards": {
     "issued": {
+      "balance": "Sold",
+      "use_online": "Folosește online",
+      "online_instructions": "Introdu codul cardului cadou când plătești pe site-ul nostru.",
+      "use_in_store": "Folosește în magazin",
+      "scan_instructions": "Arată acest cod QR la casă ca să folosești cardul cadou.",
+      "in_store_fallback": "Arată codul cardului cadou la casă ca să îl folosești.",
+      "copy_code_error": "Selectează și copiază manual codul.",
+      "inactive": "Acest card cadou este inactiv.",
+      "empty_balance": "Acest card cadou nu mai are sold disponibil.",
       "how_to_use_gift_card": "Folosește codul cardului cadou online sau codul QR în magazin",
       "title": "Iată soldul aferent cardurilor cadou, în valoare de {{ value }}, pentru {{ shop }}!",
       "subtext": "Cardul tău cadou",

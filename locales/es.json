@@ -295,6 +295,15 @@
   },
   "gift_cards": {
     "issued": {
+      "balance": "Saldo",
+      "use_online": "Usar en línea",
+      "online_instructions": "Introduce el código de la tarjeta de regalo al pagar en nuestro sitio web.",
+      "use_in_store": "Usar en tienda",
+      "scan_instructions": "Muestra este código QR en caja para canjear tu tarjeta de regalo.",
+      "in_store_fallback": "Muestra el código de la tarjeta de regalo en caja para canjearla.",
+      "copy_code_error": "Selecciona y copia el código manualmente.",
+      "inactive": "Esta tarjeta de regalo está inactiva.",
+      "empty_balance": "No queda saldo en esta tarjeta de regalo.",
       "how_to_use_gift_card": "Usar el código de la tarjeta de regalo online o el código QR en la tienda",
       "title": "Este es el saldo de tu tarjeta de regalo de {{ value }} para {{ shop }}.",
       "subtext": "Tu tarjeta de regalo",

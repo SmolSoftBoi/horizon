@@ -295,6 +295,15 @@
   },
   "gift_cards": {
     "issued": {
+      "balance": "Saldo",
+      "use_online": "Usar online",
+      "online_instructions": "Introduza o código do cartão de oferta ao pagar no nosso site.",
+      "use_in_store": "Usar na loja",
+      "scan_instructions": "Mostre este código QR na caixa para utilizar o seu cartão de oferta.",
+      "in_store_fallback": "Mostre o código do cartão de oferta na caixa para o utilizar.",
+      "copy_code_error": "Selecione e copie o código manualmente.",
+      "inactive": "Este cartão de oferta está inativo.",
+      "empty_balance": "Este cartão de oferta já não tem saldo.",
       "how_to_use_gift_card": "Utilize o código do cartão de oferta online ou o código QR na loja",
       "title": "Aqui está o seu saldo do cartão de oferta de {{ value }} para {{ shop }}!",
       "subtext": "O seu cartão de oferta",

@@ -289,6 +289,15 @@
   },
   "gift_cards": {
     "issued": {
+      "balance": "Bakiye",
+      "use_online": "İnternette kullan",
+      "online_instructions": "Web sitemizde ödeme yaparken hediye kartı kodunu girin.",
+      "use_in_store": "Mağazada kullan",
+      "scan_instructions": "Hediye kartınızı kullanmak için bu QR kodunu kasada gösterin.",
+      "in_store_fallback": "Hediye kartınızı kullanmak için kartın kodunu kasada gösterin.",
+      "copy_code_error": "Kodu seçip elle kopyalayın.",
+      "inactive": "Bu hediye kartı etkin değil.",
+      "empty_balance": "Bu hediye kartında bakiye kalmadı.",
       "how_to_use_gift_card": "Hediye kartı kodunu online olarak veya QR kodunu mağazada kullanın",
       "title": "İşte {{ shop }} için {{ value }} tutarındaki hediye kartı bakiyeniz!",
       "subtext": "Hediye kartınız",
