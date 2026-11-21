@@ -1,9 +1,14 @@
 {% layout none %}
 
 {%- liquid
-  assign formatted_balance = gift_card.balance | money_without_trailing_zeros | strip_html
+  assign formatted_balance = gift_card.balance | money_with_currency | strip_html | replace: '&nbsp;', ' ' | strip
   assign language = request.locale.iso_code | split: '-' | first
+  assign show_title_art = false
   assign card_status = ''
+
+  if settings.smelly_branding and language == 'en'
+    assign show_title_art = true
+  endif
 
   if gift_card.expired
     assign card_status = 'gift_cards.issued.expired'
@@ -27,7 +32,7 @@
     >
     <meta
       name="theme-color"
-      content="#fff6ef"
+      content="{% if settings.smelly_branding %}#fff6ef{% else %}{{ settings.page_background_color }}{% endif %}"
     >
     <link
       rel="canonical"
@@ -42,7 +47,7 @@
       >
     {%- endif -%}
 
-    <title>{{ 'gift_cards.issued.title' | t: value: formatted_balance, shop: shop.name | escape }}</title>
+    <title>{{ 'gift_cards.issued.title' | t: value: formatted_balance, shop: shop.name | escape_once }}</title>
 
     <meta
       name="description"
@@ -72,20 +77,24 @@
     {{ content_for_header }}
   </head>
 
-  <body class="gift-card">
+  <body class="gift-card{% if settings.smelly_branding %} gift-card--branded{% endif %}">
     <main
       class="gift-card__main"
-      style="--gift-card-art: url('{{ 'smelly-gift-card-art.webp' | asset_url }}');"
+      {% if settings.smelly_branding %}
+        style="--gift-card-art: url('{{ 'smelly-gift-card-art.webp' | asset_url }}');"
+      {% endif %}
     >
       <header class="gift-card__header">
         {%- if settings.logo != blank -%}
           {%- assign logo_alt = settings.logo.alt | default: shop.name -%}
           {{ settings.logo | image_url: width: 640 | image_tag: class: 'gift-card__logo', alt: logo_alt, loading: 'eager' }}
-        {%- else -%}
+        {%- elsif settings.smelly_branding -%}
           {%- render 'smelly-wordmark' -%}
+        {%- else -%}
+          <span class="gift-card__shop-name">{{ shop.name | escape }}</span>
         {%- endif -%}
-        <h1 class="gift-card__title">
-          {%- if language == 'en' -%}
+        <h1 class="gift-card__title{% if show_title_art %} gift-card__title--art{% endif %}">
+          {%- if show_title_art -%}
             <span class="gift-card__title-art">
               <img
                 src="{{ 'smelly-gift-card-art.webp' | asset_url }}"
@@ -101,12 +110,14 @@
         </h1>
 
         <div class="gift-card__balance" style="--balance-length: {{ formatted_balance | size | at_least: 4 }};">
-          <svg viewBox="0 0 200 200" fill="currentColor" aria-hidden="true" focusable="false">
-            <path d="M76.4 12.1Q100 -10 123.6 12.1Q155 4.7 164.3 35.7Q195.3 45 187.9 76.4Q210 100 187.9 123.6Q195.3 155 164.3 164.3Q155 195.3 123.6 187.9Q100 210 76.4 187.9Q45 195.3 35.7 164.3Q4.7 155 12.1 123.6Q-10 100 12.1 76.4Q4.7 45 35.7 35.7Q45 4.7 76.4 12.1Z"/>
-          </svg>
+          {%- if settings.smelly_branding -%}
+            <svg viewBox="0 0 200 200" fill="currentColor" aria-hidden="true" focusable="false">
+              <path d="M76.4 12.1Q100 -10 123.6 12.1Q155 4.7 164.3 35.7Q195.3 45 187.9 76.4Q210 100 187.9 123.6Q195.3 155 164.3 164.3Q155 195.3 123.6 187.9Q100 210 76.4 187.9Q45 195.3 35.7 164.3Q4.7 155 12.1 123.6Q-10 100 12.1 76.4Q4.7 45 35.7 35.7Q45 4.7 76.4 12.1Z"/>
+            </svg>
+          {%- endif -%}
           <p class="gift-card__balance-text">
             <span>{{ 'gift_cards.issued.balance' | t }}</span>
-            <bdi>{{ formatted_balance | escape }}</bdi>
+            <bdi>{{ formatted_balance | escape_once }}</bdi>
           </p>
         </div>
       </header>
@@ -159,8 +170,8 @@
               </svg>
               <div>
                 <h2 id="GiftCardStore">{{ 'gift_cards.issued.use_in_store' | t }}</h2>
-                <p class="gift-card__scan-instructions">{{ 'gift_cards.issued.scan_instructions' | t }}</p>
-                <p class="gift-card__scan-fallback">{{ 'gift_cards.issued.in_store_fallback' | t }}</p>
+                <p id="GiftCardScanInstructions" hidden>{{ 'gift_cards.issued.scan_instructions' | t }}</p>
+                <p id="GiftCardManualInstructions">{{ 'gift_cards.issued.in_store_fallback' | t }}</p>
               </div>
             </div>
 
@@ -168,9 +179,11 @@
               <qr-code-image
                 class="gift-card__qr-code"
                 data-identifier="{{ gift_card.qr_identifier | escape }}"
-                width="396"
-                height="396"
-                alt="{{ 'gift_cards.issued.qr_image_alt' | t | escape }}"
+                data-scan-instructions="GiftCardScanInstructions"
+                data-manual-instructions="GiftCardManualInstructions"
+                role="img"
+                aria-label="{{ 'gift_cards.issued.qr_image_alt' | t | escape }}"
+                hidden
               ></qr-code-image>
             {%- endif -%}
           </section>

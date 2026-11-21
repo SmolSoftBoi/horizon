@@ -1220,21 +1220,18 @@ var svgDrawer = (function () {
       height: '100%',
       fill: _htOption.colorLight,
     });
-    svg.setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xlink', 'http://www.w3.org/1999/xlink');
-    _el.appendChild(svg);
-
     svg.appendChild(makeSVG('rect', { fill: _htOption.colorLight, width: '100%', height: '100%' }));
-    svg.appendChild(makeSVG('rect', { fill: _htOption.colorDark, width: '1', height: '1', id: 'template' }));
 
+    const modules = [];
     for (var row = 0; row < nCount; row++) {
       for (var col = 0; col < nCount; col++) {
         if (oQRCode.isDark(row, col)) {
-          var child = makeSVG('use', { x: String(col), y: String(row) });
-          child.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#template');
-          svg.appendChild(child);
+          modules.push(`M${col} ${row}h1v1h-1z`);
         }
       }
     }
+    svg.appendChild(makeSVG('path', { fill: _htOption.colorDark, d: modules.join('') }));
+    _el.appendChild(svg);
   };
   Drawing.prototype.clear = function () {
     while (this._el.hasChildNodes() && this._el.lastChild) this._el.removeChild(this._el.lastChild);
@@ -1649,13 +1646,10 @@ export function QRCode(el, vOption) {
     el = element;
   }
 
-  if (this._htOption.useSVG) {
-    Drawing = svgDrawer;
-  }
-
+  const Drawer = this._htOption.useSVG ? svgDrawer : Drawing;
   this._el = el;
   this._oQRCode = null;
-  this._oDrawing = new Drawing(this._el, this._htOption);
+  this._oDrawing = new Drawer(this._el, this._htOption);
 
   if (this._htOption.text) {
     this.makeCode(this._htOption.text);
