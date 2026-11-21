@@ -289,6 +289,15 @@
   },
   "gift_cards": {
     "issued": {
+      "balance": "Saldo",
+      "use_online": "Online gebruiken",
+      "online_instructions": "Voer de cadeauboncode in bij het afrekenen in onze webshop.",
+      "use_in_store": "In de winkel gebruiken",
+      "scan_instructions": "Laat deze QR-code bij de kassa zien om je cadeaubon te gebruiken.",
+      "in_store_fallback": "Laat de cadeauboncode bij de kassa zien om je cadeaubon te gebruiken.",
+      "copy_code_error": "Selecteer en kopieer de code handmatig.",
+      "inactive": "Deze cadeaubon is niet actief.",
+      "empty_balance": "Er staat geen saldo meer op deze cadeaubon.",
       "how_to_use_gift_card": "Gebruik de cadeauboncode online of de QR-code in de winkel",
       "title": "Dit is het saldo van de cadeaubon ter waarde van {{ value }} voor {{ shop }}",
       "subtext": "Je cadeaubon",

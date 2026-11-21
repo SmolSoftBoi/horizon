@@ -2,21 +2,29 @@ import { Component } from '@theme/component';
 
 /**
  * Handles copying text to clipboard, from an event like a click.
- * Optionally, reveals a success message after copying.
+ * Reports the result to an optional status element.
  * @extends {Component}
  */
 class CopyToClipboardComponent extends Component {
-  copyToClipboard() {
+  connectedCallback() {
+    super.connectedCallback();
+    if (this.refs.copyButton instanceof HTMLButtonElement && navigator.clipboard?.writeText) {
+      this.refs.copyButton.hidden = false;
+    }
+  }
+
+  async copyToClipboard() {
     const copyContent = this.getAttribute('text-to-copy');
+    const { copyMessage } = this.refs;
 
-    if (!copyContent) return;
+    if (!copyContent || !navigator.clipboard?.writeText) return;
+    if (copyMessage instanceof Element) copyMessage.textContent = '';
 
-    navigator.clipboard.writeText(copyContent);
-
-    const copySuccessMessage = this.refs.copySuccessMessage;
-
-    if (copySuccessMessage instanceof Element) {
-      copySuccessMessage.classList.remove('visually-hidden');
+    try {
+      await navigator.clipboard.writeText(copyContent);
+      if (copyMessage instanceof Element) copyMessage.textContent = this.dataset.copySuccess ?? '';
+    } catch {
+      if (copyMessage instanceof Element) copyMessage.textContent = this.dataset.copyError ?? '';
     }
   }
 }

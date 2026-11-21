@@ -301,6 +301,15 @@
   },
   "gift_cards": {
     "issued": {
+      "balance": "Zůstatek",
+      "use_online": "Použití online",
+      "online_instructions": "Zadejte kód dárkové karty při placení na našem webu.",
+      "use_in_store": "Použití v prodejně",
+      "scan_instructions": "Ukažte tento QR kód u pokladny a uplatněte dárkovou kartu.",
+      "in_store_fallback": "Ukažte kód dárkové karty u pokladny a uplatněte ji.",
+      "copy_code_error": "Označte kód a ručně ho zkopírujte.",
+      "inactive": "Tato dárková karta není aktivní.",
+      "empty_balance": "Na této dárkové kartě nezbývá žádný zůstatek.",
       "how_to_use_gift_card": "Použijte kód dárkové karty online nebo QR kód na prodejně",
       "title": "Zůstatek vaší dárkové karty pro obchod {{ shop }} je: {{ value }}!",
       "subtext": "Vaše dárková karta",

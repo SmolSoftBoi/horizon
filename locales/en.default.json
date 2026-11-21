@@ -333,14 +333,23 @@
     "issued": {
       "how_to_use_gift_card": "Use the gift card code online or QR code in-store",
       "title": "Here's your {{ value }} gift card balance for {{ shop }}!",
-      "subtext": "Your gift card",
+      "subtext": "Gift card",
+      "balance": "Balance",
+      "use_online": "Use online",
+      "online_instructions": "Enter this gift card code at checkout on our website.",
+      "use_in_store": "Use in-store",
+      "scan_instructions": "Show this QR code at the till to redeem your gift card.",
+      "in_store_fallback": "Show the gift card code at the till to redeem it.",
       "shop_link": "Visit online store",
       "add_to_apple_wallet": "Add to Apple Wallet",
       "qr_image_alt": "QR code — scan to redeem gift card",
       "copy_code": "Copy gift card code",
       "expiration_date_html": "Expires <bdi>{{ expires_on }}</bdi>",
-      "copy_code_success": "Code copied successfully",
-      "expired": "Expired"
+      "copy_code_success": "Code copied",
+      "copy_code_error": "Select and copy the code manually.",
+      "expired": "Expired",
+      "inactive": "This gift card is inactive.",
+      "empty_balance": "This gift card has no balance remaining."
     }
   },
   "placeholders": {

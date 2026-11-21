@@ -289,6 +289,15 @@
   },
   "gift_cards": {
     "issued": {
+      "balance": "Guthaben",
+      "use_online": "Online einlösen",
+      "online_instructions": "Gib den Gutscheincode an der Kasse in unserem Onlineshop ein.",
+      "use_in_store": "Im Geschäft einlösen",
+      "scan_instructions": "Zeige diesen QR-Code an der Kasse, um deinen Gutschein einzulösen.",
+      "in_store_fallback": "Zeige den Gutscheincode an der Kasse, um ihn einzulösen.",
+      "copy_code_error": "Markiere den Code und kopiere ihn manuell.",
+      "inactive": "Dieser Gutschein ist inaktiv.",
+      "empty_balance": "Auf diesem Gutschein ist kein Guthaben mehr vorhanden.",
       "how_to_use_gift_card": "Verwende diesen Geschenkgutscheincode online oder verwende den QR-Code im Shop",
       "title": "Hier ist dein {{ value }}-Gutschein für {{ shop }}!",
       "subtext": "Dein Gutschein",

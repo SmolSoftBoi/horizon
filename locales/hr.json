@@ -295,6 +295,15 @@
   },
   "gift_cards": {
     "issued": {
+      "balance": "Stanje",
+      "use_online": "Upotreba na mreži",
+      "online_instructions": "Unesite kôd poklon-kartice pri plaćanju na našem web-mjestu.",
+      "use_in_store": "Upotreba u trgovini",
+      "scan_instructions": "Pokažite ovaj QR kôd na blagajni da biste iskoristili poklon-karticu.",
+      "in_store_fallback": "Pokažite kôd poklon-kartice na blagajni da biste je iskoristili.",
+      "copy_code_error": "Označite kôd i kopirajte ga ručno.",
+      "inactive": "Ova poklon-kartica nije aktivna.",
+      "empty_balance": "Na ovoj poklon-kartici nema preostalog iznosa.",
       "how_to_use_gift_card": "Upotrijebite kod poklon-kartice na internetu ili QR kod u trgovini",
       "title": "Poklanjamo vam darovnu karticu u vrijednosti od {{ value }} za trgovinu {{ shop }}!",
       "subtext": "Vaša poklon-kartica",

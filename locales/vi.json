@@ -289,6 +289,15 @@
   },
   "gift_cards": {
     "issued": {
+      "balance": "Số dư",
+      "use_online": "Dùng trực tuyến",
+      "online_instructions": "Nhập mã thẻ quà tặng khi thanh toán trên trang web của chúng tôi.",
+      "use_in_store": "Dùng tại cửa hàng",
+      "scan_instructions": "Xuất trình mã QR này tại quầy thanh toán để dùng thẻ quà tặng.",
+      "in_store_fallback": "Xuất trình mã thẻ quà tặng tại quầy thanh toán để sử dụng.",
+      "copy_code_error": "Chọn và sao chép mã theo cách thủ công.",
+      "inactive": "Thẻ quà tặng này không hoạt động.",
+      "empty_balance": "Thẻ quà tặng này đã hết số dư.",
       "how_to_use_gift_card": "Sử dụng mã thẻ quà tặng trực tuyến hoặc mã QR tại cửa hàng",
       "title": "Đây là số dư thẻ quà tặng trị giá {{ value }} của bạn cho {{ shop }}!",
       "subtext": "Thẻ quà tặng của bạn",

@@ -301,6 +301,15 @@
   },
   "gift_cards": {
     "issued": {
+      "balance": "Saldo",
+      "use_online": "Użyj online",
+      "online_instructions": "Wpisz kod karty prezentowej podczas płatności w naszym sklepie internetowym.",
+      "use_in_store": "Użyj w sklepie",
+      "scan_instructions": "Pokaż ten kod QR przy kasie, aby skorzystać z karty prezentowej.",
+      "in_store_fallback": "Pokaż kod karty prezentowej przy kasie, aby z niej skorzystać.",
+      "copy_code_error": "Zaznacz kod i skopiuj go ręcznie.",
+      "inactive": "Ta karta prezentowa jest nieaktywna.",
+      "empty_balance": "Na tej karcie prezentowej nie ma już środków.",
       "how_to_use_gift_card": "Użyj kodu karty prezentowej online lub kodu QR w sklepie",
       "title": "Oto Twoja karta prezentowa o wartości {{ value }} do {{ shop }}!",
       "subtext": "Twoja karta prezentowa",

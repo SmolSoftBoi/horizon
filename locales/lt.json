@@ -301,6 +301,15 @@
   },
   "gift_cards": {
     "issued": {
+      "balance": "Likutis",
+      "use_online": "Naudokite internetu",
+      "online_instructions": "Mokėdami mūsų svetainėje įveskite dovanų kortelės kodą.",
+      "use_in_store": "Naudokite parduotuvėje",
+      "scan_instructions": "Parodykite šį QR kodą prie kasos, kad panaudotumėte dovanų kortelę.",
+      "in_store_fallback": "Parodykite dovanų kortelės kodą prie kasos, kad ją panaudotumėte.",
+      "copy_code_error": "Pažymėkite ir nukopijuokite kodą rankiniu būdu.",
+      "inactive": "Ši dovanų kortelė neaktyvi.",
+      "empty_balance": "Šioje dovanų kortelėje nebėra lėšų.",
       "how_to_use_gift_card": "Panaudokite dovanų kortelės kodą internetinėje parduotuvėje arba QR kodą fizinėje parduotuvėje",
       "title": "Štai jūsų {{ value }} vertės parduotuvės {{ shop }} dovanų kortelė!",
       "subtext": "Jūsų dovanų kortelė",

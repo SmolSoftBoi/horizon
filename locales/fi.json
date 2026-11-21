@@ -289,6 +289,15 @@
   },
   "gift_cards": {
     "issued": {
+      "balance": "Saldo",
+      "use_online": "Käytä verkossa",
+      "online_instructions": "Syötä lahjakortin koodi verkkokauppamme kassalla.",
+      "use_in_store": "Käytä myymälässä",
+      "scan_instructions": "Näytä tämä QR-koodi kassalla käyttääksesi lahjakorttia.",
+      "in_store_fallback": "Näytä lahjakortin koodi kassalla käyttääksesi korttia.",
+      "copy_code_error": "Valitse ja kopioi koodi manuaalisesti.",
+      "inactive": "Tämä lahjakortti ei ole aktiivinen.",
+      "empty_balance": "Tällä lahjakortilla ei ole enää saldoa.",
       "how_to_use_gift_card": "Käytä lahjakortin koodia verkossa tai QR-koodia kaupassa",
       "title": "Tässä on lahjakorttisi saldo ({{ value }}) kauppaan {{ shop }}!",
       "subtext": "Lahjakorttisi",

@@ -289,6 +289,15 @@
   },
   "gift_cards": {
     "issued": {
+      "balance": "餘額",
+      "use_online": "線上使用",
+      "online_instructions": "在我們的網站結帳時輸入禮品卡代碼。",
+      "use_in_store": "在門市使用",
+      "scan_instructions": "結帳時向店員出示此 QR 碼，即可使用禮品卡。",
+      "in_store_fallback": "結帳時向店員出示禮品卡代碼，即可使用禮品卡。",
+      "copy_code_error": "請選取代碼並手動複製。",
+      "inactive": "此禮品卡未啟用。",
+      "empty_balance": "此禮品卡已無可用餘額。",
       "how_to_use_gift_card": "請在網路商店使用禮品卡代碼或在實體商店使用 QR 碼",
       "title": "這是您在 {{ shop }} 餘額為 {{ value }} 的禮品卡！",
       "subtext": "您的禮品卡",

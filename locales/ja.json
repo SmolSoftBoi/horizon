@@ -289,6 +289,15 @@
   },
   "gift_cards": {
     "issued": {
+      "balance": "残高",
+      "use_online": "オンラインで使う",
+      "online_instructions": "当店のウェブサイトでのお支払い時に、ギフトカードコードを入力してください。",
+      "use_in_store": "店舗で使う",
+      "scan_instructions": "レジでこのQRコードを提示して、ギフトカードをご利用ください。",
+      "in_store_fallback": "レジでギフトカードコードを提示してご利用ください。",
+      "copy_code_error": "コードを選択し、手動でコピーしてください。",
+      "inactive": "このギフトカードは無効です。",
+      "empty_balance": "このギフトカードに残高はありません。",
       "how_to_use_gift_card": "オンラインではギフトカードコード、実店舗ではQRコードを使用する",
       "title": "{{ shop }}で利用可能な{{ value }}のギフトカードの残高です。",
       "subtext": "あなたのギフトカード",

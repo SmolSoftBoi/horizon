@@ -289,6 +289,15 @@
   },
   "gift_cards": {
     "issued": {
+      "balance": "余额",
+      "use_online": "在线使用",
+      "online_instructions": "在我们的网站结账时输入礼品卡代码。",
+      "use_in_store": "在门店使用",
+      "scan_instructions": "结账时向收银员出示此二维码，即可使用礼品卡。",
+      "in_store_fallback": "结账时向收银员出示礼品卡代码，即可使用礼品卡。",
+      "copy_code_error": "请选择代码并手动复制。",
+      "inactive": "此礼品卡未启用。",
+      "empty_balance": "此礼品卡已无余额。",
       "how_to_use_gift_card": "在线使用礼品卡代码或在店内使用二维码",
       "title": "您的 {{ shop }} 的礼品卡余额为 {{ value }}！",
       "subtext": "您的礼品卡",

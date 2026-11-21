@@ -301,6 +301,15 @@
   },
   "gift_cards": {
     "issued": {
+      "balance": "Zostatok",
+      "use_online": "Použitie online",
+      "online_instructions": "Pri platbe na našom webe zadajte kód darčekového poukazu.",
+      "use_in_store": "Použitie v predajni",
+      "scan_instructions": "Ukážte tento QR kód pri pokladni a uplatnite darčekový poukaz.",
+      "in_store_fallback": "Ukážte kód darčekového poukazu pri pokladni a uplatnite ho.",
+      "copy_code_error": "Označte kód a skopírujte ho ručne.",
+      "inactive": "Tento darčekový poukaz je neaktívny.",
+      "empty_balance": "Na tomto darčekovom poukaze už nie je žiadny zostatok.",
       "how_to_use_gift_card": "Použite online kód darčekového poukazu alebo QR kód v obchode",
       "title": "Váš darčekový poukaz v hodnote {{ value }} do obchodu {{ shop }}!",
       "subtext": "Váš darčekový poukaz",

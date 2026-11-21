@@ -295,6 +295,15 @@
   },
   "gift_cards": {
     "issued": {
+      "balance": "Solde",
+      "use_online": "Utiliser en ligne",
+      "online_instructions": "Saisissez le code de la carte‑cadeau lors du paiement sur notre site.",
+      "use_in_store": "Utiliser en boutique",
+      "scan_instructions": "Présentez ce code QR en caisse pour utiliser votre carte‑cadeau.",
+      "in_store_fallback": "Présentez le code de la carte‑cadeau en caisse pour l’utiliser.",
+      "copy_code_error": "Sélectionnez le code et copiez-le manuellement.",
+      "inactive": "Cette carte‑cadeau est inactive.",
+      "empty_balance": "Cette carte‑cadeau n’a plus de solde.",
       "how_to_use_gift_card": "Utiliser le code de la carte‑cadeau en ligne ou le code QR en boutique",
       "title": "Voici le solde de votre carte‑cadeau {{ shop }} d'une valeur de {{ value }} !",
       "subtext": "Votre carte‑cadeau",

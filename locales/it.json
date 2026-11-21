@@ -295,6 +295,15 @@
   },
   "gift_cards": {
     "issued": {
+      "balance": "Saldo",
+      "use_online": "Usa online",
+      "online_instructions": "Inserisci il codice del buono regalo al momento del pagamento sul nostro sito.",
+      "use_in_store": "Usa in negozio",
+      "scan_instructions": "Mostra questo codice QR alla cassa per utilizzare il buono regalo.",
+      "in_store_fallback": "Mostra il codice del buono regalo alla cassa per utilizzarlo.",
+      "copy_code_error": "Seleziona e copia il codice manualmente.",
+      "inactive": "Questo buono regalo non è attivo.",
+      "empty_balance": "Il saldo di questo buono regalo è esaurito.",
       "how_to_use_gift_card": "Utilizza il codice del buono regalo online o il codice QR in negozio",
       "title": "Ecco il saldo del tuo buono regalo dal valore di {{ value }} per {{ shop }}!",
       "subtext": "Il tuo buono regalo",

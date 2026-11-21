@@ -289,6 +289,15 @@
   },
   "gift_cards": {
     "issued": {
+      "balance": "Saldo",
+      "use_online": "Använd online",
+      "online_instructions": "Ange presentkortskoden när du betalar i vår webbutik.",
+      "use_in_store": "Använd i butik",
+      "scan_instructions": "Visa den här QR-koden i kassan för att använda presentkortet.",
+      "in_store_fallback": "Visa presentkortskoden i kassan för att använda presentkortet.",
+      "copy_code_error": "Markera och kopiera koden manuellt.",
+      "inactive": "Det här presentkortet är inte aktivt.",
+      "empty_balance": "Det finns inget saldo kvar på det här presentkortet.",
       "how_to_use_gift_card": "Använd presentkortskoden online eller QR-koden i butik",
       "title": "Här är ditt presentkort värt {{ value }} för {{ shop }}!",
       "subtext": "Ditt presentkort",

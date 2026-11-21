@@ -289,6 +289,15 @@
   },
   "gift_cards": {
     "issued": {
+      "balance": "Saldo",
+      "use_online": "Gunakan online",
+      "online_instructions": "Masukkan kode voucher saat checkout di situs web kami.",
+      "use_in_store": "Gunakan di toko",
+      "scan_instructions": "Tunjukkan kode QR ini di kasir untuk menggunakan voucher Anda.",
+      "in_store_fallback": "Tunjukkan kode voucher di kasir untuk menggunakannya.",
+      "copy_code_error": "Pilih dan salin kode secara manual.",
+      "inactive": "Voucher ini tidak aktif.",
+      "empty_balance": "Voucher ini tidak memiliki sisa saldo.",
       "how_to_use_gift_card": "Gunakan kode voucher secara online atau kode QR di toko",
       "title": "Ini dia voucher senilai {{ value }} Anda untuk {{ shop }}!",
       "subtext": "Voucher Anda",
