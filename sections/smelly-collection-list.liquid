@@ -14,9 +14,7 @@
     heading: heading,
     text: section.settings.text,
     note: section.settings.note,
-    banner_image: section.settings.banner_image,
-    parent_url: routes.all_products_collection_url,
-    parent_label: all_label
+    banner_image: section.settings.banner_image
   %}
 
   <div class="smelly-collection-list__content">
@@ -25,10 +23,8 @@
         assign all_collection = collections.all
         assign show_all_card = false
 
-        if paginate.current_page == 1
-          if paginate.pages <= 1 or all_collection.published_at == blank
-            assign show_all_card = true
-          endif
+        if paginate.pages <= 1
+          assign show_all_card = true
         endif
 
         # A published All collection fills its own pagination slot.
@@ -40,6 +36,12 @@
           endif
         endfor
       %}
+
+      {% unless show_all_card %}
+        <a class="smelly-text-link smelly-collection-list__all-link" href="{{ routes.all_products_collection_url | escape }}">
+          {{ all_label | escape }}
+        </a>
+      {% endunless %}
 
       <ul class="smelly-collection-list__grid" role="list" aria-label="{{ 'content.search_results_resource_collections' | t }}">
         {% if show_all_card %}

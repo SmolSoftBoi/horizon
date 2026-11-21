@@ -10,8 +10,11 @@
 
 {% liquid
   assign title = heading | default: card_collection.title
-  assign description = text | default: card_collection.description
+  assign description = text | strip
   if description != blank
+    assign description = description | truncatewords: 18 | escape
+  elsif card_collection.description != blank
+    assign description = card_collection.description
     # Keep neighbouring blocks separate while preserving words split by inline markup.
     assign text_boundaries = '<br|<hr|</p>|</div>|</li>|</blockquote>|</h1>|</h2>|</h3>|</h4>|</h5>|</h6>|</td>|</th>' | split: '|'
     for boundary in text_boundaries
@@ -19,7 +22,7 @@
       assign spaced_boundary = boundary | prepend: ' '
       assign description = description | replace: boundary, spaced_boundary | replace: uppercase_boundary, spaced_boundary
     endfor
-    assign description = description | strip_html | replace: '&nbsp;', ' ' | strip | truncatewords: 18
+    assign description = description | strip_html | replace: '&nbsp;', ' ' | strip | truncatewords: 18 | escape_once
   endif
   assign count = card_collection.all_products_count
   assign url = card_collection.url
@@ -64,7 +67,7 @@
       </p>
     {% endif %}
     {% if description != blank %}
-      <p class="smelly-collection-card__description">{{ description | escape_once }}</p>
+      <p class="smelly-collection-card__description">{{ description }}</p>
     {% endif %}
     <a class="smelly-button smelly-collection-card__link" href="{{ url | escape }}" aria-label="{{ action | escape }} – {{ title | escape }}">
       {{ action | escape }}

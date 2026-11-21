@@ -16,15 +16,14 @@
   assign all_collection = collections.all
   assign all_label = 'smelly.shop_all' | t
   assign all_label = section.settings.all_label | default: all_label
+  assign collections_label = 'content.search_results_resource_collections' | t
   assign heading = collection.title
   assign banner_image = collection.image | default: section.settings.banner_image
-  assign parent_url = routes.all_products_collection_url
   if collection.handle == 'all'
     assign is_all = true
     assign all_collection = collection
     assign heading = section.settings.heading | default: collection.title
     assign banner_image = section.settings.banner_image | default: collection.image
-    assign parent_url = nil
   endif
 
   assign show_filters = false
@@ -58,8 +57,8 @@
     text: section.settings.text,
     note: section.settings.note,
     banner_image: banner_image,
-    parent_url: parent_url,
-    parent_label: all_label
+    parent_url: routes.collections_url,
+    parent_label: collections_label
   %}
 
   <div class="smelly-catalogue__shell">

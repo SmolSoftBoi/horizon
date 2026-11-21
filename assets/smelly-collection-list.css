@@ -16,6 +16,13 @@
   padding-block-start: 22px;
 }
 
+.smelly-collection-list__all-link {
+  max-width: 100%;
+  min-height: 44px;
+  margin-block-end: 12px;
+  overflow-wrap: anywhere;
+}
+
 .smelly-collection-list__grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
