@@ -1,0 +1,154 @@
+{% if product.gift_card? %}
+  {{ 'smelly-catalogue.css' | asset_url | stylesheet_tag }}
+  {{ 'smelly-gift-card.css' | asset_url | stylesheet_tag }}
+
+  {% liquid
+    assign heading = section.settings.heading | default: product.title
+    assign shop_label = 'smelly.shop_all' | t
+    assign card_image = section.settings.card_image
+    assign card_alt = card_image.alt | default: product.title
+    assign variant = product.selected_or_first_available_variant
+  %}
+
+  {% capture fallback_banner %}
+    <picture class="smelly-catalogue__banner-photo">
+      <source media="(max-width: 749px)" srcset="{{ 'smelly-gift-card-banner-mobile.webp' | asset_url }}">
+      <img
+        src="{{ 'smelly-gift-card-banner.webp' | asset_url }}"
+        width="1881"
+        height="480"
+        alt=""
+        loading="eager"
+        fetchpriority="high"
+      >
+    </picture>
+  {% endcapture %}
+
+  <script type="application/ld+json">
+    {{ product | structured_data }}
+  </script>
+
+  <div class="smelly-section smelly-catalogue smelly-gift-card">
+    {% render 'smelly-catalogue-hero',
+      heading: heading,
+      text: section.settings.intro,
+      banner_image: section.settings.banner_image,
+      fallback_banner: fallback_banner,
+      parent_url: routes.all_products_collection_url,
+      parent_label: shop_label
+    %}
+
+    <div class="smelly-gift-card__layout">
+      <section
+        class="smelly-gift-card__purchase"
+        {% if section.settings.purchase_heading != blank %}
+          aria-labelledby="GiftCardPurchase-{{ section.id }}"
+        {% endif %}
+      >
+        <div class="smelly-gift-card__art">
+          {% if card_image != blank %}
+            {{ card_image | image_url: width: 1100 | image_tag: widths: '320, 480, 640, 850, 1100', sizes: '(min-width: 1080px) 27vw, (min-width: 700px) 42vw, 80vw', alt: card_alt }}
+          {% else %}
+            <img
+              src="{{ 'smelly-gift-card-art.webp' | asset_url }}"
+              width="1008"
+              height="672"
+              alt="{{ card_alt | escape }}"
+            >
+          {% endif %}
+        </div>
+
+        <div class="smelly-gift-card__controls">
+          {% if section.settings.purchase_heading != blank %}
+            <h2 id="GiftCardPurchase-{{ section.id }}">{{ section.settings.purchase_heading | escape }}</h2>
+          {% endif %}
+          {% if section.settings.purchase_intro != blank %}
+            <p>{{ section.settings.purchase_intro | escape }}</p>
+          {% endif %}
+
+          {% if product.has_only_default_variant %}
+            {% if variant != blank %}
+              <p class="smelly-gift-card__amount">
+                {{ 'content.price' | t }} <bdi>{{ variant.price | money_without_trailing_zeros }}</bdi>
+              </p>
+            {% endif %}
+          {% else %}
+            {% content_for 'block', type: 'variant-picker', id: 'amount', closest.product: product %}
+          {% endif %}
+
+          {% content_for 'block', type: 'buy-buttons', id: 'purchase', closest.product: product, gift_card_purchase: true %}
+        </div>
+      </section>
+
+      <div class="smelly-gift-card__information">
+        {% capture benefit_items %}
+          {% assign benefits = 'email,choice,redeem' | split: ',' %}
+          {% assign icons = 'chat_bubble,box,price_tag' | split: ',' %}
+          {% for benefit in benefits %}
+            {% liquid
+              assign heading_key = benefit | append: '_heading'
+              assign text_key = benefit | append: '_text'
+              assign benefit_heading = section.settings[heading_key]
+              assign benefit_text = section.settings[text_key]
+            %}
+            {% if benefit_heading != blank or benefit_text != blank %}
+              <li>
+                <span class="smelly-gift-card__icon" aria-hidden="true">
+                  <svg viewBox="0 0 20 20" width="34" height="34" fill="currentColor" focusable="false">
+                    {% render 'icon', icon: icons[forloop.index0] %}
+                  </svg>
+                </span>
+                {% if benefit_heading != blank %}
+                  <p class="smelly-gift-card__benefit-heading">{{ benefit_heading | escape }}</p>
+                {% endif %}
+                {% if benefit_text != blank %}<p>{{ benefit_text | escape }}</p>{% endif %}
+              </li>
+            {% endif %}
+          {% endfor %}
+        {% endcapture %}
+        {% if benefit_items != blank %}
+          <ul class="smelly-gift-card__benefits" role="list">{{ benefit_items }}</ul>
+        {% endif %}
+
+        {% capture faq %}
+          {% content_for 'block', type: 'accordion', id: 'faq' %}
+        {% endcapture %}
+        {% if faq != blank %}
+          <div class="smelly-gift-card__faq">
+            {% if section.settings.faq_heading != blank %}
+              <h2>{{ section.settings.faq_heading | escape }}</h2>
+            {% endif %}
+            {{ faq }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% elsif request.design_mode %}
+  <div class="smelly-section smelly-shell">
+    <p>Preview this template with a Shopify gift card product to see its purchase controls.</p>
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Smelly A.F. gift cards",
+  "enabled_on": { "templates": ["product"] },
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Page heading", "default": "Gift Cards" },
+    { "type": "textarea", "id": "intro", "label": "Introduction", "default": "The perfect treat for candle lovers. Let them choose their favourite Smelly A.F. scents." },
+    { "type": "image_picker", "id": "banner_image", "label": "Banner image" },
+    { "type": "image_picker", "id": "card_image", "label": "Gift card artwork" },
+    { "type": "text", "id": "purchase_heading", "label": "Purchase heading", "default": "Buy a Gift Card" },
+    { "type": "textarea", "id": "purchase_intro", "label": "Purchase introduction", "default": "Choose an amount, add a personal message and send it by email." },
+    { "type": "text", "id": "faq_heading", "label": "FAQ heading", "default": "Gift Card FAQs" },
+    { "type": "header", "content": "Gift card benefits" },
+    { "type": "text", "id": "email_heading", "label": "Email heading", "default": "Email delivery" },
+    { "type": "text", "id": "email_text", "label": "Email text", "default": "Send to your inbox or theirs." },
+    { "type": "text", "id": "choice_heading", "label": "Choice heading", "default": "Flexible choice" },
+    { "type": "text", "id": "choice_text", "label": "Choice text", "default": "They pick the scents they love." },
+    { "type": "text", "id": "redeem_heading", "label": "Redemption heading", "default": "Easy to redeem" },
+    { "type": "text", "id": "redeem_text", "label": "Redemption text", "default": "Enter the gift card code at checkout." }
+  ]
+}
+{% endschema %}

@@ -364,8 +364,7 @@ class GiftCardRecipientForm extends Component {
         if (inputElement && inputElement instanceof HTMLElement) {
           // Set ARIA attributes for accessibility
           inputElement.setAttribute('aria-invalid', 'true');
-          const errorId = `RecipientForm-${field}-error-${this.dataset.sectionId || 'default'}`;
-          inputElement.setAttribute('aria-describedby', errorId);
+          if (errorContainer?.id) inputElement.setAttribute('aria-describedby', errorContainer.id);
         }
       }
     }
@@ -412,7 +411,11 @@ class GiftCardRecipientForm extends Component {
    */
   #handleCartAdd(event) {
     if (event.action !== 'add') return;
-    event.promise?.then(() => this.#clearErrorMessages()).catch(() => {});
+    event.promise
+      ?.then((result) => {
+        if (!result.detail?.didError) this.#clearErrorMessages();
+      })
+      .catch(() => {});
   }
 }
 

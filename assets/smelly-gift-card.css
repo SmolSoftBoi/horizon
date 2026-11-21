@@ -1,0 +1,346 @@
+.smelly-gift-card {
+  --gift-card-panel: #fcebe9;
+  --gift-card-field: #fffaf5;
+  --gift-card-border: #a58585;
+
+  padding-block-end: 0;
+  background: #fffaf5;
+}
+
+.smelly-gift-card .smelly-catalogue__hero-inner {
+  min-height: clamp(262px, 21.8vw, 530px);
+}
+
+.smelly-gift-card .smelly-catalogue__intro {
+  max-width: min(42%, 38rem);
+}
+
+.smelly-gift-card .smelly-catalogue__intro h1 {
+  font-size: clamp(3rem, 6vw, 6rem);
+  text-wrap: wrap;
+}
+
+.smelly-gift-card .smelly-catalogue__description {
+  font-size: clamp(1rem, 1.52vw, 1.45rem);
+}
+
+.smelly-gift-card .smelly-catalogue__hero::after {
+  background: linear-gradient(var(--catalogue-direction), #211009a6, #21100959 39%, transparent 65%);
+}
+
+.smelly-gift-card .smelly-catalogue__banner-photo img {
+  object-position: 63% 50%;
+}
+
+.smelly-gift-card:dir(rtl) .smelly-catalogue__hero::after {
+  background: linear-gradient(to left, #211009ed, #211009d9 39%, transparent 73%);
+}
+
+.smelly-gift-card__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.58fr) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(24px, 3.6vw, 56px);
+  width: min(1520px, calc(100% - clamp(28px, 4.1vw, 64px)));
+  margin-inline: auto;
+  padding-block: 24px;
+  overflow-wrap: anywhere;
+}
+
+.smelly-gift-card__purchase {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(22px, 2.5vw, 38px);
+  padding: clamp(18px, 2vw, 32px);
+  border-radius: 22px;
+  background: var(--gift-card-panel);
+}
+
+.smelly-gift-card__art {
+  width: min(100%, 550px);
+  margin-inline: auto;
+  padding-block: 12px;
+}
+
+.smelly-gift-card__art img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: clamp(14px, 1.6vw, 24px);
+  box-shadow: 0 6px 16px #4c252b36;
+  transform: rotate(-2deg);
+}
+
+.smelly-gift-card__controls {
+  --height-buy-buttons: 52px;
+  --color-variant-background: var(--gift-card-field);
+  --color-variant-text: var(--smelly-ink);
+  --color-variant-border: var(--gift-card-border);
+  --color-variant-hover-background: #f9dce6;
+  --color-variant-hover-text: var(--smelly-ink);
+  --color-variant-hover-border: var(--smelly-pink);
+  --color-selected-variant-background: var(--smelly-pink);
+  --color-selected-variant-text: #fff;
+  --color-selected-variant-border: var(--smelly-pink);
+  --color-selected-variant-hover-background: #a51240;
+  --color-selected-variant-hover-text: #fff;
+  --color-selected-variant-hover-border: #a51240;
+  --color-input-background: var(--gift-card-field);
+  --color-input-text: var(--smelly-ink);
+  --color-input-border: var(--gift-card-border);
+  --style-border-radius-inputs: 12px;
+  --style-border-width-inputs: 1px;
+  --variant-picker-button-radius: 12px;
+  --variant-picker-button-border-width: 1px;
+
+  min-width: 0;
+  line-height: 1.45;
+}
+
+.smelly-gift-card .smelly-gift-card__controls h2 {
+  font-size: clamp(1.9rem, 2.55vw, 2.6rem);
+  letter-spacing: -0.035em;
+}
+
+.smelly-gift-card__controls > p {
+  margin-block-start: 8px;
+}
+
+.smelly-gift-card__controls > .smelly-gift-card__amount,
+.smelly-gift-card__controls .variant-picker {
+  display: block;
+  margin-block: 18px 14px;
+}
+
+.smelly-gift-card__amount bdi {
+  margin-inline-start: 8px;
+  font-weight: 700;
+}
+
+.smelly-gift-card__controls :is(.variant-option legend, .recipient-form__send-to, .quantity-label) {
+  color: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.smelly-gift-card__controls .variant-option--buttons:not(.variant-option--swatches) {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.smelly-gift-card__controls .variant-option__button-label {
+  min-width: 0;
+  min-height: 44px;
+  padding: 6px;
+  white-space: normal;
+  text-align: center;
+  font-weight: 700;
+}
+
+.smelly-gift-card__controls .variant-option__button-label__pill {
+  display: none;
+}
+
+.smelly-gift-card__controls .variant-option__button-label:has(:checked):not(:has([data-option-available='false'])) {
+  background: var(--color-selected-variant-background);
+  border-color: var(--color-selected-variant-border);
+  color: var(--color-selected-variant-text);
+}
+
+.smelly-gift-card__controls .recipient-form {
+  padding-block: 0 16px;
+}
+
+.smelly-gift-card__controls .gift-card-form-option {
+  gap: 8px;
+  margin: 0;
+}
+
+.smelly-gift-card__controls .gift-card-form-option__button-label {
+  min-height: 44px;
+  padding: 6px 8px;
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.smelly-gift-card__controls .recipient-fields {
+  padding-block-start: 12px;
+}
+
+.smelly-gift-card__controls .recipient-fields__textarea {
+  height: 6.75rem;
+  resize: vertical;
+}
+
+.smelly-gift-card__controls .recipient-fields__input:focus-visible {
+  outline: 2px solid var(--smelly-pink);
+  outline-offset: 2px;
+}
+
+.smelly-gift-card__controls .product-form-buttons {
+  --buy-button-preferred-width: 165px;
+
+  gap: 8px;
+}
+
+.smelly-gift-card__controls .quantity-label {
+  margin: 0;
+}
+
+.smelly-gift-card__controls .quantity-selector {
+  background: var(--gift-card-field);
+  border: 1px solid var(--gift-card-border);
+  border-radius: 12px;
+}
+
+.smelly-gift-card__controls .quantity-selector :is(button, input) {
+  min-width: 44px;
+  color: var(--smelly-ink);
+}
+
+.smelly-gift-card__controls .add-to-cart-button {
+  --button-background-color: var(--smelly-pink);
+  --button-color: #fff;
+  --button-border-color: var(--smelly-pink);
+
+  padding: 8px 12px;
+  border-radius: 100px;
+  font-weight: 700;
+  text-transform: none;
+}
+
+.smelly-gift-card__controls .add-to-cart-button:hover:not(:disabled) {
+  --button-background-color: #a51240;
+  --button-border-color: #a51240;
+}
+
+.smelly-gift-card__controls .add-to-cart-button:disabled {
+  --button-background-color: #e4dcd8;
+  --button-color: #65595e;
+  --button-border-color: #e4dcd8;
+}
+
+.smelly-gift-card__benefits {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0 0 20px;
+  list-style: none;
+  text-align: center;
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+.smelly-gift-card__icon {
+  display: grid;
+  place-items: center;
+  width: clamp(48px, 5vw, 72px);
+  aspect-ratio: 1;
+  margin: 0 auto 8px;
+  border-radius: 16px;
+  background: var(--smelly-blush);
+  color: var(--smelly-pink);
+}
+
+.smelly-gift-card .smelly-gift-card__benefit-heading {
+  margin-block-end: 2px;
+  font-size: clamp(0.95rem, 1.33vw, 1.25rem);
+  font-weight: 700;
+}
+
+.smelly-gift-card__faq {
+  padding-block-start: 16px;
+  border-block-start: 1px solid var(--smelly-line);
+}
+
+.smelly-gift-card .smelly-gift-card__faq h2 {
+  margin-block-end: 12px;
+  font-size: clamp(1.55rem, 2vw, 2rem);
+  letter-spacing: -0.025em;
+}
+
+.smelly-gift-card__faq .accordion {
+  display: grid;
+  gap: 8px;
+}
+
+.smelly-gift-card__faq .details {
+  border-radius: 15px;
+  background: var(--gift-card-panel);
+}
+
+.smelly-gift-card__faq .details__header {
+  gap: 12px;
+  min-height: 48px;
+  padding: 10px 16px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.smelly-gift-card__faq .details-content {
+  padding: 0 16px 14px;
+  font-size: 0.95rem;
+}
+
+.smelly-gift-card__faq .details-content a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 1079px) {
+  .smelly-gift-card__layout {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 860px;
+  }
+}
+
+@media (max-width: 749px) {
+  .smelly-gift-card .smelly-catalogue__hero {
+    display: flex;
+    flex-direction: column-reverse;
+    background: #26130c;
+  }
+
+  .smelly-gift-card .smelly-catalogue__hero::after {
+    display: none;
+  }
+
+  .smelly-gift-card .smelly-catalogue__hero-inner {
+    min-height: 0;
+    padding-block: 12px 20px;
+  }
+
+  .smelly-gift-card .smelly-catalogue__intro {
+    max-width: min(100%, 34rem);
+  }
+
+  .smelly-gift-card .smelly-catalogue__banner-photo {
+    position: static;
+    height: auto;
+    aspect-ratio: 2.08;
+    z-index: auto;
+    object-fit: cover;
+  }
+
+  .smelly-gift-card .smelly-gift-card__benefits {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 699px) {
+  .smelly-gift-card__purchase {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+
+  .smelly-gift-card__art {
+    width: min(96%, 410px);
+    padding-block: 4px;
+  }
+}
