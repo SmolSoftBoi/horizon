@@ -364,6 +364,27 @@
     }
   },
   "smelly": {
+    "basket": {
+      "title": "Keranjang Anda",
+      "intro": "Beberapa aroma istimewa siap untuk Anda.",
+      "banner_note": "Dituang dengan tangan dan penuh perhatian.",
+      "summary": "Ringkasan pesanan",
+      "delivery": "Pengiriman",
+      "delivery_at_checkout": "Dihitung saat checkout",
+      "delivery_remaining": "Belanja {{ amount }} lagi untuk pengiriman gratis di Britania Raya!",
+      "delivery_eligible": "Anda telah mencapai batas minimum pengiriman gratis di Britania Raya!",
+      "taxes_included": "Pajak sudah termasuk.",
+      "taxes_at_checkout": "Pajak dihitung saat checkout.",
+      "duties_included": "Bea masuk sudah termasuk.",
+      "checkout": "Check out",
+      "gift_card_at_checkout": "Punya kartu hadiah? Gunakan saat checkout.",
+      "save": "Simpan untuk nanti",
+      "save_hint": "Tambahkan produk ini ke daftar keinginan Anda",
+      "saved": "Tersimpan di daftar keinginan Anda pada perangkat ini.",
+      "clear": "Kosongkan keranjang",
+      "clear_confirm": "Hapus semua barang dari keranjang Anda?",
+      "clear_error": "Keranjang tidak dapat dikosongkan. Coba lagi."
+    },
     "catalogue": {
       "product_view": "Tampilan produk",
       "grid_view": "Tampilan kisi",

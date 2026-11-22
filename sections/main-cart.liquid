@@ -4,7 +4,51 @@
     assign custom_color = true
     render 'contrast-override', background_color: section.settings.background_color, text_color: section.settings.text_color, section_id: section.id
   endif
+  assign cart_context = nil
+  assign basket_title = nil
+  if settings.smelly_branding
+    assign cart_context = 'basket'
+    assign basket_title = 'smelly.basket.title' | t
+  endif
 %}
+
+{% capture cart_page_title %}
+  {%- content_for 'block', id: 'cart-page-title', type: '_cart-title', basket_title: basket_title -%}
+{% endcapture %}
+
+{{ 'smelly-basket.css' | asset_url | stylesheet_tag }}
+
+{%- if settings.smelly_branding -%}
+  <header class="smelly-basket__banner">
+    <picture class="smelly-basket__photo">
+      <source media="(max-width: 1099px)" srcset="{{ 'smelly-collection-hero-small.webp' | asset_url }}">
+      <img src="{{ 'smelly-collection-hero.webp' | asset_url }}" alt="" width="2000" height="667" fetchpriority="high">
+    </picture>
+    <div class="smelly-basket__banner-inner">
+      <div>
+        <nav class="smelly-basket__breadcrumbs" aria-label="{{ 'smelly.product.breadcrumbs' | t }}">
+          <ol class="list-unstyled" role="list">
+            <li>
+              <a href="{{ routes.root_url }}" aria-label="{{ 'smelly.home' | t }}">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="m3 10 9-7 9 7m-16-1v11h5v-6h4v6h5V9"/>
+                </svg>
+              </a>
+            </li>
+            <li aria-hidden="true">{{ 'icon-chevron-right.svg' | inline_asset_content }}</li>
+            <li aria-current="page">{{ basket_title }}</li>
+          </ol>
+        </nav>
+        {{ cart_page_title }}
+        <p class="smelly-basket__intro">{{ 'smelly.basket.intro' | t }}</p>
+      </div>
+      <p class="smelly-basket__note smelly-handwritten">{{ 'smelly.basket.banner_note' | t }}</p>
+    </div>
+  </header>
+  {%- if section.settings.show_wishlist -%}
+    {% render 'smelly-product-wishlist', section_id: section.id, placement: 'dialog' %}
+  {%- endif -%}
+{%- endif -%}
 
 {% capture cart_page_more_blocks_content %}
   <div class="cart-page__more-blocks">
@@ -19,14 +63,16 @@
       class="section{% if custom_color %} color-custom-{{ section.id }}{% endif %} section--{{ section.settings.section_width }}"
     >
       <div
-        class="cart-page spacing-style{% if cart.empty? %} cart-page--empty{% endif %}"
+        class="cart-page spacing-style cart-page--empty"
         style="{% render 'spacing-style', settings: section.settings %}"
       >
-        <div class="cart-page__title">
-          {%- content_for 'block', id: 'cart-page-title', type: '_cart-title', force_empty: true %}
-        </div>
+        {%- unless settings.smelly_branding -%}
+          <div class="cart-page__title cart-title">
+            <h1>{{ 'content.your_cart_is_empty' | t }}</h1>
+          </div>
+        {%- endunless -%}
         <div class="cart-page__items">
-          {%- content_for 'block', id: 'cart-page-items', type: '_cart-products', force_empty: true %}
+          {% render 'cart-products', force_empty: true, context: cart_context, section_id: section.id, show_wishlist: section.settings.show_wishlist %}
         </div>
         {{ cart_page_more_blocks_content }}
       </div>
@@ -41,9 +87,9 @@
       class="cart-page spacing-style{% if cart.empty? %} cart-page--empty{% endif %}"
       style="{% render 'spacing-style', settings: section.settings %}"
     >
-      <div class="cart-page__title">
-        {%- content_for 'block', id: 'cart-page-title', type: '_cart-title' %}
-      </div>
+      {%- unless settings.smelly_branding -%}
+        <div class="cart-page__title">{{ cart_page_title }}</div>
+      {%- endunless -%}
 
       <div class="cart-page__items">
         {%- content_for 'block', id: 'cart-page-items', type: '_cart-products' %}
@@ -58,6 +104,10 @@
       {{ cart_page_more_blocks_content }}
     </div>
   </div>
+
+  {%- if section.settings.show_recommendations -%}
+    {% render 'smelly-basket-recommendations', collection: section.settings.recommendation_collection, section_id: section.id %}
+  {%- endif -%}
 {% endcapture %}
 {% render 'cart-items-component', children: cart_items_children, section_id: section.id %}
 
@@ -138,6 +188,7 @@
 {% schema %}
 {
   "name": "t:names.cart",
+  "class": "cart-section",
   "disabled_on": {
     "groups": ["header", "footer"]
   },
@@ -198,6 +249,32 @@
       "id": "text_color",
       "label": "t:settings.text_color",
       "placeholder": "t:settings.default"
+    },
+    {
+      "type": "number",
+      "id": "free_uk_delivery_threshold",
+      "label": "Free UK delivery threshold (£)",
+      "info": "Match your Shopify UK shipping rate minimum in GBP. Leave blank to hide the progress bar.",
+      "visible_if": "{{ settings.smelly_branding }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_wishlist",
+      "label": "Show Save for later",
+      "default": true,
+      "visible_if": "{{ settings.smelly_branding }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_recommendations",
+      "label": "Show basket recommendations",
+      "default": true
+    },
+    {
+      "type": "collection",
+      "id": "recommendation_collection",
+      "label": "Basket recommendation collection",
+      "info": "Leave blank to suggest available products from your full catalogue."
     },
     {
       "type": "header",

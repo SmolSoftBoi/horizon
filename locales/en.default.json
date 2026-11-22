@@ -383,6 +383,27 @@
     }
   },
   "smelly": {
+    "basket": {
+      "title": "Your Basket",
+      "intro": "A few seriously good scents, ready to go.",
+      "banner_note": "Hand-poured goodness.",
+      "summary": "Order Summary",
+      "delivery": "Delivery",
+      "delivery_at_checkout": "Calculated at checkout",
+      "delivery_remaining": "Spend {{ amount }} more for free UK delivery!",
+      "delivery_eligible": "You’ve reached the free UK delivery threshold!",
+      "taxes_included": "Taxes included.",
+      "taxes_at_checkout": "Taxes calculated at checkout.",
+      "duties_included": "Duties included.",
+      "checkout": "Proceed to checkout",
+      "gift_card_at_checkout": "Have a gift card? Redeem it at checkout.",
+      "save": "Save for later",
+      "save_hint": "Add these products to your wishlist",
+      "saved": "Saved to your wishlist on this device.",
+      "clear": "Clear basket",
+      "clear_confirm": "Remove all items from your basket?",
+      "clear_error": "We couldn’t clear your basket. Please try again."
+    },
     "catalogue": {
       "product_view": "Product view",
       "grid_view": "Grid view",

@@ -371,6 +371,27 @@
     }
   },
   "smelly": {
+    "basket": {
+      "title": "O seu carrinho",
+      "intro": "Algumas fragrâncias incríveis, prontas para si.",
+      "banner_note": "Feitas à mão com cuidado.",
+      "summary": "Resumo da encomenda",
+      "delivery": "Entrega",
+      "delivery_at_checkout": "Calculada ao finalizar a compra",
+      "delivery_remaining": "Gaste mais {{ amount }} para beneficiar de entrega gratuita no Reino Unido!",
+      "delivery_eligible": "Atingiu o montante mínimo para entrega gratuita no Reino Unido!",
+      "taxes_included": "Impostos incluídos.",
+      "taxes_at_checkout": "Os impostos são calculados ao finalizar a compra.",
+      "duties_included": "Direitos aduaneiros incluídos.",
+      "checkout": "Finalizar a compra",
+      "gift_card_at_checkout": "Tem um cartão de oferta? Utilize-o ao finalizar a compra.",
+      "save": "Guardar para mais tarde",
+      "save_hint": "Adicione estes produtos à sua lista de desejos",
+      "saved": "Guardados na sua lista de desejos neste dispositivo.",
+      "clear": "Esvaziar o carrinho",
+      "clear_confirm": "Remover todos os artigos do carrinho?",
+      "clear_error": "Não foi possível esvaziar o carrinho. Tente novamente."
+    },
     "catalogue": {
       "product_view": "Vista de produtos",
       "grid_view": "Vista em grelha",

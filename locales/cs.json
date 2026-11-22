@@ -378,6 +378,27 @@
     }
   },
   "smelly": {
+    "basket": {
+      "title": "Váš košík",
+      "intro": "Několik opravdu skvělých vůní je připraveno.",
+      "banner_note": "Ručně odléváno s péčí.",
+      "summary": "Přehled objednávky",
+      "delivery": "Doprava",
+      "delivery_at_checkout": "Vypočítá se při placení",
+      "delivery_remaining": "Nakupte ještě za {{ amount }} a získejte dopravu po Spojeném království zdarma!",
+      "delivery_eligible": "Dosáhli jste limitu pro dopravu po Spojeném království zdarma!",
+      "taxes_included": "Daně jsou zahrnuty.",
+      "taxes_at_checkout": "Daně se vypočítají při placení.",
+      "duties_included": "Cla jsou zahrnuta.",
+      "checkout": "Zaplatit",
+      "gift_card_at_checkout": "Máte dárkovou kartu? Uplatněte ji při placení.",
+      "save": "Uložit na později",
+      "save_hint": "Přidejte tyto produkty do seznamu přání",
+      "saved": "Uloženo do seznamu přání v tomto zařízení.",
+      "clear": "Vyprázdnit košík",
+      "clear_confirm": "Odebrat všechny položky z košíku?",
+      "clear_error": "Košík se nepodařilo vyprázdnit. Zkuste to znovu."
+    },
     "catalogue": {
       "product_view": "Zobrazení produktů",
       "grid_view": "Mřížkové zobrazení",

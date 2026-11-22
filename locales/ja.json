@@ -364,6 +364,27 @@
     }
   },
   "smelly": {
+    "basket": {
+      "title": "あなたのカート",
+      "intro": "とっておきの香りをお届けします。",
+      "banner_note": "ひとつずつ丁寧に手作業で。",
+      "summary": "注文内容",
+      "delivery": "配送",
+      "delivery_at_checkout": "決済時に計算されます",
+      "delivery_remaining": "あと{{ amount }}のお買い上げで英国国内の配送料が無料になります！",
+      "delivery_eligible": "英国国内の送料無料条件を満たしました！",
+      "taxes_included": "税込みです。",
+      "taxes_at_checkout": "税金は決済時に計算されます。",
+      "duties_included": "関税込みです。",
+      "checkout": "チェックアウト",
+      "gift_card_at_checkout": "ギフトカードをお持ちですか？ 決済時にご利用いただけます。",
+      "save": "あとで見るために保存",
+      "save_hint": "この商品をウィッシュリストに追加",
+      "saved": "この端末のウィッシュリストに保存しました。",
+      "clear": "カートを空にする",
+      "clear_confirm": "カート内のすべての商品を削除しますか？",
+      "clear_error": "カートを空にできませんでした。もう一度お試しください。"
+    },
     "catalogue": {
       "product_view": "商品表示",
       "grid_view": "グリッド表示",

@@ -364,6 +364,27 @@
     }
   },
   "smelly": {
+    "basket": {
+      "title": "카트",
+      "intro": "기분 좋은 향들이 기다리고 있어요.",
+      "banner_note": "정성을 담아 손으로 부었어요.",
+      "summary": "주문 요약",
+      "delivery": "배송",
+      "delivery_at_checkout": "결제 시 계산",
+      "delivery_remaining": "{{ amount }} 더 구매하면 영국 내 배송이 무료입니다!",
+      "delivery_eligible": "영국 내 무료 배송 기준에 도달했습니다!",
+      "taxes_included": "세금 포함.",
+      "taxes_at_checkout": "세금은 결제 시 계산됩니다.",
+      "duties_included": "관세 포함.",
+      "checkout": "결제",
+      "gift_card_at_checkout": "기프트 카드가 있나요? 결제 시 사용하세요.",
+      "save": "나중을 위해 저장",
+      "save_hint": "이 상품들을 위시리스트에 추가",
+      "saved": "이 기기의 위시리스트에 저장했습니다.",
+      "clear": "장바구니 비우기",
+      "clear_confirm": "장바구니의 모든 상품을 삭제할까요?",
+      "clear_error": "장바구니를 비울 수 없습니다. 다시 시도해 주세요."
+    },
     "catalogue": {
       "product_view": "상품 보기",
       "grid_view": "격자 보기",

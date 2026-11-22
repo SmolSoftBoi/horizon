@@ -364,6 +364,27 @@
     }
   },
   "smelly": {
+    "basket": {
+      "title": "Kosár",
+      "intro": "Néhány igazán jó illat már vár rád.",
+      "banner_note": "Gondosan, kézzel öntve.",
+      "summary": "Rendelés összesítése",
+      "delivery": "Szállítás",
+      "delivery_at_checkout": "Fizetéskor számítjuk ki",
+      "delivery_remaining": "Vásárolj még {{ amount }} értékben az ingyenes egyesült királyságbeli szállításhoz!",
+      "delivery_eligible": "Elérted az ingyenes egyesült királyságbeli szállítás értékhatárát!",
+      "taxes_included": "Az adókat az ár tartalmazza.",
+      "taxes_at_checkout": "Az adókat fizetéskor számítjuk ki.",
+      "duties_included": "A vámokat az ár tartalmazza.",
+      "checkout": "Fizetés",
+      "gift_card_at_checkout": "Van ajándékkártyád? Váltsd be fizetéskor.",
+      "save": "Mentés későbbre",
+      "save_hint": "Add ezeket a termékeket a kívánságlistádhoz",
+      "saved": "A kívánságlistádra mentve ezen az eszközön.",
+      "clear": "Kosár ürítése",
+      "clear_confirm": "Eltávolítod az összes terméket a kosaradból?",
+      "clear_error": "Nem sikerült kiüríteni a kosaradat. Próbáld újra."
+    },
     "catalogue": {
       "product_view": "Terméknézet",
       "grid_view": "Rácsnézet",

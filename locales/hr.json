@@ -371,6 +371,27 @@
     }
   },
   "smelly": {
+    "basket": {
+      "title": "Vaša košarica",
+      "intro": "Nekoliko zaista dobrih mirisa spremno je za vas.",
+      "banner_note": "Ručno lijevano s pažnjom.",
+      "summary": "Sažetak narudžbe",
+      "delivery": "Dostava",
+      "delivery_at_checkout": "Izračunava se pri naplati",
+      "delivery_remaining": "Dodajte još {{ amount }} za besplatnu dostavu u Ujedinjenom Kraljevstvu!",
+      "delivery_eligible": "Dosegnuli ste prag za besplatnu dostavu u Ujedinjenom Kraljevstvu!",
+      "taxes_included": "Porezi su uključeni.",
+      "taxes_at_checkout": "Porezi se izračunavaju pri naplati.",
+      "duties_included": "Carine su uključene.",
+      "checkout": "Plaćanje",
+      "gift_card_at_checkout": "Imate poklon-karticu? Iskoristite je pri naplati.",
+      "save": "Spremi za poslije",
+      "save_hint": "Dodajte ove proizvode na popis želja",
+      "saved": "Spremljeno na popis želja na ovom uređaju.",
+      "clear": "Isprazni košaricu",
+      "clear_confirm": "Ukloniti sve stavke iz košarice?",
+      "clear_error": "Košaricu nije bilo moguće isprazniti. Pokušajte ponovno."
+    },
     "catalogue": {
       "product_view": "Prikaz proizvoda",
       "grid_view": "Mrežni prikaz",

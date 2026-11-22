@@ -371,6 +371,27 @@
     }
   },
   "smelly": {
+    "basket": {
+      "title": "Votre panier",
+      "intro": "Quelques parfums qui valent le détour, prêts à partir.",
+      "banner_note": "Coulées à la main avec soin.",
+      "summary": "Récapitulatif de la commande",
+      "delivery": "Livraison",
+      "delivery_at_checkout": "Calculée lors du paiement",
+      "delivery_remaining": "Ajoutez {{ amount }} pour bénéficier de la livraison gratuite au Royaume-Uni !",
+      "delivery_eligible": "Vous avez atteint le seuil de livraison gratuite au Royaume-Uni !",
+      "taxes_included": "Taxes incluses.",
+      "taxes_at_checkout": "Taxes calculées lors du paiement.",
+      "duties_included": "Droits de douane inclus.",
+      "checkout": "Payer",
+      "gift_card_at_checkout": "Vous avez une carte-cadeau ? Utilisez-la lors du paiement.",
+      "save": "Enregistrer pour plus tard",
+      "save_hint": "Ajoutez ces produits à votre liste d’envies",
+      "saved": "Enregistrés dans votre liste d’envies sur cet appareil.",
+      "clear": "Vider le panier",
+      "clear_confirm": "Supprimer tous les articles de votre panier ?",
+      "clear_error": "Impossible de vider votre panier. Veuillez réessayer."
+    },
     "catalogue": {
       "product_view": "Affichage des produits",
       "grid_view": "Vue en grille",

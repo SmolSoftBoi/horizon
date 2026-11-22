@@ -364,6 +364,27 @@
     }
   },
   "smelly": {
+    "basket": {
+      "title": "您的購物車",
+      "intro": "幾款好聞的香氛已經為你準備好了。",
+      "banner_note": "用心手工灌製。",
+      "summary": "訂單摘要",
+      "delivery": "配送",
+      "delivery_at_checkout": "於結帳時計算",
+      "delivery_remaining": "再購買 {{ amount }} 即可享英國境內免運！",
+      "delivery_eligible": "你已達到英國境內免運門檻！",
+      "taxes_included": "已含稅。",
+      "taxes_at_checkout": "稅金於結帳時計算。",
+      "duties_included": "已含關稅。",
+      "checkout": "結帳",
+      "gift_card_at_checkout": "有禮品卡嗎？可在結帳時使用。",
+      "save": "儲存以便稍後查看",
+      "save_hint": "將這些商品加到願望清單",
+      "saved": "已儲存到這部裝置上的願望清單。",
+      "clear": "清空購物車",
+      "clear_confirm": "要移除購物車中的所有商品嗎？",
+      "clear_error": "無法清空購物車。請再試一次。"
+    },
     "catalogue": {
       "product_view": "商品檢視",
       "grid_view": "格狀檢視",

@@ -1,0 +1,51 @@
+{% doc %}
+  Shows available products from the selected collection, excluding gift cards and products in the basket.
+  @param {collection} [collection] - Recommendation source. Defaults to the all-products collection.
+  @param {string} section_id - Section identifier for product form IDs and the heading.
+{% enddoc %}
+
+{%- liquid
+  assign recommendation_collection = collection | default: collections.all
+  assign cart_product_ids = cart.items | map: 'product_id'
+  assign recommendation_count = 0
+  assign carousel_id = 'BasketCarousel-' | append: section_id
+-%}
+
+{% capture recommendation_slides %}
+  {% for recommendation in recommendation_collection.products %}
+    {% if recommendation.available == false or recommendation.gift_card? or cart_product_ids contains recommendation.id %}
+      {% continue %}
+    {% endif %}
+    {% capture product_card %}
+      {% render 'smelly-product-card', card_product: recommendation, section_id: section_id, image_sizes: '120px' %}
+    {% endcapture %}
+    {%- render 'slideshow-slide', index: recommendation_count, children: product_card -%}
+    {% assign recommendation_count = recommendation_count | plus: 1 %}
+    {% assign carousel_id = carousel_id | append: '-' | append: recommendation.id %}
+    {% if recommendation_count == 8 %}{% break %}{% endif %}
+  {% endfor %}
+{% endcapture %}
+
+{% if recommendation_count > 0 %}
+  {% capture carousel_attributes %}id="{{ carousel_id | escape }}"{% endcapture %}
+  <section class="smelly-basket__recommendations" aria-labelledby="BasketRecommendations-{{ section_id }}">
+    <h2 id="BasketRecommendations-{{ section_id }}">
+      {{ 'smelly.product.related' | t }}
+      <span class="smelly-basket__heart" aria-hidden="true">{% render 'smelly-illustration', kind: 'heart' %}</span>
+    </h2>
+    {% render 'slideshow',
+      slides: recommendation_slides,
+      slide_count: recommendation_count,
+      class: 'smelly-basket__carousel',
+      attributes: carousel_attributes,
+      show_arrows: true,
+      arrows_position: 'center',
+      icon_style: 'chevron',
+      icon_shape: 'circle',
+      slide_position: 'stretch',
+      animate_arrows: false,
+      auto_hide_controls: true,
+      infinite: false
+    %}
+  </section>
+{% endif %}

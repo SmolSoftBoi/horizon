@@ -378,6 +378,27 @@
     }
   },
   "smelly": {
+    "basket": {
+      "title": "Jūsų krepšelis",
+      "intro": "Keli puikūs aromatai jau laukia jūsų.",
+      "banner_note": "Rūpestingai lietos rankomis.",
+      "summary": "Užsakymo suvestinė",
+      "delivery": "Pristatymas",
+      "delivery_at_checkout": "Apskaičiuojama atsiskaitant",
+      "delivery_remaining": "Išleiskite dar {{ amount }}, kad pristatymas Jungtinėje Karalystėje būtų nemokamas!",
+      "delivery_eligible": "Pasiekėte nemokamo pristatymo Jungtinėje Karalystėje ribą!",
+      "taxes_included": "Mokesčiai įskaičiuoti.",
+      "taxes_at_checkout": "Mokesčiai apskaičiuojami atsiskaitant.",
+      "duties_included": "Muito mokesčiai įskaičiuoti.",
+      "checkout": "Atsiskaityti",
+      "gift_card_at_checkout": "Turite dovanų kortelę? Panaudokite ją atsiskaitydami.",
+      "save": "Išsaugoti vėlesniam laikui",
+      "save_hint": "Pridėkite šias prekes prie norų sąrašo",
+      "saved": "Išsaugota jūsų norų sąraše šiame įrenginyje.",
+      "clear": "Ištuštinti krepšelį",
+      "clear_confirm": "Pašalinti visas prekes iš krepšelio?",
+      "clear_error": "Nepavyko ištuštinti krepšelio. Bandykite dar kartą."
+    },
     "catalogue": {
       "product_view": "Produktų rodinys",
       "grid_view": "Tinklelio rodinys",

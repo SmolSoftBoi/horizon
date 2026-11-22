@@ -364,6 +364,27 @@
     }
   },
   "smelly": {
+    "basket": {
+      "title": "Sepetiniz",
+      "intro": "Birkaç harika koku sizi bekliyor.",
+      "banner_note": "Özenle elde döküldü.",
+      "summary": "Sipariş özeti",
+      "delivery": "Teslimat",
+      "delivery_at_checkout": "Ödeme sırasında hesaplanır",
+      "delivery_remaining": "Birleşik Krallık içi ücretsiz teslimat için {{ amount }} daha harcayın!",
+      "delivery_eligible": "Birleşik Krallık içi ücretsiz teslimat sınırına ulaştınız!",
+      "taxes_included": "Vergiler dahildir.",
+      "taxes_at_checkout": "Vergiler ödeme sırasında hesaplanır.",
+      "duties_included": "Gümrük vergileri dahildir.",
+      "checkout": "Ödeme",
+      "gift_card_at_checkout": "Hediye kartınız mı var? Ödeme sırasında kullanabilirsiniz.",
+      "save": "Sonrası için kaydet",
+      "save_hint": "Bu ürünleri istek listenize ekleyin",
+      "saved": "Bu cihazdaki istek listenize kaydedildi.",
+      "clear": "Sepeti boşalt",
+      "clear_confirm": "Sepetinizdeki tüm ürünler kaldırılsın mı?",
+      "clear_error": "Sepetiniz boşaltılamadı. Lütfen tekrar deneyin."
+    },
     "catalogue": {
       "product_view": "Ürün görünümü",
       "grid_view": "Izgara görünümü",

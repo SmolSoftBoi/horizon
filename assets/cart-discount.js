@@ -17,7 +17,7 @@ import { CartDiscountUpdateEvent, CartErrorEvent } from '@shopify/events';
 /**
  * @extends {Component<CartDiscountComponentRefs>}
  */
-class CartDiscount extends Component {
+export class CartDiscount extends Component {
   requiredRefs = ['cartDiscountError', 'cartDiscountErrorDiscountCode', 'cartDiscountErrorShipping'];
 
   /** @type {AbortController | null} */
@@ -26,6 +26,10 @@ class CartDiscount extends Component {
   #pending = false;
 
   #needsRefresh = false;
+
+  get isUpdating() {
+    return this.#pending;
+  }
 
   /**
    * Keeps discount controls focusable while the pending guard prevents another mutation.

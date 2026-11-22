@@ -364,6 +364,27 @@
     }
   },
   "smelly": {
+    "basket": {
+      "title": "Dein Warenkorb",
+      "intro": "Ein paar richtig gute Düfte warten auf dich.",
+      "banner_note": "Mit Sorgfalt von Hand gegossen.",
+      "summary": "Bestellübersicht",
+      "delivery": "Versand",
+      "delivery_at_checkout": "Wird beim Bezahlen berechnet",
+      "delivery_remaining": "Kaufe für weitere {{ amount }} ein und erhalte kostenlosen Versand im Vereinigten Königreich!",
+      "delivery_eligible": "Du hast den Mindestbestellwert für kostenlosen Versand im Vereinigten Königreich erreicht!",
+      "taxes_included": "Steuern sind enthalten.",
+      "taxes_at_checkout": "Steuern werden beim Bezahlen berechnet.",
+      "duties_included": "Zollgebühren sind enthalten.",
+      "checkout": "Auschecken",
+      "gift_card_at_checkout": "Hast du einen Geschenkgutschein? Löse ihn beim Bezahlen ein.",
+      "save": "Für später speichern",
+      "save_hint": "Diese Produkte auf deine Wunschliste setzen",
+      "saved": "Auf diesem Gerät in deiner Wunschliste gespeichert.",
+      "clear": "Warenkorb leeren",
+      "clear_confirm": "Alle Artikel aus deinem Warenkorb entfernen?",
+      "clear_error": "Der Warenkorb konnte nicht geleert werden. Bitte versuche es erneut."
+    },
     "catalogue": {
       "product_view": "Produktansicht",
       "grid_view": "Rasteransicht",

@@ -371,6 +371,27 @@
     }
   },
   "smelly": {
+    "basket": {
+      "title": "Tu carrito",
+      "intro": "Unos aromas increíbles, listos para ti.",
+      "banner_note": "Vertidas a mano con mimo.",
+      "summary": "Resumen del pedido",
+      "delivery": "Envío",
+      "delivery_at_checkout": "Se calcula al finalizar la compra",
+      "delivery_remaining": "¡Añade {{ amount }} más para obtener envío gratuito en el Reino Unido!",
+      "delivery_eligible": "¡Has alcanzado el mínimo para el envío gratuito en el Reino Unido!",
+      "taxes_included": "Impuestos incluidos.",
+      "taxes_at_checkout": "Los impuestos se calculan al finalizar la compra.",
+      "duties_included": "Aranceles incluidos.",
+      "checkout": "Pagar",
+      "gift_card_at_checkout": "¿Tienes una tarjeta regalo? Canjéala al finalizar la compra.",
+      "save": "Guardar para más adelante",
+      "save_hint": "Añade estos productos a tu lista de deseos",
+      "saved": "Guardados en tu lista de deseos en este dispositivo.",
+      "clear": "Vaciar la cesta",
+      "clear_confirm": "¿Quieres eliminar todos los artículos de tu cesta?",
+      "clear_error": "No hemos podido vaciar tu cesta. Vuelve a intentarlo."
+    },
     "catalogue": {
       "product_view": "Vista de productos",
       "grid_view": "Vista de cuadrícula",
