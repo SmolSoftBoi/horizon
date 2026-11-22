@@ -1,9 +1,17 @@
 {% liquid
   assign range_count = section.blocks.size
+  assign range_id = 'SmellyRanges-' | append: section.id
   assign explore_label = 'smelly.explore_range' | t
   assign image_sizes = '(min-width: 750px) 220px, (min-width: 464px) 180px, calc((100vw - 104px) / 2)'
   if range_count == 1
     assign image_sizes = '(min-width: 750px) 220px, 180px'
+  endif
+  assign compact_layout = false
+  if section.settings.layout == 'compact'
+    assign compact_layout = true
+    assign shop_label = section.settings.shop_label
+    assign shop_url = section.settings.shop_link | default: routes.all_products_collection_url
+    assign image_sizes = '116px'
   endif
   assign image_loading = 'lazy'
   if section.index == 1 or section.index == 2
@@ -12,17 +20,35 @@
 %}
 
 {% if range_count > 0 or request.design_mode %}
-  <div class="smelly-shell smelly-section-space" id="SmellyRanges-{{ section.id }}">
-    {% if section.settings.note != blank or section.settings.heading != blank or section.settings.text != blank %}
-      <div class="smelly-section-heading smelly-section-heading--centred smelly-ranges-heading">
-        {% if section.settings.note != blank %}
-          <p class="smelly-handwritten">{{ section.settings.note | escape }}</p>
+  <div
+    class="smelly-shell smelly-section-space{% if compact_layout %} smelly-ranges--compact{% endif %}"
+    id="{{ range_id }}"
+    {% if template.name == 'page' and range_count > 0 %}
+      data-smelly-about-ranges="{{ range_id }}" tabindex="-1"
+    {% endif %}
+  >
+    {%- capture range_intro -%}
+      {%- if section.settings.note != blank -%}
+        <p class="smelly-handwritten">{{ section.settings.note | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2>{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <p>{{ section.settings.text | escape }}</p>
+      {%- endif -%}
+    {%- endcapture -%}
+    {% if range_intro != blank or shop_label != blank %}
+      <div class="smelly-ranges-heading{% unless compact_layout %} smelly-section-heading smelly-section-heading--centred{% endunless %}">
+        {% if compact_layout and range_intro != blank %}
+          <div>{{ range_intro }}</div>
+        {% else %}
+          {{ range_intro }}
         {% endif %}
-        {% if section.settings.heading != blank %}
-          <h2>{{ section.settings.heading | escape }}</h2>
-        {% endif %}
-        {% if section.settings.text != blank %}
-          <p>{{ section.settings.text | escape }}</p>
+        {% if shop_label != blank %}
+          <a class="smelly-ranges__shop-link" href="{{ shop_url | escape }}">
+            {{ shop_label | escape }} <span aria-hidden="true">→</span>
+          </a>
         {% endif %}
       </div>
     {% endif %}
@@ -42,7 +68,7 @@
           <li class="smelly-range-grid__item" {{ block.shopify_attributes }}>
             <a
               class="smelly-range-card smelly-range-card--{{ block.settings.illustration }}"
-              href="{{ range_url }}"
+              href="{{ range_url | escape }}"
               aria-labelledby="SmellyRangeLink-{{ section.id }}-{{ block.id }} SmellyRangeTitle-{{ section.id }}-{{ block.id }}"
             >
               <div class="smelly-range-card__art" aria-hidden="true">
@@ -63,8 +89,8 @@
                 <p class="smelly-range-card__description">{{ block.settings.text | escape }}</p>
               {% endif %}
               <span class="smelly-range-card__link" id="SmellyRangeLink-{{ section.id }}-{{ block.id }}">
-                <span>{{ explore_label }}</span>
-                <span class="smelly-range-card__arrow" aria-hidden="true">↗</span>
+                <span{% if compact_layout %} class="visually-hidden"{% endif %}>{{ explore_label }}</span>
+                <span class="smelly-range-card__arrow" aria-hidden="true">{% if compact_layout %}→{% else %}↗{% endif %}</span>
               </span>
             </a>
           </li>
@@ -73,6 +99,71 @@
     {% endif %}
   </div>
 {% endif %}
+
+{% stylesheet %}
+  .smelly-ranges-section:has(.smelly-ranges--compact) { background: var(--smelly-cream); }
+  .smelly-ranges--compact.smelly-shell {
+    max-width: 1240px;
+    padding-block: clamp(48px, 6.2vw, 88px);
+  }
+  .smelly-ranges--compact, [data-smelly-about-ranges] {
+    scroll-margin-block-start: calc(max(var(--header-group-height, 0px), 88px) + 20px);
+  }
+  .smelly-ranges--compact .smelly-ranges-heading {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 6px 24px;
+    margin-bottom: 26px;
+  }
+  .smelly-ranges--compact .smelly-ranges-heading h2 {
+    font-size: clamp(38px, 4.2vw, 60px);
+    line-height: 1.03;
+    letter-spacing: -.055em;
+  }
+  .smelly-ranges--compact .smelly-ranges-heading h2 + p,
+  .smelly-ranges--compact .smelly-ranges-heading .smelly-handwritten { margin-block: 6px; }
+  .smelly-ranges--compact .smelly-ranges__shop-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    color: var(--smelly-pink);
+    font-weight: 650;
+    text-decoration: underline;
+    text-underline-offset: .25em;
+    overflow-wrap: anywhere;
+  }
+  .smelly-ranges--compact .smelly-ranges__shop-link:hover { color: #a51240; }
+  .smelly-ranges--compact .smelly-range-grid .smelly-range-card {
+    padding: clamp(14px, 1.75vw, 25px) 10px 14px;
+    border-radius: 50% 50% 12px 12px / 45% 45% 12px 12px;
+  }
+  .smelly-ranges--compact .smelly-range-card__art { height: auto; margin-bottom: 10px; }
+  .smelly-ranges--compact .smelly-range-card__art::before { display: none; }
+  .smelly-ranges--compact .smelly-range-card__illustration { width: min(72%, 116px); height: auto; aspect-ratio: 4 / 3; }
+  .smelly-ranges--compact .smelly-range-card h3 { font-size: clamp(19px, 2.1vw, 30px); }
+  .smelly-ranges--compact .smelly-range-card .smelly-range-card__description {
+    margin-block: 6px 10px;
+    font-size: clamp(12px, 1.25vw, 15px);
+    line-height: 1.35;
+  }
+  .smelly-ranges--compact .smelly-range-card__link {
+    justify-content: center;
+    min-height: 0;
+    padding-block: 0;
+    border: 0;
+  }
+  .smelly-ranges--compact .smelly-range-card__arrow { height: 22px; background: none; }
+  .smelly-ranges--compact .smelly-range-card:hover h3 { text-decoration: underline; text-underline-offset: .15em; }
+
+  @media (max-width: 749px) {
+    .smelly-ranges--compact .smelly-ranges-heading { margin-bottom: 18px; }
+    .smelly-ranges--compact .smelly-range-grid { row-gap: 12px; }
+  }
+{% endstylesheet %}
+
 {% schema %}
 {
   "name": "Smelly A.F. ranges",
@@ -82,7 +173,19 @@
   "settings": [
     { "type": "text", "id": "note", "label": "Handwritten note", "default": "Whatever your mood, there’s an A.F. for that." },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Find your kind of A.F." },
-    { "type": "text", "id": "text", "label": "Text", "default": "A little sweet, a little seasonal, a whole lot of personality." }
+    { "type": "text", "id": "text", "label": "Text", "default": "A little sweet, a little seasonal, a whole lot of personality." },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Card layout",
+      "options": [
+        { "value": "classic", "label": "Classic" },
+        { "value": "compact", "label": "Compact" }
+      ],
+      "default": "classic"
+    },
+    { "type": "text", "id": "shop_label", "label": "Shop link label", "default": "Shop all candles", "visible_if": "{{ section.settings.layout == 'compact' }}" },
+    { "type": "url", "id": "shop_link", "label": "Shop link", "info": "Defaults to the full catalogue.", "visible_if": "{{ section.settings.layout == 'compact' }}" }
   ],
   "max_blocks": 4,
   "blocks": [{ "type": "range", "name": "Scent range", "settings": [

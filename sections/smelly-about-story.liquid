@@ -1,0 +1,193 @@
+{% liquid
+  assign has_copy = false
+  if section.settings.heading != blank or section.settings.text != blank or section.settings.signature != blank
+    assign has_copy = true
+  endif
+  assign image_loading = 'lazy'
+  if section.index == 1
+    assign image_loading = 'eager'
+  endif
+%}
+
+{% if has_copy or section.blocks.size > 0 %}
+  <div class="smelly-about-story">
+    <div class="smelly-about-story__layout smelly-shell">
+      {% if has_copy %}
+        <div class="smelly-about-story__copy">
+          {% if section.settings.heading != blank %}
+            <h2>{{ section.settings.heading | escape | newline_to_br }}</h2>
+          {% endif %}
+          {% if section.settings.text != blank %}
+            <div class="smelly-about-story__text rte">{{ section.settings.text }}</div>
+          {% endif %}
+          {% if section.settings.signature != blank %}
+            <p class="smelly-about-story__signature smelly-handwritten">
+              {% render 'smelly-illustration', kind: 'heart' %}
+              <span>{{ section.settings.signature | escape }}</span>
+            </p>
+          {% endif %}
+        </div>
+      {% endif %}
+      {% if section.blocks.size > 0 %}
+        <div class="smelly-about-story__photos">
+          {% for block in section.blocks %}
+            {% liquid
+              assign fallback_photo = 'smelly-pink-bubblegum.jpg'
+              assign photo_alt = 'smelly.photos.bubblegum' | t
+              if block.settings.default_photo == 'pumpkin'
+                assign fallback_photo = 'smelly-pumpkin-spice.jpg'
+                assign photo_alt = 'smelly.photos.pumpkin' | t
+              endif
+              if block.settings.image != blank
+                assign photo_alt = block.settings.image_alt | default: block.settings.caption | default: shop.name
+              endif
+            %}
+            <figure
+              class="smelly-about-story__photo{% if block.settings.image == blank %} smelly-about-story__photo--{{ block.settings.default_photo }}{% endif %}"
+              {{ block.shopify_attributes }}
+            >
+              {% render 'smelly-photo',
+                image: block.settings.image,
+                fallback: fallback_photo,
+                alt: photo_alt,
+                loading: image_loading,
+                sizes: '(min-width: 750px) 290px, (min-width: 560px) 230px, calc((100vw - 76px) / 2)'
+              %}
+              {% if block.settings.caption != blank %}
+                <figcaption class="smelly-handwritten">{{ block.settings.caption | escape }}</figcaption>
+              {% endif %}
+            </figure>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .smelly-about-story {
+    padding-block: clamp(48px, 6.5vw, 93px);
+    border-block: 1px solid #edc6d3;
+    background: var(--smelly-blush);
+  }
+  .smelly-about-story__layout {
+    display: grid;
+    align-items: center;
+    max-width: 1240px;
+    gap: clamp(24px, 6.4vw, 96px);
+  }
+  .smelly-about-story__copy { overflow-wrap: anywhere; }
+  .smelly-about-story__copy h2 {
+    font-size: clamp(38px, 4.2vw, 60px);
+    line-height: 1.03;
+    letter-spacing: -.055em;
+  }
+  .smelly-about-story__text {
+    max-width: 48ch;
+    margin-top: 18px;
+    font-size: 16px;
+    line-height: 1.65;
+    text-wrap: pretty;
+  }
+  .smelly-about-story__text p + p { margin-top: 16px; }
+  .smelly-about-story__text a { text-decoration: underline; text-underline-offset: .15em; }
+  .smelly-about-story .smelly-about-story__signature {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+    color: #b31348;
+    font-size: 19px;
+  }
+  .smelly-about-story__signature svg { flex: 0 0 38px; width: 38px; height: 28px; stroke-width: 6; }
+  .smelly-about-story__photos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(10px, 1.6vw, 22px);
+    align-items: center;
+    width: min(100%, 610px);
+    padding: 14px 9px;
+  }
+  .smelly-about-story__photos:only-child { justify-self: center; }
+  .smelly-about-story__photo {
+    margin: 0;
+    transform: rotate(-4deg);
+    padding: clamp(5px, 1vw, 10px);
+    border: 1px solid #ebcdd2;
+    border-radius: 5px;
+    background: var(--smelly-cream);
+    box-shadow: 0 7px 16px #632a4220;
+  }
+  .smelly-about-story__photo + .smelly-about-story__photo { margin-top: 27px; transform: rotate(4deg); }
+  .smelly-about-story__photo:only-child { grid-column: 1 / -1; width: min(100%, 330px); justify-self: center; }
+  .smelly-about-story__photo img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1.04;
+    object-fit: cover;
+    border-radius: 2px;
+  }
+  .smelly-about-story__photo--bubblegum img { object-position: center 82%; }
+  .smelly-about-story__photo--pumpkin img { object-position: center 46%; }
+  .smelly-about-story__photo .smelly-handwritten {
+    margin-top: 6px;
+    color: var(--smelly-ink);
+    font-size: clamp(15px, 1.8vw, 19px);
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+
+  @media (min-width: 750px) {
+    .smelly-about-story__layout:has(> :nth-child(2)) {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    }
+    .smelly-about-story__layout:has(> :nth-child(2)) > .smelly-about-story__photos { grid-area: 1 / 1; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Smelly A.F. About story",
+  "tag": "section",
+  "class": "smelly-section",
+  "enabled_on": { "templates": ["page"] },
+  "settings": [
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "Good scents.\nBetter days." },
+    { "type": "richtext", "id": "text", "label": "Story", "default": "<p>Candles should smell brilliant and make you smile. That’s the idea behind Smelly A.F., from the colourful wax to the names on the jars.</p><p>Light Pink Bubblegum for a trip down the sweet aisle, or Pumpkin Spice when it’s time to settle in for a cosy night.</p>" },
+    { "type": "text", "id": "signature", "label": "Handwritten sign-off", "default": "Homes should smell amazing. A.F." }
+  ],
+  "max_blocks": 2,
+  "blocks": [
+    {
+      "type": "photo",
+      "name": "Story photograph",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Photograph" },
+        {
+          "type": "select",
+          "id": "default_photo",
+          "label": "Bundled photograph",
+          "options": [
+            { "value": "bubblegum", "label": "Pink Bubblegum" },
+            { "value": "pumpkin", "label": "Pumpkin Spice" }
+          ],
+          "default": "bubblegum",
+          "visible_if": "{{ block.settings.image == blank }}"
+        },
+        { "type": "text", "id": "image_alt", "label": "Photo description", "info": "Alternative text in Shopify Files takes priority.", "visible_if": "{{ block.settings.image != blank }}" },
+        { "type": "text", "id": "caption", "label": "Photo caption" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Smelly A.F. About story",
+      "blocks": [
+        { "type": "photo", "settings": { "default_photo": "bubblegum", "caption": "Pink Bubblegum" } },
+        { "type": "photo", "settings": { "default_photo": "pumpkin", "caption": "Pumpkin Spice" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

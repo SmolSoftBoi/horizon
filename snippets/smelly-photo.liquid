@@ -17,5 +17,25 @@
 {% if image != blank %}
   {{ image | image_url: width: 1600 | image_tag: widths: '320, 480, 640, 800, 1200, 1600', sizes: image_sizes, loading: image_loading, fetchpriority: image_priority, alt: photo_alt }}
 {% else %}
-  <img src="{{ fallback | asset_url }}" alt="{{ alt | escape }}" width="{% if fallback == 'smelly-pumpkin-spice.jpg' %}1152{% else %}1536{% endif %}" height="{% if fallback == 'smelly-candy-cane.jpg' %}2047{% else %}2048{% endif %}" loading="{{ image_loading }}" fetchpriority="{{ image_priority }}">
+  {% liquid
+    assign fallback_width = 1536
+    assign fallback_height = 2048
+    case fallback
+      when 'smelly-pumpkin-spice.jpg'
+        assign fallback_width = 1152
+      when 'smelly-candy-cane.jpg'
+        assign fallback_height = 2047
+      when 'smelly-collection-hero.webp'
+        assign fallback_width = 2000
+        assign fallback_height = 667
+    endcase
+  %}
+  <img
+    src="{{ fallback | asset_url }}"
+    alt="{{ alt | escape }}"
+    width="{{ fallback_width }}"
+    height="{{ fallback_height }}"
+    loading="{{ image_loading }}"
+    fetchpriority="{{ image_priority }}"
+  >
 {% endif %}
