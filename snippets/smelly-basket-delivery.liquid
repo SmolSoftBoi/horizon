@@ -1,6 +1,6 @@
 {% doc %}
   Shows progress towards the configured UK delivery threshold for physical baskets in GBP.
-  @param {number} [threshold] - Free delivery threshold in pounds, as configured in Shopify shipping settings.
+  @param {number} [threshold] - Shared free delivery threshold in pounds for eligible UK baskets.
 {% enddoc %}
 
 {% if threshold > 0 and localization.country.iso_code == 'GB' and cart.currency.iso_code == 'GBP' %}

@@ -19,7 +19,7 @@
     {% capture product_card %}
       {% render 'smelly-product-card', card_product: recommendation, section_id: section_id, image_sizes: '120px' %}
     {% endcapture %}
-    {%- render 'slideshow-slide', index: recommendation_count, children: product_card -%}
+    {%- render 'slideshow-slide', index: recommendation_count, children: product_card, attributes: 'data-skip-node-update' -%}
     {% assign recommendation_count = recommendation_count | plus: 1 %}
     {% assign carousel_id = carousel_id | append: '-' | append: recommendation.id %}
     {% if recommendation_count == 8 %}{% break %}{% endif %}
@@ -38,6 +38,7 @@
       slide_count: recommendation_count,
       class: 'smelly-basket__carousel',
       attributes: carousel_attributes,
+      preserve_state: true,
       show_arrows: true,
       arrows_position: 'center',
       icon_style: 'chevron',

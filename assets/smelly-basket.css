@@ -142,7 +142,6 @@
 }
 
 .smelly-theme .cart-section .cart-items__media-container {
-  aspect-ratio: 1;
   border-radius: 14px;
   background: var(--smelly-blush);
 }
@@ -490,7 +489,7 @@
     align-items: center;
   }
 
-  .smelly-theme .cart-section .cart-items__media-container { aspect-ratio: 1.52; }
+  .cart-section .cart-items__media-container { --basket-thumbnail-ratio: 1.52; }
 
   .smelly-theme .cart-section .cart-items__price {
     align-items: flex-end;

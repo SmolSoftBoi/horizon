@@ -207,6 +207,8 @@
                         assign ratio = 0.8
                       elsif block_settings.image_ratio == 'adapt'
                         assign ratio = item.image.aspect_ratio
+                      elsif block_settings.image_ratio == 'responsive'
+                        assign ratio = 'var(--basket-thumbnail-ratio, 1)'
                       endif
                       assign image_width = 250
                       if context == 'basket'
