@@ -28,6 +28,7 @@ import {
  * @property {HTMLElement[]} quantitySelectors - The quantity selector elements.
  * @property {HTMLTableRowElement[]} cartItemRows - The cart item rows.
  * @property {TextComponent} cartTotal - The cart total.
+ * @property {HTMLElement} [basketClearStatus] - Inline feedback for clearing the basket.
  *
  * @extends {Component<Refs>}
  */
@@ -52,6 +53,7 @@ export class CartItemsComponent extends createViewEventElement(Component) {
   );
   /** @type {Promise<any> | null} */
   #pendingCartFetch = null;
+  #clearingBasket = false;
 
   /**
    * True when the event was dispatched from outside this cart-items-component (e.g.
@@ -78,8 +80,9 @@ export class CartItemsComponent extends createViewEventElement(Component) {
         ...options,
       });
       this.#updateCartQuantitySelectorButtonStates();
+      return true;
     } catch (error) {
-      if (error?.name === 'AbortError') return;
+      if (error?.name === 'AbortError') return false;
 
       this.dispatchEvent(
         new CartErrorEvent({
@@ -87,6 +90,7 @@ export class CartItemsComponent extends createViewEventElement(Component) {
           code: 'SERVICE_UNAVAILABLE',
         })
       );
+      return false;
     }
   }
 
@@ -217,7 +221,7 @@ export class CartItemsComponent extends createViewEventElement(Component) {
    * @param {QuantitySelectorUpdateEvent} event - The event.
    */
   #onQuantityChange(event) {
-    if (!(event.target instanceof Node) || !this.contains(event.target)) return;
+    if (this.#clearingBasket || !(event.target instanceof Node) || !this.contains(event.target)) return;
 
     const { quantity, cartLine: line } = event.detail;
 
@@ -246,6 +250,7 @@ export class CartItemsComponent extends createViewEventElement(Component) {
    * @param {number} line - The line item index.
    */
   onLineItemRemove(line) {
+    if (this.#clearingBasket) return;
     this.updateQuantity({
       line,
       quantity: 0,
@@ -291,10 +296,44 @@ export class CartItemsComponent extends createViewEventElement(Component) {
     });
   }
 
+  /** @param {Event} event */
+  async clearBasket(event) {
+    const button = event.target;
+    if (!(button instanceof HTMLButtonElement) || this.#clearingBasket) return;
+    const discount = /** @type {import('./cart-discount').CartDiscount | null} */ (
+      this.querySelector('cart-discount-component')
+    );
+    if (CartItemsComponent.#pendingQuantityUpdates.size || discount?.isUpdating) return;
+
+    // Removing a parent line also removes its nested lines. Target the current keys so new lines are preserved.
+    const rows = this.refs.cartItemRows?.filter((row) => !row.dataset.parentKey) ?? [];
+    if (!rows.length || rows.some((row) => !row.dataset.key || !row.querySelector('.cart-items__remove:not([hidden])'))) return;
+    if (!window.confirm(button.dataset.confirm ?? '')) return;
+
+    this.#clearingBasket = true;
+    this.inert = true;
+    let success;
+    try {
+      const removeKeys = rows.map((row) => row.dataset.key ?? '');
+      success = await this.updateQuantity({ removeKeys, quantity: 0, action: 'clear' });
+    } finally {
+      this.#clearingBasket = false;
+      this.inert = false;
+    }
+
+    if (!success) {
+      const status = this.refs.basketClearStatus;
+      if (status) status.textContent = button.dataset.error ?? '';
+    }
+    const focusTarget = this.querySelector('.cart-items__empty-button, .smelly-basket__clear');
+    if (focusTarget instanceof HTMLElement) focusTarget.focus();
+  }
+
   /**
    * Updates the quantity.
    * @param {Object} config - The config.
-   * @param {number} config.line - The line.
+   * @param {number} [config.line] - The line index for single-line changes.
+   * @param {string[]} [config.removeKeys] - Parent line keys for a bulk removal.
    * @param {number} config.quantity - The quantity.
    * @param {string} config.action - The action.
    */
@@ -311,7 +350,7 @@ export class CartItemsComponent extends createViewEventElement(Component) {
     try {
       this.#disableCartItems();
 
-      const { line, quantity } = config;
+      const { line, quantity, removeKeys } = config;
       const { cartTotal } = this.refs;
 
       const cartItemsComponents = document.querySelectorAll('cart-items-component');
@@ -326,35 +365,43 @@ export class CartItemsComponent extends createViewEventElement(Component) {
         sectionRenderer.abortRender(sectionId);
       }
 
+      const change = removeKeys
+        ? { updates: Object.fromEntries(removeKeys.map((key) => [key, 0])) }
+        : { line, quantity };
       const body = JSON.stringify({
-        line: line,
-        quantity: quantity,
+        ...change,
         sections: Array.from(sectionsToUpdate).join(','),
         sections_url: window.location.pathname,
       });
 
       cartTotal?.shimmer();
 
-      const lineId = this.refs.cartItemRows[line - 1]?.dataset.key ?? '';
+      const lineId = line ? this.refs.cartItemRows[line - 1]?.dataset.key ?? '' : '';
+      const lines = removeKeys ? removeKeys.map((id) => ({ id, quantity: 0 })) : [{ id: lineId, quantity }];
       this.dispatchEvent(
         new CartLinesUpdateEvent({
           action: config.action === 'change' && quantity > 0 ? 'update' : 'remove',
           context: 'cart',
-          lines: [{ id: lineId, quantity }],
+          lines,
           promise: deferredUpdatePromise.promise,
         })
       );
 
-      const response = await fetch(`${Theme.routes.cart_change_url}`, fetchConfig('json', { body }));
+      const url = removeKeys ? Theme.routes.cart_update_url : Theme.routes.cart_change_url;
+      const response = await fetch(url, fetchConfig('json', { body }));
       const responseText = await response.text();
       const parsedResponseText = JSON.parse(responseText);
 
       resetShimmer(this);
 
-      if (parsedResponseText.errors) {
+      if (removeKeys && (!response.ok || parsedResponseText.errors)) {
+        throw new Error('Failed to clear basket');
+      }
+
+      if (line && parsedResponseText.errors) {
         this.#handleCartError(line, parsedResponseText);
         deferredUpdatePromise.reject(new Error(parsedResponseText.errors));
-        return;
+        return false;
       }
 
       const sections = /** @type {Record<string, string> | null | undefined} */ (parsedResponseText.sections);
@@ -377,8 +424,7 @@ export class CartItemsComponent extends createViewEventElement(Component) {
           },
         });
 
-        await this.#refreshCartSection();
-        return;
+        return await this.#refreshCartSection();
       }
 
       const newSectionHTML = new DOMParser().parseFromString(sectionHTML, 'text/html');
@@ -404,6 +450,7 @@ export class CartItemsComponent extends createViewEventElement(Component) {
       });
 
       this.#updateCartQuantitySelectorButtonStates();
+      return true;
     } catch (error) {
       console.error(error);
       deferredUpdatePromise.reject(error);
@@ -414,6 +461,7 @@ export class CartItemsComponent extends createViewEventElement(Component) {
           code: 'SERVICE_UNAVAILABLE',
         })
       );
+      return false;
     } finally {
       try {
         this.#enableCartItems();

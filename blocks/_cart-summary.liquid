@@ -1,6 +1,10 @@
 {% assign block_settings = block.settings %}
 {% liquid
   assign custom_color = false
+  assign extend_summary = block_settings.extend_summary
+  if settings.smelly_branding
+    assign extend_summary = false
+  endif
   if block_settings.background_color != blank or block_settings.text_color != blank
     assign custom_color = true
     render 'contrast-override', background_color: block_settings.background_color, text_color: block_settings.text_color, section_id: block.id
@@ -9,11 +13,11 @@
 
 {%- capture cart_summary_inner_class -%}
   cart-summary__inner
-  {% if block_settings.extend_summary == false and custom_color %} color-custom-{{ block.id }} inherit-parent-scheme--mobile{% endif %}
-  {% if block_settings.extend_summary == false and block_settings.border_radius > 0 %} has-border-radius{% endif %}
+  {% if extend_summary == false and custom_color %} color-custom-{{ block.id }} inherit-parent-scheme--mobile{% endif %}
+  {% if extend_summary == false and block_settings.border_radius > 0 %} has-border-radius{% endif %}
 {%- endcapture -%}
 
-{% if block_settings.extend_summary %}
+{% if extend_summary %}
   <div
     class="section-background{% if custom_color %} color-custom-{{ block.id }} inherit-parent-scheme--mobile{% endif %}"
   ></div>
@@ -21,7 +25,7 @@
 <div
   class="
     cart-summary border-style
-    {% if block_settings.extend_summary == true %}
+    {% if extend_summary == true %}
       cart-summary--extend
       {% if custom_color %} color-custom-{{ block.id }} inherit-parent-scheme--mobile{% endif %}
     {% endif %}
@@ -31,7 +35,11 @@
   {{ block.shopify_attributes }}
 >
   <div class="{{ cart_summary_inner_class }}">
-    {% render 'cart-summary', accelerated_checkout_buttons_layout: 'vertical', section_id: section.id %}
+    {% if settings.smelly_branding %}
+      {% render 'cart-summary', section_id: section.id, basket_settings: section.settings %}
+    {% else %}
+      {% render 'cart-summary', accelerated_checkout_buttons_layout: 'vertical', section_id: section.id %}
+    {% endif %}
   </div>
 </div>
 

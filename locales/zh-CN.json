@@ -327,6 +327,7 @@
       "added_to_cart": "添加到购物车",
       "adding_to_cart": "正在添加...",
       "add_to_cart_error": "添加到购物车时出错",
+      "variant_load_error": "无法加载此选项。请选择其他选项，或刷新页面后重试。",
       "sold_out": "售罄",
       "unavailable": "不可售",
       "quantity_error_max": "此商品上限为 {{ maximum }}",
@@ -363,6 +364,27 @@
     }
   },
   "smelly": {
+    "basket": {
+      "title": "您的购物车",
+      "intro": "几款好闻的香氛已经为你准备好了。",
+      "banner_note": "用心手工浇注。",
+      "summary": "订单摘要",
+      "delivery": "配送",
+      "delivery_at_checkout": "结账时计算",
+      "delivery_remaining": "再购买 {{ amount }} 即可享受英国境内免费配送！",
+      "delivery_eligible": "你已达到英国境内免费配送门槛！",
+      "taxes_included": "已含税。",
+      "taxes_at_checkout": "税费在结账时计算。",
+      "duties_included": "已含关税。",
+      "checkout": "结账",
+      "gift_card_at_checkout": "有礼品卡？可在结账时使用。",
+      "save": "保存以便稍后查看",
+      "save_hint": "将这些商品添加到心愿单",
+      "saved": "已保存到本设备上的心愿单。",
+      "clear": "清空购物车",
+      "clear_confirm": "要移除购物车中的所有商品吗？",
+      "clear_error": "无法清空购物车。请重试。"
+    },
     "catalogue": {
       "product_view": "商品视图",
       "grid_view": "网格视图",

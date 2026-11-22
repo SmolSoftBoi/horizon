@@ -327,6 +327,7 @@
       "added_to_cart": "Lisätty ostoskoriin",
       "adding_to_cart": "Lisätään...",
       "add_to_cart_error": "Ostoskoriin lisättäessä tapahtui virhe",
+      "variant_load_error": "Tätä vaihtoehtoa ei voitu ladata. Valitse toinen vaihtoehto tai päivitä sivu ja yritä uudelleen.",
       "sold_out": "Loppuunmyyty",
       "unavailable": "Ei käytettävissä",
       "quantity_error_max": "Tämän tuotteen enimmäismäärä on {{ maximum }}",
@@ -363,6 +364,27 @@
     }
   },
   "smelly": {
+    "basket": {
+      "title": "Ostoskorisi",
+      "intro": "Muutama todella hyvä tuoksu on valmiina sinulle.",
+      "banner_note": "Käsin valettu huolella.",
+      "summary": "Tilauksen yhteenveto",
+      "delivery": "Toimitus",
+      "delivery_at_checkout": "Lasketaan kassalla",
+      "delivery_remaining": "Osta vielä {{ amount }}:lla, niin saat ilmaisen toimituksen Isossa-Britanniassa!",
+      "delivery_eligible": "Saavutit ilmaisen toimituksen rajan Isossa-Britanniassa!",
+      "taxes_included": "Verot sisältyvät hintaan.",
+      "taxes_at_checkout": "Verot lasketaan kassalla.",
+      "duties_included": "Tullimaksut sisältyvät hintaan.",
+      "checkout": "Maksa kassalla",
+      "gift_card_at_checkout": "Onko sinulla lahjakortti? Käytä se kassalla.",
+      "save": "Tallenna myöhemmäksi",
+      "save_hint": "Lisää nämä tuotteet toivelistallesi",
+      "saved": "Tallennettu toivelistallesi tällä laitteella.",
+      "clear": "Tyhjennä ostoskori",
+      "clear_confirm": "Poistetaanko kaikki tuotteet ostoskoristasi?",
+      "clear_error": "Ostoskorin tyhjentäminen ei onnistunut. Yritä uudelleen."
+    },
     "catalogue": {
       "product_view": "Tuotenäkymä",
       "grid_view": "Ruudukkonäkymä",

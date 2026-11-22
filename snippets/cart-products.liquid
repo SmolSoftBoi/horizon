@@ -5,7 +5,9 @@
 
   @param {boolean} [force_empty] - Force render empty cart state
   @param {block} [block] - The block object providing settings and editor attributes.
-  @param {string} [context] - Render context — pass `'drawer'` when rendered inside the cart drawer to enable drawer-specific styles.
+  @param {string} [context] - Render context, either `'drawer'` or `'basket'`.
+  @param {string} [section_id] - Basket section identifier for the wishlist dialog.
+  @param {boolean} [show_wishlist] - Show basket wishlist controls.
 
   @example
   {% render 'cart-products', force_empty: true %}
@@ -16,6 +18,7 @@
 
 {% liquid
   assign block_settings = block.settings
+  assign can_clear_basket = true
 %}
 
 {%- if block_settings.input_style == 'custom' -%}
@@ -58,6 +61,14 @@
   "
 >
   {% if cart.empty? or force_empty %}
+    {%- if context == 'basket' -%}
+      <h2 class="smelly-basket__empty-title">{{ 'content.your_cart_is_empty' | t }}</h2>
+      {% if show_wishlist %}
+        <button type="button" class="button-unstyled smelly-wishlist__open" aria-haspopup="dialog" aria-controls="SmellyWishlist-{{ section_id }}" data-wishlist-open>
+          {{ 'smelly.product.wishlist_view' | t }}
+        </button>
+      {% endif %}
+    {%- endif -%}
     {%- if shop.customer_accounts_enabled and customer == null -%}
       <p>
         {{ 'actions.log_in_html' | t: link: routes.account_login_url }}
@@ -140,11 +151,30 @@
               >
                 {{ 'content.product_total' | t }}
               </th>
+              {% if context == 'basket' %}
+                <th id="removeProduct" scope="col" role="columnheader">{{ 'accessibility.remove' | t }}</th>
+              {% endif %}
             </tr>
           </thead>
 
           <tbody role="rowgroup">
             {% for item in cart.items %}
+              {% assign can_remove = item.instructions.can_remove | default: true, allow_false: true %}
+              {% if can_remove == false and item.parent_relationship.parent == null %}
+                {% assign can_clear_basket = false %}
+              {% endif %}
+              {% capture remove_item_button %}
+                <button
+                  class="button cart-items__remove"
+                  type="button"
+                  aria-label="{{ 'accessibility.remove_item' | t: title: item.title | escape }}"
+                  on:click="/onLineItemRemove/{{ item.index | plus: 1 }}"
+                  {% if can_remove == false %}hidden{% endif %}
+                >
+                  {{- 'icon-delete.svg' | inline_asset_content -}}
+                  <span class="visually-hidden">{{ 'accessibility.remove' | t }}</span>
+                </button>
+              {% endcapture %}
               <tr
                 id="CartItem-{{ item.key }}"
                 role="row"
@@ -152,6 +182,12 @@
                 ref="cartItemRows[]"
                 data-parent-key="{{ item.parent_relationship.parent.key }}"
                 data-key="{{ item.key }}"
+                {% if context == 'basket' and show_wishlist %}
+                  data-wishlist-product
+                  data-product-id="{{ item.product.id }}"
+                  data-product-title="{{ item.product.title | escape }}"
+                  data-product-url="{{ item.product.url | escape }}"
+                {% endif %}
               >
                 <td
                   class="cart-items__media"
@@ -171,6 +207,12 @@
                         assign ratio = 0.8
                       elsif block_settings.image_ratio == 'adapt'
                         assign ratio = item.image.aspect_ratio
+                      elsif block_settings.image_ratio == 'responsive'
+                        assign ratio = 'var(--basket-thumbnail-ratio, 1)'
+                      endif
+                      assign image_width = 250
+                      if context == 'basket'
+                        assign image_width = 360
                       endif
                     %}
                     <a
@@ -179,7 +221,7 @@
                       style="--ratio:{{ ratio }};"
                     >
                       {%- liquid
-                        echo item.image | image_url: width: 250 | image_tag: class: 'cart-items__media-image border-style', style: border_override
+                        echo item.image | image_url: width: image_width | image_tag: class: 'cart-items__media-image border-style', style: border_override
                       -%}
                     </a>
                   {%- endif %}
@@ -212,6 +254,28 @@
                         mode: 'trigger'
                       -%}
                     </div>
+                    {%- if context == 'basket' -%}
+                      {%- liquid
+                        assign net_weight = item.product.metafields.custom.net_weight.value
+                        assign rating = item.product.metafields.reviews.rating.value
+                        assign review_count = item.product.metafields.reviews.rating_count.value | plus: 0
+                      -%}
+                      {%- if item.product.type != blank or net_weight != blank -%}
+                        <p class="smelly-basket__product-detail">
+                          {{- item.product.type | escape -}}
+                          {% if item.product.type != blank and net_weight != blank %} · {% endif %}
+                          {{- net_weight | escape -}}
+                        </p>
+                      {%- endif -%}
+                      {%- if review_count > 0 and rating.rating > 0 and rating.scale_max > 0 -%}
+                        {%- assign rating_fill = rating.rating | times: 100.0 | divided_by: rating.scale_max | at_most: 100 -%}
+                        <p class="smelly-basket__rating">
+                          <span class="smelly-basket__stars" style="--rating-fill: {{ rating_fill }}%;" aria-hidden="true">★★★★★<span>★★★★★</span></span>
+                          <span class="visually-hidden">{{ 'smelly.product.rating' | t: rating: rating.rating, scale: rating.scale_max }}. {{ 'smelly.product.review_count' | t: count: review_count }}</span>
+                          <span aria-hidden="true">({{ review_count }})</span>
+                        </p>
+                      {%- endif -%}
+                    {%- endif -%}
                     {% if item.product.vendor and block_settings.vendor %}
                       <p>
                         <bdi>{{ item.product.vendor }}</bdi>
@@ -361,19 +425,7 @@
                       can_update_quantity: can_update_quantity
                     %}
 
-                    <button
-                      class="button cart-items__remove"
-                      type="button"
-                      aria-label="{{ 'accessibility.remove_item' | t: title: item.title | escape }}"
-                      on:click="/onLineItemRemove/{{ item.index | plus: 1 }}"
-                      {% assign can_remove = item.instructions.can_remove | default: true, allow_false: true %}
-                      {% if can_remove == false %}
-                        hidden
-                      {% endif %}
-                    >
-                      {{- 'icon-delete.svg' | inline_asset_content -}}
-                      <span class="visually-hidden">{{ 'accessibility.remove' | t }}</span>
-                    </button>
+                    {% unless context == 'basket' %}{{ remove_item_button }}{% endunless %}
                   </div>
                 </td>
                 <td
@@ -418,6 +470,9 @@
                     </div>
                   {%- endif -%}
                 </td>
+                {% if context == 'basket' %}
+                  <td class="smelly-basket__remove" role="cell" headers="removeProduct">{{ remove_item_button }}</td>
+                {% endif %}
               </tr>
             {% endfor %}
           </tbody>
@@ -437,6 +492,33 @@
         {% endfor %}
       </div>
     </form>
+    {% if context == 'basket' %}
+      <div class="smelly-basket__actions">
+        {% if show_wishlist %}
+          <button type="button" class="button-unstyled smelly-basket__save" data-wishlist-save-products aria-haspopup="dialog" aria-controls="SmellyWishlist-{{ section_id }}">
+            {% render 'smelly-illustration', kind: 'heart' %}
+            <span>
+              <strong>{{ 'smelly.basket.save' | t }}</strong>
+              <small>{{ 'smelly.basket.save_hint' | t }}</small>
+            </span>
+          </button>
+        {% endif %}
+        {% if can_clear_basket %}
+          <button
+            type="button"
+            class="button-unstyled smelly-basket__clear"
+            data-confirm="{{ 'smelly.basket.clear_confirm' | t | escape }}"
+            data-error="{{ 'smelly.basket.clear_error' | t | escape }}"
+            on:click="/clearBasket"
+          >
+            <span class="svg-wrapper" aria-hidden="true">{{ 'icon-delete.svg' | inline_asset_content }}</span>
+            {{ 'smelly.basket.clear' | t }}
+          </button>
+        {% endif %}
+        <p class="smelly-basket__action-status" role="status" ref="basketClearStatus"></p>
+        {% if show_wishlist %}<p class="smelly-basket__action-status" role="status" data-wishlist-purchase-status></p>{% endif %}
+      </div>
+    {% endif %}
   {%- endif -%}
 </div>
 

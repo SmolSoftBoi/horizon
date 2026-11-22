@@ -23,6 +23,7 @@
   @param {string} [icon_shape] - The shape of the icon background (none, circle, square), defaults to 'none'
   @param {string} [arrows_position] - The position of the arrows, defaults to 'bottom'
   @param {string} [attributes] - Additional attributes to add to the slideshow component
+  @param {boolean} [preserve_state] - Keep live carousel, scrollbar and built-in arrow state when morphing a keyed slideshow.
   @param {boolean} [header] - The title of the slideshow
 
   @example
@@ -96,6 +97,9 @@
   {% unless infinite == false %}
     infinite
   {% endunless %}
+  {% if preserve_state %}
+    data-skip-node-update
+  {% endif %}
 
   {{ attributes }}
 >
@@ -109,7 +113,7 @@
     {% endif %}
   >
     {% if show_arrows %}
-      {% render 'slideshow-arrows', icon_style: icon_style, icon_shape: icon_shape, arrows_position: arrows_position %}
+      {% render 'slideshow-arrows', icon_style: icon_style, icon_shape: icon_shape, arrows_position: arrows_position, preserve_state: preserve_state %}
     {% endif %}
     {% if slideshow_arrows %}
       {{ slideshow_arrows }}
@@ -117,6 +121,9 @@
     <slideshow-slides
       tabindex="-1"
       ref="scroller"
+      {% if preserve_state %}
+        data-skip-node-update
+      {% endif %}
       {% if slideshow_gutters %}
         gutters="{{ slideshow_gutters }}"
       {% endif %}

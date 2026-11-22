@@ -327,6 +327,7 @@
       "added_to_cart": "Lagt i indkøbskurv",
       "adding_to_cart": "Tilføjer...",
       "add_to_cart_error": "Der opstod en fejl, da du lagde varen i indkøbskurven",
+      "variant_load_error": "Denne valgmulighed kunne ikke indlæses. Vælg en anden mulighed, eller genindlæs siden for at prøve igen.",
       "sold_out": "Udsolgt",
       "unavailable": "Ikke tilgængelig",
       "quantity_error_max": "Denne vare har en maksimumgrænse på {{ maximum }}",
@@ -363,6 +364,27 @@
     }
   },
   "smelly": {
+    "basket": {
+      "title": "Din indkøbskurv",
+      "intro": "Et par virkelig gode dufte, klar til dig.",
+      "banner_note": "Håndstøbt med omhu.",
+      "summary": "Ordreoversigt",
+      "delivery": "Levering",
+      "delivery_at_checkout": "Beregnes ved betaling",
+      "delivery_remaining": "Køb for {{ amount }} mere for at få gratis levering i Storbritannien!",
+      "delivery_eligible": "Du har nået grænsen for gratis levering i Storbritannien!",
+      "taxes_included": "Skatter er inkluderet.",
+      "taxes_at_checkout": "Skatter beregnes ved betaling.",
+      "duties_included": "Told er inkluderet.",
+      "checkout": "Gå til betaling",
+      "gift_card_at_checkout": "Har du et gavekort? Indløs det ved betaling.",
+      "save": "Gem til senere",
+      "save_hint": "Tilføj disse produkter til din ønskeliste",
+      "saved": "Gemt på din ønskeliste på denne enhed.",
+      "clear": "Tøm kurven",
+      "clear_confirm": "Vil du fjerne alle varer fra kurven?",
+      "clear_error": "Vi kunne ikke tømme kurven. Prøv igen."
+    },
     "catalogue": {
       "product_view": "Produktvisning",
       "grid_view": "Gittervisning",

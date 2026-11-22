@@ -19,9 +19,12 @@
     data-remove-item="{{ 'accessibility.remove_item' | t: title: '[product]' | escape }}"
     data-error="{{ 'smelly.product.wishlist_error' | t | escape }}"
     data-unavailable="{{ 'smelly.product.wishlist_unavailable' | t | escape }}"
+    {% if request.page_type == 'cart' %}
+      data-basket-saved="{{ 'smelly.basket.saved' | t | escape }}"
+    {% endif %}
   >
     <p class="visually-hidden" role="status" data-wishlist-status></p>
-    <dialog id="SmellyWishlist-{{ section_id }}" aria-labelledby="SmellyWishlistTitle-{{ section_id }}" class="smelly-wishlist__dialog">
+    <dialog id="SmellyWishlist-{{ section_id }}" aria-labelledby="SmellyWishlistTitle-{{ section_id }}" class="smelly-wishlist__dialog" data-skip-subtree-update>
       <div class="smelly-wishlist__heading">
         <h2 id="SmellyWishlistTitle-{{ section_id }}">{{ 'smelly.product.wishlist' | t }}</h2>
         <form method="dialog">
@@ -72,7 +75,7 @@
     static storagePrefix = 'smelly-af:wishlist:';
 
     connectedCallback() {
-      this.container = this.closest('.smelly-product, .smelly-catalogue');
+      this.container = this.closest('.smelly-product, .smelly-catalogue, .cart-section');
       if (!this.container) return;
 
       this.dialog = this.querySelector('dialog');
@@ -184,6 +187,11 @@
         return;
       }
 
+      if (button.hasAttribute('data-wishlist-save-products')) {
+        this.saveBasketProducts();
+        return;
+      }
+
       const toggling = button.hasAttribute('data-wishlist-toggle');
       const id = toggling ? button.dataset.productId : button.dataset.wishlistRemove;
       if (!id) return;
@@ -207,6 +215,23 @@
         this.reportError();
       }
     };
+
+    saveBasketProducts() {
+      try {
+        for (const row of this.container.querySelectorAll('[data-wishlist-product]')) {
+          const { productId: id, productTitle: title, productUrl: url } = row.dataset;
+          if (id && url) {
+            localStorage.setItem(SmellyProductWishlist.storagePrefix + id, JSON.stringify({ id, title, url }));
+          }
+        }
+
+        this.dialog.showModal();
+        window.dispatchEvent(new Event('smelly:wishlist-change'));
+        this.reportError(this.dataset.basketSaved);
+      } catch {
+        this.reportError();
+      }
+    }
 
     reportError(message = this.dataset.error) {
       const status = this.dialog?.open

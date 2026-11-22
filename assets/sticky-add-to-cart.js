@@ -69,6 +69,9 @@ class StickyAddToCartComponent extends Component {
   /** @type {boolean} */
   #hiddenByBottom = false;
 
+  /** @type {ProductSelectEvent['promise'] | undefined} */
+  #pendingVariantChange;
+
   connectedCallback() {
     super.connectedCallback();
 
@@ -174,7 +177,7 @@ class StickyAddToCartComponent extends Component {
    * Handles the add to cart button click in the sticky bar
    */
   handleAddToCartClick = async () => {
-    if (!this.#targetAddToCartButton) return;
+    if (!this.#targetAddToCartButton || this.#targetAddToCartButton.disabled) return;
     this.#targetAddToCartButton.dataset.puppet = 'true';
     this.#targetAddToCartButton.click();
     const cartIcon = document.querySelector('.header-actions__cart-icon');
@@ -208,7 +211,10 @@ class StickyAddToCartComponent extends Component {
    * @param {ProductSelectEvent} event - The product select event
    */
   #handleProductSelect = (event) => {
-    if (!(event.target instanceof Element) || event.target.closest('product-card')) return;
+    if (!(event.target instanceof HTMLElement) || event.target.closest('product-card')) return;
+    const sourceProductId = event.target.dataset.productId;
+    if (sourceProductId && sourceProductId !== this.dataset.productId) return;
+    this.#pendingVariantChange = event.promise;
 
     // Update variant ID from the event detail (variant:selected part)
     const { optionValueId } = event.detail ?? {};
@@ -219,7 +225,7 @@ class StickyAddToCartComponent extends Component {
     // Wait for the promise to resolve with variant update data
     event.promise
       .then(({ detail }) => {
-        if (!detail?.html) return;
+        if (this.#pendingVariantChange !== event.promise || !detail?.html) return;
 
         const { html, productId, resource: variant } = detail;
 
@@ -261,7 +267,11 @@ class StickyAddToCartComponent extends Component {
         this.#updateButtonText();
       })
       .catch((error) => {
-        if (error?.name !== 'AbortError') console.warn('[sticky-add-to-cart] Event promise rejected:', error);
+        if (this.#pendingVariantChange !== event.promise || error?.name === 'AbortError' || !this.isConnected) return;
+        this.dataset.variantAvailable = 'false';
+        this.refs.addToCartButton.disabled = true;
+        this.#handleVariantUnavailable();
+        this.#updateButtonText();
       });
   };
 

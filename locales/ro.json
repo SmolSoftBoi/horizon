@@ -357,6 +357,7 @@
       "adding_to_cart": "Se adaugă...",
       "added_to_cart": "Adăugat în coș",
       "add_to_cart_error": "Eroare la adăugarea în coș",
+      "variant_load_error": "Această opțiune nu s-a putut încărca. Alege altă opțiune sau reîncarcă pagina pentru a încerca din nou.",
       "quantity_error_max": "Acest articol are maxim {{ maximum }}",
       "sold_out": "Stoc epuizat",
       "unavailable": "Indisponibil",
@@ -370,6 +371,27 @@
     }
   },
   "smelly": {
+    "basket": {
+      "title": "Coșul tău",
+      "intro": "Câteva arome grozave te așteaptă.",
+      "banner_note": "Turnate manual cu grijă.",
+      "summary": "Rezumatul comenzii",
+      "delivery": "Livrare",
+      "delivery_at_checkout": "Calculată la finalizarea comenzii",
+      "delivery_remaining": "Mai adaugă produse de {{ amount }} pentru livrare gratuită în Regatul Unit!",
+      "delivery_eligible": "Ai atins pragul pentru livrare gratuită în Regatul Unit!",
+      "taxes_included": "Taxele sunt incluse.",
+      "taxes_at_checkout": "Taxele se calculează la finalizarea comenzii.",
+      "duties_included": "Taxele vamale sunt incluse.",
+      "checkout": "Finalizează comanda",
+      "gift_card_at_checkout": "Ai un card cadou? Folosește-l la finalizarea comenzii.",
+      "save": "Salvează pentru mai târziu",
+      "save_hint": "Adaugă aceste produse la lista ta de dorințe",
+      "saved": "Salvate în lista ta de dorințe pe acest dispozitiv.",
+      "clear": "Golește coșul",
+      "clear_confirm": "Elimini toate produsele din coș?",
+      "clear_error": "Nu am putut goli coșul. Încearcă din nou."
+    },
     "catalogue": {
       "product_view": "Afișarea produselor",
       "grid_view": "Vizualizare grilă",

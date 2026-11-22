@@ -1,0 +1,30 @@
+{% doc %}
+  Shows progress towards the configured UK delivery threshold for physical baskets in GBP.
+  @param {number} [threshold] - Shared free delivery threshold in pounds for eligible UK baskets.
+{% enddoc %}
+
+{% if threshold > 0 and localization.country.iso_code == 'GB' and cart.currency.iso_code == 'GBP' %}
+  {% assign digital_lines = cart.items | where: 'requires_shipping', false %}
+  {% if digital_lines.size == 0 %}
+    {%- liquid
+      assign target = threshold | times: 100 | round
+      assign progress = cart.total_price | at_most: target
+      assign remaining = target | minus: progress | money
+    -%}
+    {% if target > 0 %}
+      <div class="smelly-basket__delivery-progress">
+        <span class="svg-wrapper" aria-hidden="true">{{ 'icon-cart.svg' | inline_asset_content }}</span>
+        <div>
+          <p id="SmellyBasketDeliveryProgress">
+            {% if progress < target %}
+              {{ 'smelly.basket.delivery_remaining' | t: amount: remaining }}
+            {% else %}
+              {{ 'smelly.basket.delivery_eligible' | t }}
+            {% endif %}
+          </p>
+          <progress value="{{ progress }}" max="{{ target }}" aria-labelledby="SmellyBasketDeliveryProgress"></progress>
+        </div>
+      </div>
+    {% endif %}
+  {% endif %}
+{% endif %}

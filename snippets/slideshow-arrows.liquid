@@ -7,6 +7,7 @@
   @param {string} [icon_style] - The style of the icon, defaults to 'arrow'
   @param {string} [icon_shape] - The shape of the icon background (none, circle, square), defaults to 'none'
   @param {string} [arrows_position] - { 'left' | 'center' | 'right' } The position of the arrows, defaults to 'center'
+  @param {boolean} [preserve_state] - Keep the live arrow buttons during a section morph.
 
   @example
   {%- render 'slideshow-arrows' -%}
@@ -20,6 +21,9 @@
 
 <slideshow-arrows
   position="{{ arrows_position }}"
+  {% if preserve_state %}
+    data-skip-subtree-update
+  {% endif %}
   {% if class %}
     class="{{ class }}"
   {% endif %}

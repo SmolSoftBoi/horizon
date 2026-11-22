@@ -339,6 +339,7 @@
       "added_to_cart": "Dodano v košarico",
       "adding_to_cart": "Dodajanje ...",
       "add_to_cart_error": "Pri dodajanju v košarico je prišlo do napake",
+      "variant_load_error": "Te možnosti ni bilo mogoče naložiti. Izberite drugo možnost ali osvežite stran in poskusite znova.",
       "sold_out": "Razprodano",
       "unavailable": "Ni na voljo",
       "quantity_error_max": "Ta artikel ima največ {{ maximum }}",
@@ -377,6 +378,27 @@
     }
   },
   "smelly": {
+    "basket": {
+      "title": "Vaša košarica",
+      "intro": "Nekaj res odličnih dišav vas že čaka.",
+      "banner_note": "Ročno vlito s skrbjo.",
+      "summary": "Povzetek naročila",
+      "delivery": "Dostava",
+      "delivery_at_checkout": "Izračuna se ob zaključku nakupa",
+      "delivery_remaining": "Dodajte izdelke v vrednosti {{ amount }} za brezplačno dostavo v Združenem kraljestvu!",
+      "delivery_eligible": "Dosegli ste prag za brezplačno dostavo v Združenem kraljestvu!",
+      "taxes_included": "Davki so vključeni.",
+      "taxes_at_checkout": "Davki se izračunajo ob zaključku nakupa.",
+      "duties_included": "Carine so vključene.",
+      "checkout": "Zaključi nakup",
+      "gift_card_at_checkout": "Imate darilno kartico? Uporabite jo ob zaključku nakupa.",
+      "save": "Shrani za pozneje",
+      "save_hint": "Dodajte te izdelke na seznam želja",
+      "saved": "Shranjeno na seznam želja v tej napravi.",
+      "clear": "Izprazni košarico",
+      "clear_confirm": "Odstranite vse izdelke iz košarice?",
+      "clear_error": "Košarice ni bilo mogoče izprazniti. Poskusite znova."
+    },
     "catalogue": {
       "product_view": "Prikaz izdelkov",
       "grid_view": "Mrežni prikaz",

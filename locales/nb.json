@@ -350,6 +350,7 @@
       "adding_to_cart": "Legger til ...",
       "added_to_cart": "Lagt til i handlekurv",
       "add_to_cart_error": "Problem med å legge til i handlekurven",
+      "variant_load_error": "Dette alternativet kunne ikke lastes inn. Velg et annet alternativ, eller last inn siden på nytt for å prøve igjen.",
       "quantity_error_max": "Denne varen har et maksimumsantall på {{ maximum }}",
       "sold_out": "Utsolgt",
       "unavailable": "Utilgjengelig",
@@ -363,6 +364,27 @@
     }
   },
   "smelly": {
+    "basket": {
+      "title": "Handlekurven din",
+      "intro": "Noen skikkelig gode dufter, klare for deg.",
+      "banner_note": "Håndstøpt med omtanke.",
+      "summary": "Ordresammendrag",
+      "delivery": "Frakt",
+      "delivery_at_checkout": "Beregnes i kassen",
+      "delivery_remaining": "Handle for {{ amount }} til for å få gratis frakt i Storbritannia!",
+      "delivery_eligible": "Du har nådd grensen for gratis frakt i Storbritannia!",
+      "taxes_included": "Avgifter er inkludert.",
+      "taxes_at_checkout": "Avgifter beregnes i kassen.",
+      "duties_included": "Toll er inkludert.",
+      "checkout": "Betaling",
+      "gift_card_at_checkout": "Har du et gavekort? Løs det inn i kassen.",
+      "save": "Lagre til senere",
+      "save_hint": "Legg disse produktene til i ønskelisten din",
+      "saved": "Lagret i ønskelisten din på denne enheten.",
+      "clear": "Tøm handlekurven",
+      "clear_confirm": "Vil du fjerne alle varer fra handlekurven?",
+      "clear_error": "Vi kunne ikke tømme handlekurven. Prøv igjen."
+    },
     "catalogue": {
       "product_view": "Produktvisning",
       "grid_view": "Rutenettvisning",

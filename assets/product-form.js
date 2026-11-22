@@ -176,6 +176,7 @@ if (!customElements.get('add-to-cart-component')) {
  * @property {HTMLInputElement} variantId - The form input for submitting the variant ID.
  * @property {AddToCartComponent | undefined} addToCartButtonContainer - The add to cart button container element.
  * @property {HTMLElement | undefined} addToCartTextError - The add to cart text error.
+ * @property {HTMLElement | undefined} variantLoadError - The variant loading error.
  * @property {HTMLElement | undefined} acceleratedCheckoutButtonContainer - The accelerated checkout button container element.
  * @property {HTMLElement} liveRegion - The live region.
  * @property {HTMLElement | undefined} quantityLabelCartCount - The quantity label cart count element.
@@ -333,6 +334,7 @@ class ProductFormComponent extends Component {
       return;
     }
 
+    if (!this.#getVariantIdInput()) return;
     this.#processAddToCart(undefined, undefined, event);
   }
 
@@ -419,6 +421,7 @@ class ProductFormComponent extends Component {
         }
 
         setTimeout(() => {
+          if (!this.#getVariantIdInput()) return;
           for (const container of allAddToCartContainers) {
             container.enable();
           }
@@ -787,6 +790,8 @@ class ProductFormComponent extends Component {
     // Skip events from product-cards when this form is at the section level
     const sourceCard = /** @type {Element | null} */ (event.target)?.closest('product-card');
     if (sourceCard && !sourceCard.contains(this)) return;
+    const sourceProductId = event.target instanceof HTMLElement ? event.target.dataset.productId : undefined;
+    if (sourceProductId && sourceProductId !== this.dataset.productId) return;
 
     // Track generation to prevent a stale (aborted) call from clearing the flag
     // while a newer variant selection is still pending.
@@ -795,10 +800,11 @@ class ProductFormComponent extends Component {
     // Hold the in-flight section-fetch promise so the queue drain can await it before reading the
     // resolved variant id.
     this.#pendingVariantChange = event.promise;
+    this.refs.acceleratedCheckoutButtonContainer?.setAttribute('inert', '');
 
     try {
       const { detail } = await event.promise;
-      if (!detail?.html) return;
+      if (generation !== this.#variantChangeGeneration || !detail?.html) return;
 
       const { html, newProduct, productId, resource } = detail;
 
@@ -811,19 +817,21 @@ class ProductFormComponent extends Component {
 
       const { variantId } = this.refs;
       variantId.value = resource?.id ?? '';
+      this.refs.variantLoadError?.classList.add('hidden');
+      if (this.refs.liveRegion.textContent === Theme.translations.variant_load_error) this.#clearLiveRegionText();
 
       const { addToCartButtonContainer: currentAddToCartButtonContainer, acceleratedCheckoutButtonContainer } =
         this.refs;
       const currentAddToCartButton = currentAddToCartButtonContainer?.refs.addToCartButton;
 
       // Update state and text for add-to-cart button
-      if (!currentAddToCartButtonContainer || (!currentAddToCartButton && !acceleratedCheckoutButtonContainer)) return;
+      if (!currentAddToCartButton && !acceleratedCheckoutButtonContainer) return;
 
       // Update the button state
       if (resource == null || resource.available == false) {
-        currentAddToCartButtonContainer.disable();
+        currentAddToCartButtonContainer?.disable();
       } else {
-        currentAddToCartButtonContainer.enable();
+        currentAddToCartButtonContainer?.enable();
       }
 
       const newAddToCartButton = html.querySelector('product-form-component [ref="addToCartButton"]');
@@ -936,11 +944,25 @@ class ProductFormComponent extends Component {
       // Fetch and update cart quantity for the new variant
       this.#refreshCart().then((cart) => this.#updateCartQuantity(cart));
     } catch (error) {
-      if (error?.name !== 'AbortError') throw error;
+      if (generation !== this.#variantChangeGeneration || error?.name === 'AbortError' || !this.isConnected) return;
+
+      const { variantId, addToCartButtonContainer, acceleratedCheckoutButtonContainer, variantLoadError } = this.refs;
+      variantId.value = '';
+      addToCartButtonContainer?.disable();
+      acceleratedCheckoutButtonContainer?.setAttribute('hidden', '');
+      this.#addToCartQueue = this.#addToCartQueue.filter((item) => item.generation !== generation);
+
+      const message = Theme.translations.variant_load_error;
+      if (variantLoadError) {
+        variantLoadError.textContent = message;
+        variantLoadError.classList.remove('hidden');
+      }
+      this.#setLiveRegionText(message);
     } finally {
       // Only clear the flag if no newer variant selection has started
       if (generation === this.#variantChangeGeneration) {
         this.#variantChangeInProgress = false;
+        this.refs.acceleratedCheckoutButtonContainer?.removeAttribute('inert');
 
         // Drain any queued add-to-cart requests that accumulated during the variant change
         await this.#drainAddToCartQueue();

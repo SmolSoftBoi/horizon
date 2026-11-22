@@ -350,6 +350,7 @@
       "adding_to_cart": "Hozzáadás…",
       "added_to_cart": "Hozzáadva a kosárhoz",
       "add_to_cart_error": "Nem tudtuk hozzáadni a terméket a kosárhoz",
+      "variant_load_error": "Nem sikerült betölteni ezt az opciót. Válassz másikat, vagy frissítsd az oldalt az újbóli próbálkozáshoz.",
       "quantity_error_max": "A tétel maximális mennyisége {{ maximum }}",
       "sold_out": "Elfogyott",
       "unavailable": "Nincs készleten",
@@ -363,6 +364,27 @@
     }
   },
   "smelly": {
+    "basket": {
+      "title": "Kosár",
+      "intro": "Néhány igazán jó illat már vár rád.",
+      "banner_note": "Gondosan, kézzel öntve.",
+      "summary": "Rendelés összesítése",
+      "delivery": "Szállítás",
+      "delivery_at_checkout": "Fizetéskor számítjuk ki",
+      "delivery_remaining": "Vásárolj még {{ amount }} értékben az ingyenes egyesült királyságbeli szállításhoz!",
+      "delivery_eligible": "Elérted az ingyenes egyesült királyságbeli szállítás értékhatárát!",
+      "taxes_included": "Az adókat az ár tartalmazza.",
+      "taxes_at_checkout": "Az adókat fizetéskor számítjuk ki.",
+      "duties_included": "A vámokat az ár tartalmazza.",
+      "checkout": "Fizetés",
+      "gift_card_at_checkout": "Van ajándékkártyád? Váltsd be fizetéskor.",
+      "save": "Mentés későbbre",
+      "save_hint": "Add ezeket a termékeket a kívánságlistádhoz",
+      "saved": "A kívánságlistádra mentve ezen az eszközön.",
+      "clear": "Kosár ürítése",
+      "clear_confirm": "Eltávolítod az összes terméket a kosaradból?",
+      "clear_error": "Nem sikerült kiüríteni a kosaradat. Próbáld újra."
+    },
     "catalogue": {
       "product_view": "Terméknézet",
       "grid_view": "Rácsnézet",

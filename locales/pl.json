@@ -364,6 +364,7 @@
       "adding_to_cart": "Trwa dodawanie...",
       "added_to_cart": "Dodano do koszyka",
       "add_to_cart_error": "Błąd podczas dodawania do koszyka",
+      "variant_load_error": "Nie udało się wczytać tej opcji. Wybierz inną opcję lub odśwież stronę, aby spróbować ponownie.",
       "quantity_error_max": "Pozycja ma maksymalny limit {{ maximum }}",
       "sold_out": "Wyprzedane",
       "unavailable": "Niedostępny",
@@ -377,6 +378,27 @@
     }
   },
   "smelly": {
+    "basket": {
+      "title": "Twój koszyk",
+      "intro": "Kilka naprawdę świetnych zapachów już na Ciebie czeka.",
+      "banner_note": "Odlewane ręcznie z dbałością.",
+      "summary": "Podsumowanie zamówienia",
+      "delivery": "Dostawa",
+      "delivery_at_checkout": "Obliczana przy realizacji zakupu",
+      "delivery_remaining": "Wydaj jeszcze {{ amount }}, aby otrzymać darmową dostawę w Wielkiej Brytanii!",
+      "delivery_eligible": "Osiągnięto próg darmowej dostawy w Wielkiej Brytanii!",
+      "taxes_included": "Podatki są wliczone.",
+      "taxes_at_checkout": "Podatki są obliczane przy realizacji zakupu.",
+      "duties_included": "Cła są wliczone.",
+      "checkout": "Zrealizuj zakup",
+      "gift_card_at_checkout": "Masz kartę prezentową? Użyj jej przy realizacji zakupu.",
+      "save": "Zapisz na później",
+      "save_hint": "Dodaj te produkty do listy życzeń",
+      "saved": "Zapisano na Twojej liście życzeń na tym urządzeniu.",
+      "clear": "Opróżnij koszyk",
+      "clear_confirm": "Usunąć wszystkie produkty z koszyka?",
+      "clear_error": "Nie udało się opróżnić koszyka. Spróbuj ponownie."
+    },
     "catalogue": {
       "product_view": "Widok produktów",
       "grid_view": "Widok siatki",

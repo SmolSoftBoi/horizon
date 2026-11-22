@@ -4,6 +4,7 @@
   Renders the cart title or empty cart state.
 
   @param {boolean} [force_empty] - Force render empty cart state
+  @param {string} [basket_title] - Default branded basket heading.
 
   @example
   {% render 'cart-title', force_empty: true %}
@@ -22,7 +23,11 @@
   {{ block.shopify_attributes }}
 >
   <h1 class="{{ block_settings.type_preset | default: 'h2' }}">
-    {%- if cart.empty? or force_empty -%}
+    {%- if basket_title != blank -%}
+      <span>{% if block_settings.title != blank and block_settings.title != 'Cart' %}{{ block_settings.title }}{% else %}{{ basket_title }}{% endif %}</span>
+      <span class="smelly-basket__heart" aria-hidden="true">{% render 'smelly-illustration', kind: 'heart' %}</span>
+      {%- if block_settings.show_count and cart.empty? == false -%}{% render 'cart-bubble' %}{%- endif -%}
+    {%- elsif cart.empty? or force_empty -%}
       {{ 'content.your_cart_is_empty' | t }}
     {%- else -%}
       {{ block_settings.title }}

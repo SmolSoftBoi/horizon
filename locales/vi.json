@@ -350,6 +350,7 @@
       "adding_to_cart": "Đang thêm...",
       "added_to_cart": "Đã thêm vào giỏ hàng",
       "add_to_cart_error": "Lỗi khi thêm vào giỏ hàng",
+      "variant_load_error": "Không thể tải tuỳ chọn này. Hãy chọn tuỳ chọn khác hoặc tải lại trang để thử lại.",
       "quantity_error_max": "Mặt hàng này có tối đa {{ maximum }}",
       "sold_out": "Hết hàng",
       "unavailable": "Không khả dụng",
@@ -363,6 +364,27 @@
     }
   },
   "smelly": {
+    "basket": {
+      "title": "Giỏ hàng của bạn",
+      "intro": "Vài mùi hương tuyệt vời đang chờ bạn.",
+      "banner_note": "Được rót thủ công đầy chăm chút.",
+      "summary": "Tóm tắt đơn hàng",
+      "delivery": "Giao hàng",
+      "delivery_at_checkout": "Tính khi thanh toán",
+      "delivery_remaining": "Mua thêm {{ amount }} để được giao hàng miễn phí trong Vương quốc Anh!",
+      "delivery_eligible": "Bạn đã đạt mức tối thiểu để được giao hàng miễn phí trong Vương quốc Anh!",
+      "taxes_included": "Đã bao gồm thuế.",
+      "taxes_at_checkout": "Thuế được tính khi thanh toán.",
+      "duties_included": "Đã bao gồm thuế hải quan.",
+      "checkout": "Thanh toán",
+      "gift_card_at_checkout": "Bạn có thẻ quà tặng? Hãy dùng khi thanh toán.",
+      "save": "Lưu để xem sau",
+      "save_hint": "Thêm các sản phẩm này vào danh sách yêu thích",
+      "saved": "Đã lưu vào danh sách yêu thích trên thiết bị này.",
+      "clear": "Xóa tất cả trong giỏ hàng",
+      "clear_confirm": "Bạn muốn xóa tất cả sản phẩm trong giỏ hàng?",
+      "clear_error": "Không thể xóa hết sản phẩm trong giỏ hàng. Vui lòng thử lại."
+    },
     "catalogue": {
       "product_view": "Cách hiển thị sản phẩm",
       "grid_view": "Dạng lưới",

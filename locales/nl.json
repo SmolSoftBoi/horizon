@@ -350,6 +350,7 @@
       "adding_to_cart": "Toevoegen...",
       "added_to_cart": "Toegevoegd aan winkelwagen",
       "add_to_cart_error": "Fout bij het toevoegen aan de winkelwagen",
+      "variant_load_error": "Deze optie kon niet worden geladen. Kies een andere optie of vernieuw de pagina om het opnieuw te proberen.",
       "quantity_error_max": "Voor dit artikel geldt een maximum van {{ maximum }}.",
       "sold_out": "Uitverkocht",
       "unavailable": "Niet beschikbaar",
@@ -363,6 +364,27 @@
     }
   },
   "smelly": {
+    "basket": {
+      "title": "Je winkelwagen",
+      "intro": "Een paar heerlijke geuren, klaar voor jou.",
+      "banner_note": "Met zorg met de hand gegoten.",
+      "summary": "Overzicht van je bestelling",
+      "delivery": "Verzending",
+      "delivery_at_checkout": "Wordt berekend bij het afrekenen",
+      "delivery_remaining": "Besteed nog {{ amount }} voor gratis verzending binnen het Verenigd Koninkrijk!",
+      "delivery_eligible": "Je hebt het minimumbedrag voor gratis verzending binnen het Verenigd Koninkrijk bereikt!",
+      "taxes_included": "Belastingen zijn inbegrepen.",
+      "taxes_at_checkout": "Belastingen worden berekend bij het afrekenen.",
+      "duties_included": "Invoerrechten zijn inbegrepen.",
+      "checkout": "Afrekenen",
+      "gift_card_at_checkout": "Heb je een cadeaubon? Wissel die in bij het afrekenen.",
+      "save": "Bewaar voor later",
+      "save_hint": "Voeg deze producten toe aan je verlanglijst",
+      "saved": "Op dit apparaat op je verlanglijst bewaard.",
+      "clear": "Winkelwagen legen",
+      "clear_confirm": "Alle artikelen uit je winkelwagen verwijderen?",
+      "clear_error": "Je winkelwagen kon niet worden geleegd. Probeer het opnieuw."
+    },
     "catalogue": {
       "product_view": "Productweergave",
       "grid_view": "Rasterweergave",

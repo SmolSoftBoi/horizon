@@ -350,6 +350,7 @@
       "adding_to_cart": "Lägger till ...",
       "added_to_cart": "Tillagd i varukorgen",
       "add_to_cart_error": "Det uppstod ett fel när artikeln skulle läggas till i varukorgen",
+      "variant_load_error": "Det gick inte att läsa in det här alternativet. Välj ett annat alternativ eller uppdatera sidan för att försöka igen.",
       "quantity_error_max": "Den här artikeln har max {{ maximum }}",
       "sold_out": "Slutsåld",
       "unavailable": "Inte tillgängliga",
@@ -363,6 +364,27 @@
     }
   },
   "smelly": {
+    "basket": {
+      "title": "Din varukorg",
+      "intro": "Några riktigt härliga dofter väntar på dig.",
+      "banner_note": "Handgjutna med omsorg.",
+      "summary": "Ordersammanfattning",
+      "delivery": "Leverans",
+      "delivery_at_checkout": "Beräknas i kassan",
+      "delivery_remaining": "Handla för {{ amount }} till så får du fri leverans i Storbritannien!",
+      "delivery_eligible": "Du har nått gränsen för fri leverans i Storbritannien!",
+      "taxes_included": "Skatter ingår.",
+      "taxes_at_checkout": "Skatter beräknas i kassan.",
+      "duties_included": "Tullavgifter ingår.",
+      "checkout": "Betala",
+      "gift_card_at_checkout": "Har du ett presentkort? Använd det i kassan.",
+      "save": "Spara till senare",
+      "save_hint": "Lägg till de här produkterna i din önskelista",
+      "saved": "Sparade i din önskelista på den här enheten.",
+      "clear": "Töm varukorgen",
+      "clear_confirm": "Vill du ta bort alla varor från din varukorg?",
+      "clear_error": "Vi kunde inte tömma din varukorg. Försök igen."
+    },
     "catalogue": {
       "product_view": "Produktvy",
       "grid_view": "Rutnätsvy",
