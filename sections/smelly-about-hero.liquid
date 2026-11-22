@@ -1,0 +1,159 @@
+{% liquid
+  assign heading = section.settings.heading | strip | default: page.title | default: shop.name
+  assign hero_alt = section.settings.image_alt | default: ''
+  if section.settings.image == blank
+    assign hero_alt = 'Lit Pink Bubblegum candle beside a pink knit blanket'
+  endif
+  assign image_loading = 'lazy'
+  assign image_priority = 'auto'
+  if section.index == 1
+    assign image_loading = 'eager'
+    assign image_priority = 'high'
+  endif
+  assign button_url = section.settings.button_link | default: routes.all_products_collection_url
+%}
+
+<div class="smelly-about-hero smelly-shell{% if section.settings.show_image %} smelly-about-hero--with-photo{% endif %}">
+  <div class="smelly-about-hero__copy">
+    {% if section.settings.note != blank %}
+      <p class="smelly-handwritten">{{ section.settings.note | escape }}</p>
+    {% endif %}
+    <h1>{{ heading | escape | newline_to_br }}</h1>
+    {% if section.settings.text != blank %}
+      <div class="smelly-about-hero__text rte">{{ section.settings.text }}</div>
+    {% endif %}
+    {% if section.settings.button_label != blank %}
+      <a
+        class="smelly-button"
+        {% if section.settings.button_link == blank %}data-smelly-about-scents-link="{{ button_url | escape }}" {% endif %}href="{{ button_url | escape }}"
+      >
+        <span>{{ section.settings.button_label | escape }}</span>
+        <span aria-hidden="true">→</span>
+      </a>
+    {% endif %}
+  </div>
+  {% if section.settings.show_image %}
+    <figure class="smelly-about-hero__photo{% if section.settings.image == blank %} smelly-about-hero__photo--bundled{% endif %}">
+      {% render 'smelly-photo',
+        image: section.settings.image,
+        fallback: 'smelly-collection-hero.webp',
+        alt: hero_alt,
+        loading: image_loading,
+        priority: image_priority,
+        sizes: '(min-width: 1240px) 465px, (min-width: 750px) 40vw, (min-width: 440px) 380px, calc(100vw - 60px)'
+      %}
+      {% if section.settings.caption != blank %}
+        <figcaption class="smelly-about-hero__caption smelly-handwritten">{{ section.settings.caption | escape }}</figcaption>
+      {% endif %}
+    </figure>
+  {% endif %}
+</div>
+
+{% if section.settings.show_page_content and page.content != blank %}
+  <div class="smelly-about-hero__page-content smelly-shell">
+    <div class="rte">
+      <rte-formatter>{{ page.content }}</rte-formatter>
+    </div>
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .smelly-about-hero.smelly-shell,
+  .smelly-about-hero__page-content.smelly-shell { max-width: 1240px; }
+  .smelly-about-hero {
+    display: grid;
+    align-items: center;
+    gap: clamp(32px, 5.4vw, 80px);
+    padding-block: clamp(44px, 5.3vw, 76px);
+  }
+  .smelly-about-hero--with-photo { grid-template-columns: minmax(0, 1.09fr) minmax(0, 1fr); }
+  .smelly-about-hero__copy { overflow-wrap: anywhere; }
+  .smelly-about-hero__copy .smelly-handwritten { margin-bottom: 16px; }
+  .smelly-about-hero__copy h1 {
+    max-width: 800px;
+    font-size: clamp(48px, 5.85vw, 84px);
+    line-height: .99;
+    letter-spacing: -.065em;
+    text-wrap: wrap;
+  }
+  .smelly-about-hero__text {
+    max-width: 38ch;
+    margin-top: 24px;
+    color: #614e56;
+    font-size: clamp(17px, 1.6vw, 20px);
+    line-height: 1.55;
+  }
+  .smelly-about-hero__text p + p { margin-top: .75em; }
+  .smelly-about-hero__text a, .smelly-about-hero__page-content a {
+    text-decoration: underline;
+    text-underline-offset: .15em;
+  }
+  .smelly-about-hero .smelly-button {
+    max-width: 100%;
+    gap: 16px;
+    margin-top: 28px;
+    padding-inline: 22px;
+    font-size: 16px;
+    text-align: start;
+  }
+  .smelly-about-hero .smelly-button > span[aria-hidden] { flex-shrink: 0; }
+  .smelly-about-hero .smelly-button[href^='#'] > span[aria-hidden] { transform: rotate(90deg); }
+  .smelly-about-hero__photo {
+    justify-self: center;
+    width: min(100%, 485px);
+    margin: 0;
+    padding: 9px;
+    border: 1px solid #e9bfd1;
+    border-radius: 50% 50% 20px 20px / 44% 44% 20px 20px;
+    background: var(--smelly-blush);
+  }
+  .smelly-about-hero__photo img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1.02;
+    object-fit: cover;
+    border-radius: 50% 50% 12px 12px / 47% 47% 12px 12px;
+  }
+  .smelly-about-hero__photo--bundled img { object-position: 70% center; }
+  .smelly-about-hero .smelly-about-hero__caption {
+    margin-top: 8px;
+    color: #b31348;
+    font-size: 18px;
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+  .smelly-about-hero__page-content { padding-block-end: 44px; overflow-wrap: anywhere; }
+
+  @media (max-width: 749px) {
+    .smelly-about-hero { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+    .smelly-about-hero__copy h1 { font-size: clamp(42px, 11.6vw, 70px); }
+    .smelly-about-hero__copy .smelly-handwritten { margin-bottom: 10px; }
+    .smelly-about-hero__text { margin-top: 18px; }
+    .smelly-about-hero .smelly-button { margin-top: 20px; }
+    .smelly-about-hero__photo { max-width: 400px; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Smelly A.F. About hero",
+  "tag": "section",
+  "class": "smelly-section",
+  "limit": 1,
+  "enabled_on": { "templates": ["page"] },
+  "settings": [
+    { "type": "text", "id": "note", "label": "Handwritten greeting", "default": "Hello, we’re Smelly A.F." },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "A little candle.\nA big A.F. personality." },
+    { "type": "richtext", "id": "text", "label": "Introduction", "default": "<p>Hand-poured soy wax candles for homes that don’t take themselves too seriously.</p>" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Explore our scents" },
+    { "type": "url", "id": "button_link", "label": "Button link", "info": "Defaults to the scent ranges on this page, or all candles when the ranges are hidden." },
+    { "type": "checkbox", "id": "show_image", "label": "Show photograph", "default": true },
+    { "type": "image_picker", "id": "image", "label": "Photograph", "info": "Defaults to the lit Pink Bubblegum photograph.", "visible_if": "{{ section.settings.show_image }}" },
+    { "type": "text", "id": "image_alt", "label": "Photo description", "info": "Alternative text in Shopify Files takes priority.", "visible_if": "{{ section.settings.show_image and section.settings.image != blank }}" },
+    { "type": "text", "id": "caption", "label": "Photo caption", "default": "Pink Bubblegum", "visible_if": "{{ section.settings.show_image }}" },
+    { "type": "checkbox", "id": "show_page_content", "label": "Show content from Pages", "default": false }
+  ],
+  "presets": [{ "name": "Smelly A.F. About hero" }]
+}
+{% endschema %}

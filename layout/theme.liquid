@@ -157,7 +157,24 @@
         data-product-transition="{{ settings.transition_to_main_product }}"
         data-template="{{ template }}"
       >
-        {{ content_for_layout }}
+        {% if template.name == 'page' %}
+          {% comment %}The hero and ranges render independently. Resolve the shortcut from the range section's marker.{% endcomment %}
+          {%- capture page_markup -%}{{ content_for_layout }}{%- endcapture -%}
+          {% liquid
+            assign about_range_marker = 'data-smelly-about-ranges="'
+            if page_markup contains 'data-smelly-about-scents-link' and page_markup contains about_range_marker
+              assign about_range_id = page_markup | split: about_range_marker | slice: 1, 1 | first | split: '"' | first | escape
+              assign catalogue_url = routes.all_products_collection_url | escape
+              assign about_href_prefix = 'data-smelly-about-scents-link="' | append: catalogue_url | append: '" href="'
+              assign about_catalogue_link = about_href_prefix | append: catalogue_url | append: '"'
+              assign about_range_link = about_href_prefix | append: '#' | append: about_range_id | append: '"'
+              assign page_markup = page_markup | replace_first: about_catalogue_link, about_range_link
+            endif
+            echo page_markup
+          %}
+        {% else %}
+          {{ content_for_layout }}
+        {% endif %}
       </main>
 
       <footer>
