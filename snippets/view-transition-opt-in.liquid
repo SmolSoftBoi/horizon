@@ -7,8 +7,15 @@
   falls back to dropping it at 1800 ms. It is gated on the same settings (snippets/scripts.liquid).
 {% endcomment %}
 {% if settings.transition_to_main_product or settings.page_transition_enabled %}
+  {% liquid
+    assign view_transition_media = '(prefers-reduced-motion: no-preference)'
+    if template.name == 'page' and template.suffix == 'about'
+      # Keep the Explore link tappable from the first paint on mobile.
+      assign view_transition_media = view_transition_media | append: ' and (min-width: 750px)'
+    endif
+  %}
   {% style %}
-    @media (prefers-reduced-motion: no-preference) {
+    @media {{ view_transition_media }} {
       @view-transition {
         navigation: auto;
       }
@@ -18,6 +25,7 @@
     rel="expect"
     href="#MainContent"
     blocking="render"
+    media="{{ view_transition_media }}"
     id="view-transition-render-blocker"
   >
 {% endif %}
