@@ -2,7 +2,9 @@
   "sections": {
     "main": {
       "type": "smelly-about-hero",
-      "settings": {}
+      "settings": {
+        "show_page_content": true
+      }
     },
     "story": {
       "type": "smelly-about-story",

@@ -1,6 +1,9 @@
 {% liquid
   assign heading = section.settings.heading | strip | default: page.title | default: shop.name
-  assign hero_alt = section.settings.image_alt | default: section.settings.caption | default: shop.name
+  assign hero_alt = section.settings.image_alt | default: ''
+  if section.settings.image == blank
+    assign hero_alt = 'Lit Pink Bubblegum candle beside a pink knit blanket'
+  endif
   assign image_loading = 'lazy'
   assign image_priority = 'auto'
   if section.index == 1
@@ -22,7 +25,7 @@
     {% if section.settings.button_label != blank %}
       <a
         class="smelly-button"
-        {% if section.settings.button_link == blank %}data-smelly-about-scents-link {% endif %}href="{{ button_url | escape }}"
+        {% if section.settings.button_link == blank %}data-smelly-about-scents-link="{{ button_url | escape }}" {% endif %}href="{{ button_url | escape }}"
       >
         <span>{{ section.settings.button_label | escape }}</span>
         <span aria-hidden="true">→</span>
@@ -147,9 +150,9 @@
     { "type": "url", "id": "button_link", "label": "Button link", "info": "Defaults to the scent ranges on this page, or all candles when the ranges are hidden." },
     { "type": "checkbox", "id": "show_image", "label": "Show photograph", "default": true },
     { "type": "image_picker", "id": "image", "label": "Photograph", "info": "Defaults to the lit Pink Bubblegum photograph.", "visible_if": "{{ section.settings.show_image }}" },
-    { "type": "text", "id": "image_alt", "label": "Photo description", "default": "Lit Pink Bubblegum candle beside a pink knit blanket", "info": "Alternative text in Shopify Files takes priority.", "visible_if": "{{ section.settings.show_image }}" },
+    { "type": "text", "id": "image_alt", "label": "Photo description", "info": "Alternative text in Shopify Files takes priority.", "visible_if": "{{ section.settings.show_image and section.settings.image != blank }}" },
     { "type": "text", "id": "caption", "label": "Photo caption", "default": "Pink Bubblegum", "visible_if": "{{ section.settings.show_image }}" },
-    { "type": "checkbox", "id": "show_page_content", "label": "Show content from Pages", "default": true }
+    { "type": "checkbox", "id": "show_page_content", "label": "Show content from Pages", "default": false }
   ],
   "presets": [{ "name": "Smelly A.F. About hero" }]
 }

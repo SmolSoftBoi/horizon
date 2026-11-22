@@ -145,6 +145,29 @@ document.addEventListener('shopify:section:unload', function (event) {
 });
 
 /**
+ * The editor replaces section HTML without rendering the page layout again.
+ * @param {Event} event
+ */
+function syncAboutScentsLink(event) {
+  const main = document.getElementById('MainContent');
+  if (!main) return;
+
+  const link = main.querySelector('a[data-smelly-about-scents-link]');
+  if (!(link instanceof HTMLAnchorElement)) return;
+
+  const removedSection = event.type === 'shopify:section:unload' && event.target instanceof Element ? event.target : null;
+  const ranges = Array.from(main.querySelectorAll('[data-smelly-about-ranges]')).find(
+    (section) => !removedSection?.contains(section)
+  );
+
+  link.href = ranges ? `#${ranges.id}` : link.dataset.smellyAboutScentsLink;
+}
+
+document.addEventListener('shopify:section:load', syncAboutScentsLink);
+document.addEventListener('shopify:section:unload', syncAboutScentsLink);
+document.addEventListener('shopify:section:reorder', syncAboutScentsLink);
+
+/**
  * When in the theme editor, it can be frustrating to be tweaking the design of features that are implemented as a dialog
  * or any sort of overlay, because the theme editor will refresh the page and close the dialog.
  *
