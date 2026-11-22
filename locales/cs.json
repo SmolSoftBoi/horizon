@@ -339,6 +339,7 @@
       "adding_to_cart": "Přidávání do košíku...",
       "added_to_cart": "Přidáno do košíku",
       "add_to_cart_error": "Chyba při přidávání do košíku",
+      "variant_load_error": "Tuto možnost se nepodařilo načíst. Vyberte jinou možnost nebo obnovte stránku a zkuste to znovu.",
       "sold_out": "Vyprodáno",
       "unavailable": "Není k dispozici",
       "quantity_error_max": "Maximum této položky je: {{ maximum }}",

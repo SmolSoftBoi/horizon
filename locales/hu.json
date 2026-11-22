@@ -350,6 +350,7 @@
       "adding_to_cart": "Hozzáadás…",
       "added_to_cart": "Hozzáadva a kosárhoz",
       "add_to_cart_error": "Nem tudtuk hozzáadni a terméket a kosárhoz",
+      "variant_load_error": "Nem sikerült betölteni ezt az opciót. Válassz másikat, vagy frissítsd az oldalt az újbóli próbálkozáshoz.",
       "quantity_error_max": "A tétel maximális mennyisége {{ maximum }}",
       "sold_out": "Elfogyott",
       "unavailable": "Nincs készleten",

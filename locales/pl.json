@@ -364,6 +364,7 @@
       "adding_to_cart": "Trwa dodawanie...",
       "added_to_cart": "Dodano do koszyka",
       "add_to_cart_error": "Błąd podczas dodawania do koszyka",
+      "variant_load_error": "Nie udało się wczytać tej opcji. Wybierz inną opcję lub odśwież stronę, aby spróbować ponownie.",
       "quantity_error_max": "Pozycja ma maksymalny limit {{ maximum }}",
       "sold_out": "Wyprzedane",
       "unavailable": "Niedostępny",

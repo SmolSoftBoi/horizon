@@ -364,6 +364,7 @@
       "adding_to_cart": "מוסיף...",
       "added_to_cart": "נוסף לסל",
       "add_to_cart_error": "שגיאה בהוספה לסל",
+      "variant_load_error": "לא הצלחנו לטעון את האפשרות הזו. אפשר לבחור אפשרות אחרת או לרענן את הדף ולנסות שוב.",
       "quantity_error_max": "לפריט זה יש מקסימום של {{ maximum }}",
       "sold_out": "אזל מהמלאי",
       "unavailable": "לא זמין",

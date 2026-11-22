@@ -327,6 +327,7 @@
       "added_to_cart": "카트에 추가됨",
       "adding_to_cart": "추가 중...",
       "add_to_cart_error": "카트에 추가하는 중 오류 발생",
+      "variant_load_error": "이 옵션을 불러올 수 없습니다. 다른 옵션을 선택하거나 페이지를 새로고침한 후 다시 시도해 주세요.",
       "sold_out": "품절",
       "unavailable": "사용할 수 없음",
       "quantity_error_max": "이 품목의 최대 개수는 {{ maximum }}개입니다.",

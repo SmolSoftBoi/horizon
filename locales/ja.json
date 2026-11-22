@@ -327,6 +327,7 @@
       "added_to_cart": "カートに追加済み",
       "adding_to_cart": "追加中...",
       "add_to_cart_error": "カートに追加する際にエラーが発生しました",
+      "variant_load_error": "このオプションを読み込めませんでした。別のオプションを選ぶか、ページを更新してもう一度お試しください。",
       "sold_out": "売り切れ",
       "unavailable": "利用できません",
       "quantity_error_max": "このアイテムの最大値は{{ maximum }}です",

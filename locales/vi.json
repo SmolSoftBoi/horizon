@@ -350,6 +350,7 @@
       "adding_to_cart": "Đang thêm...",
       "added_to_cart": "Đã thêm vào giỏ hàng",
       "add_to_cart_error": "Lỗi khi thêm vào giỏ hàng",
+      "variant_load_error": "Không thể tải tuỳ chọn này. Hãy chọn tuỳ chọn khác hoặc tải lại trang để thử lại.",
       "quantity_error_max": "Mặt hàng này có tối đa {{ maximum }}",
       "sold_out": "Hết hàng",
       "unavailable": "Không khả dụng",

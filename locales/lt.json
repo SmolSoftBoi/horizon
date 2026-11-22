@@ -364,6 +364,7 @@
       "adding_to_cart": "Pridedama…",
       "added_to_cart": "Įdėta į krepšelį",
       "add_to_cart_error": "Dedant į krepšelį įvyko klaida",
+      "variant_load_error": "Šios parinkties nepavyko įkelti. Pasirinkite kitą parinktį arba atnaujinkite puslapį ir bandykite dar kartą.",
       "quantity_error_max": "Nustatytas didžiausias šios prekės kiekis: {{ maximum }}",
       "sold_out": "Išparduota",
       "unavailable": "Nėra",

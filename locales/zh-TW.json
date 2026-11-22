@@ -350,6 +350,7 @@
       "adding_to_cart": "正在新增…",
       "added_to_cart": "已放入購物車",
       "add_to_cart_error": "加入購物車時發生錯誤",
+      "variant_load_error": "無法載入此選項。請選擇其他選項，或重新整理頁面後再試一次。",
       "quantity_error_max": "此品項上限為 {{ maximum }}",
       "sold_out": "售罄",
       "unavailable": "無可用資料",

@@ -327,6 +327,7 @@
       "added_to_cart": "Ditambahkan ke keranjang",
       "adding_to_cart": "Menambahkan...",
       "add_to_cart_error": "Kesalahan saat menambahkan ke keranjang",
+      "variant_load_error": "Opsi ini tidak dapat dimuat. Pilih opsi lain atau muat ulang halaman untuk mencoba lagi.",
       "sold_out": "Habis",
       "unavailable": "Tidak Tersedia",
       "quantity_error_max": "Item ini memiliki batas maksimum {{ maximum }}",

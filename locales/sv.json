@@ -350,6 +350,7 @@
       "adding_to_cart": "Lägger till ...",
       "added_to_cart": "Tillagd i varukorgen",
       "add_to_cart_error": "Det uppstod ett fel när artikeln skulle läggas till i varukorgen",
+      "variant_load_error": "Det gick inte att läsa in det här alternativet. Välj ett annat alternativ eller uppdatera sidan för att försöka igen.",
       "quantity_error_max": "Den här artikeln har max {{ maximum }}",
       "sold_out": "Slutsåld",
       "unavailable": "Inte tillgängliga",

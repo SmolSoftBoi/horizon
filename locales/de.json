@@ -327,6 +327,7 @@
       "added_to_cart": "Zum Warenkorb hinzugefügt",
       "adding_to_cart": "Wird hinzugefügt...",
       "add_to_cart_error": "Fehler beim Hinzufügen zum Warenkorb",
+      "variant_load_error": "Diese Option konnte nicht geladen werden. Wähle eine andere Option oder lade die Seite neu, um es erneut zu versuchen.",
       "sold_out": "Ausverkauft",
       "unavailable": "Nicht verfügbar",
       "quantity_error_max": "Dieser Artikel hat ein Maximum von {{ maximum }}",

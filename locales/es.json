@@ -333,6 +333,7 @@
       "added_to_cart": "Agregado al carrito",
       "adding_to_cart": "Agregando...",
       "add_to_cart_error": "Error al agregar al carrito",
+      "variant_load_error": "No se pudo cargar esta opción. Elige otra opción o actualiza la página para volver a intentarlo.",
       "sold_out": "Agotado",
       "unavailable": "No disponible",
       "quantity_error_max": "Este artículo tiene un máximo de {{ maximum }}.",

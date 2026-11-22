@@ -350,6 +350,7 @@
       "adding_to_cart": "Toevoegen...",
       "added_to_cart": "Toegevoegd aan winkelwagen",
       "add_to_cart_error": "Fout bij het toevoegen aan de winkelwagen",
+      "variant_load_error": "Deze optie kon niet worden geladen. Kies een andere optie of vernieuw de pagina om het opnieuw te proberen.",
       "quantity_error_max": "Voor dit artikel geldt een maximum van {{ maximum }}.",
       "sold_out": "Uitverkocht",
       "unavailable": "Niet beschikbaar",

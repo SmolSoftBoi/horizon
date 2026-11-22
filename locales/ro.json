@@ -357,6 +357,7 @@
       "adding_to_cart": "Se adaugă...",
       "added_to_cart": "Adăugat în coș",
       "add_to_cart_error": "Eroare la adăugarea în coș",
+      "variant_load_error": "Această opțiune nu s-a putut încărca. Alege altă opțiune sau reîncarcă pagina pentru a încerca din nou.",
       "quantity_error_max": "Acest articol are maxim {{ maximum }}",
       "sold_out": "Stoc epuizat",
       "unavailable": "Indisponibil",

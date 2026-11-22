@@ -369,6 +369,7 @@
       "adding_to_cart": "Adding...",
       "added_to_cart": "Added to basket",
       "add_to_cart_error": "Error adding to basket",
+      "variant_load_error": "Couldn’t load this option. Choose another option or refresh the page to try again.",
       "quantity_error_max": "This item has a maximum of {{ maximum }}",
       "sold_out": "Sold out",
       "unavailable": "Unavailable",

@@ -339,6 +339,7 @@
       "added_to_cart": "Dodano v košarico",
       "adding_to_cart": "Dodajanje ...",
       "add_to_cart_error": "Pri dodajanju v košarico je prišlo do napake",
+      "variant_load_error": "Te možnosti ni bilo mogoče naložiti. Izberite drugo možnost ali osvežite stran in poskusite znova.",
       "sold_out": "Razprodano",
       "unavailable": "Ni na voljo",
       "quantity_error_max": "Ta artikel ima največ {{ maximum }}",

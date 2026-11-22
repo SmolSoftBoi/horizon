@@ -350,6 +350,7 @@
       "adding_to_cart": "Legger til ...",
       "added_to_cart": "Lagt til i handlekurv",
       "add_to_cart_error": "Problem med å legge til i handlekurven",
+      "variant_load_error": "Dette alternativet kunne ikke lastes inn. Velg et annet alternativ, eller last inn siden på nytt for å prøve igjen.",
       "quantity_error_max": "Denne varen har et maksimumsantall på {{ maximum }}",
       "sold_out": "Utsolgt",
       "unavailable": "Utilgjengelig",

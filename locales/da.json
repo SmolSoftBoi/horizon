@@ -327,6 +327,7 @@
       "added_to_cart": "Lagt i indkøbskurv",
       "adding_to_cart": "Tilføjer...",
       "add_to_cart_error": "Der opstod en fejl, da du lagde varen i indkøbskurven",
+      "variant_load_error": "Denne valgmulighed kunne ikke indlæses. Vælg en anden mulighed, eller genindlæs siden for at prøve igen.",
       "sold_out": "Udsolgt",
       "unavailable": "Ikke tilgængelig",
       "quantity_error_max": "Denne vare har en maksimumgrænse på {{ maximum }}",
