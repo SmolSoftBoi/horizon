@@ -1,7 +1,8 @@
 {% comment %}
   Opts into cross-document (MPA) view transitions and holds first paint until #MainContent
   parses, so the transition runs consistently. Emitted per-layout because assets/base.css is
-  shared and can't read theme settings.
+  shared and can't read theme settings. Render after the viewport meta tag so the blocker
+  uses the correct width on mobile.
 
   view-transitions.js drops the blocker again whenever no transition can actually run, and
   falls back to dropping it at 1800 ms. It is gated on the same settings (snippets/scripts.liquid).
