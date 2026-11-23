@@ -208,6 +208,7 @@
 .smelly-search__hero :is(a, input, button):focus-visible { outline-color: #ff9bb8; outline-offset: 3px; }
 
 .smelly-search__layout {
+  position: relative;
   grid-template-areas: 'toolbar' 'results';
   column-gap: clamp(16px, 1.8vw, 28px);
   row-gap: 18px;
@@ -365,6 +366,7 @@
   background: linear-gradient(#fffdfb, #fbefed);
   overflow-wrap: anywhere;
 }
+.smelly-search .smelly-product-card { padding-block-end: 13px; }
 .smelly-search .smelly-product-card__media,
 .smelly-search__resource img { margin: -1px -1px 0; }
 .smelly-search .smelly-product-card__image,
@@ -403,7 +405,7 @@
   line-height: 1.25;
 }
 .smelly-search .smelly-product-card__price s { font-size: 0.8em; font-weight: 500; }
-.smelly-search .smelly-product-card > :is(a, form) { margin: 8px clamp(8px, 0.9vw, 14px) 13px; }
+.smelly-search .smelly-product-card > :is(a, form) { margin: 8px clamp(8px, 0.9vw, 14px) 0; }
 .smelly-search .smelly-product-card > a { width: auto; }
 .smelly-search .smelly-product-card .smelly-button {
   gap: 6px;
@@ -463,6 +465,10 @@
 
 @media (max-width: 599px) {
   .smelly-search__tools { grid-column: 1 / -1; justify-content: space-between; }
+}
+
+@media (max-width: 749px) {
+  .smelly-search .smelly-product-card--desktop-quick-add > :is(a, form) { display: none; }
 }
 
 @media (max-width: 989px) {

@@ -8,7 +8,7 @@
   assign query = search.terms | strip
   assign escaped_query = query | escape
   assign all_search_types = 'product,article,page'
-  assign search_type = search.types | join: ',' | default: all_search_types
+  assign search_type = search.types | join: ','
   assign current_result_type = search_type
   if search.types.size == 3
     assign current_result_type = 'all'
@@ -85,7 +85,9 @@
       </div>
 
       <form class="smelly-search__form" action="{{ routes.search_url | escape }}" method="get" role="search" aria-label="{{ 'content.search_input_label' | t }}">
-        <input type="hidden" name="type" value="{{ search_type | escape }}">
+        {% if search.performed and search_type != blank %}
+          <input type="hidden" name="type" value="{{ search_type | escape }}">
+        {% endif %}
         <input type="hidden" name="options[prefix]" value="last">
         <div class="smelly-search__field">
           {{- 'icon-search.svg' | inline_asset_content -}}
@@ -107,6 +109,7 @@
         data-collections-url="{{ routes.predictive_search_url | escape }}"
         data-query="{{ escaped_query }}"
       >
+        {% render 'skip-to-content-link', href: '#SearchResults', text: 'accessibility.skip_to_results_list' %}
         <div class="smelly-search__toolbar">
           <h2>{{ 'smelly.search_page.results_for' | t: query: escaped_query }} <span class="smelly-search__heart">{% render 'smelly-illustration', kind: 'heart' %}</span></h2>
           <nav class="smelly-search__types" aria-label="{{ 'content.search_results_label' | t }}">
@@ -187,7 +190,7 @@
           </form>
         {% endif %}
 
-        <div class="smelly-search__results" id="SearchResults" data-native-search>
+        <div class="smelly-search__results" id="SearchResults" data-native-search tabindex="-1">
           {% if search.results_count > 0 %}
             {% paginate search.results by 20 %}
               <ul class="smelly-search__grid" role="list">
@@ -218,7 +221,7 @@
           {% endif %}
         </div>
 
-        <div class="smelly-search__results" id="SearchCollections" data-collections-panel hidden>
+        <div class="smelly-search__results" id="SearchCollections" data-collections-panel tabindex="-1" hidden>
           <p class="smelly-search__collection-status" role="status" data-collections-status></p>
           <ul class="smelly-search__grid" role="list" data-collections-grid hidden></ul>
           <a class="smelly-text-link" href="{{ routes.collections_url | escape }}">{{ 'smelly.search_page.browse_collections' | t }}</a>

@@ -5,10 +5,13 @@ class SmellySearchResults extends HTMLElement {
     this.collectionsTab = this.querySelector('[data-collections-tab]');
     this.collectionsPanel = this.querySelector('[data-collections-panel]');
     this.nativeTab = this.querySelector('[data-native-tab]');
+    this.queryForm = this.closest('.smelly-search')?.querySelector('.smelly-search__form');
+    this.skipLink = this.querySelector('.skip-to-content-link');
     this.collectionsTab.href = `#${this.collectionsPanel.id}`;
     if (this.nativeTab) this.nativeTab.href = '#SearchResults';
 
     this.addEventListener('change', this.#handleSort);
+    this.queryForm?.addEventListener('submit', this.#preserveSearchView);
     this.setAttribute('data-auto-sort', '');
     window.addEventListener('hashchange', this.#updateView);
     this.#updateView();
@@ -16,6 +19,7 @@ class SmellySearchResults extends HTMLElement {
 
   disconnectedCallback() {
     this.removeEventListener('change', this.#handleSort);
+    this.queryForm?.removeEventListener('submit', this.#preserveSearchView);
     window.removeEventListener('hashchange', this.#updateView);
   }
 
@@ -26,10 +30,18 @@ class SmellySearchResults extends HTMLElement {
     }
   };
 
+  #preserveSearchView = (event) => {
+    const form = event.currentTarget;
+    const action = new URL(form.action);
+    action.hash = location.hash === this.collectionsTab.hash ? this.collectionsTab.hash : '';
+    form.action = action.href;
+  };
+
   #updateView = () => {
     const showCollections = location.hash === this.collectionsTab.hash;
     this.toggleAttribute('data-collections-active', showCollections);
     this.collectionsPanel.hidden = !showCollections;
+    this.skipLink.hash = showCollections ? this.collectionsTab.hash : '#SearchResults';
 
     if (showCollections) {
       this.collectionsTab.setAttribute('aria-current', 'page');
