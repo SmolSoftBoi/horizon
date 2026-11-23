@@ -344,6 +344,10 @@
 }
 
 .smelly-search__results { grid-area: results; min-width: 0; }
+body:has(#header-component[sticky]) .smelly-search__results {
+  scroll-margin-block-start: calc(var(--header-height, 0px) + 8px);
+}
+
 .smelly-search__grid {
   display: grid;
   grid-template-columns: repeat(var(--search-columns, 2), minmax(0, 1fr));

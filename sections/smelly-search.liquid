@@ -10,9 +10,17 @@
   assign all_search_types = 'product,article,page'
   assign search_type = search.types | join: ','
   assign current_result_type = search_type
+  assign result_types = 'all,product,article,page,collection'
   if search.types.size == 3
     assign current_result_type = 'all'
+  elsif search.types.size == 2
+    assign current_result_type = 'mixed'
+    assign result_types = 'mixed,' | append: result_types
   endif
+  assign result_types = result_types | split: ','
+  assign products_label = 'content.search_results_resource_products' | t
+  assign articles_label = 'smelly.search_page.articles' | t
+  assign pages_label = 'content.search_results_resource_pages' | t
   assign current_sort = search.sort_by | default: search.default_sort_by
   assign encoded_query = query | url_encode
   assign query_url = routes.search_url | append: '?options%5Bprefix%5D=last&q=' | append: encoded_query | append: '&type='
@@ -34,7 +42,6 @@
     endif
   endfor
 
-  assign result_types = 'all,product,article,page,collection' | split: ','
   assign product_image_sizes = '(min-width: 1600px) 225px, (min-width: 1440px) 15vw, (min-width: 1200px) 19vw, (min-width: 990px) 23vw, (min-width: 750px) 31vw, 46vw'
 %}
 
@@ -115,24 +122,30 @@
           <nav class="smelly-search__types" aria-label="{{ 'content.search_results_label' | t }}">
             {% for result_type in result_types %}
               {% liquid
+                assign type_url = query_url | append: result_type
                 case result_type
+                  when 'mixed'
+                    assign type_url = '#SearchResults'
+                    if search.types contains 'product' and search.types contains 'article'
+                      assign type_label = products_label | append: ' + ' | append: articles_label
+                    elsif search.types contains 'product'
+                      assign type_label = products_label | append: ' + ' | append: pages_label
+                    else
+                      assign type_label = articles_label | append: ' + ' | append: pages_label
+                    endif
+                  when 'all'
+                    assign type_label = 'smelly.search_page.all' | t
+                    assign type_url = query_url | append: all_search_types
                   when 'product'
-                    assign type_label = 'content.search_results_resource_products' | t
+                    assign type_label = products_label
                   when 'article'
-                    assign type_label = 'smelly.search_page.articles' | t
+                    assign type_label = articles_label
                   when 'collection'
                     assign type_label = 'content.search_results_resource_collections' | t
+                    assign type_url = routes.collections_url
                   when 'page'
-                    assign type_label = 'content.search_results_resource_pages' | t
-                  else
-                    assign type_label = 'smelly.search_page.all' | t
+                    assign type_label = pages_label
                 endcase
-                assign type_url = query_url | append: result_type
-                if result_type == 'all'
-                  assign type_url = query_url | append: all_search_types
-                elsif result_type == 'collection'
-                  assign type_url = routes.collections_url
-                endif
                 assign is_current = false
                 if result_type == current_result_type
                   assign is_current = true
