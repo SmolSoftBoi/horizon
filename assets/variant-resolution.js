@@ -41,6 +41,56 @@ export function resolveVariantId(drainState) {
 }
 
 /**
+ * @typedef {object} QuantityConstraints
+ * @property {string} min
+ * @property {string | null} max
+ * @property {string} step
+ * @property {string | null} cartQuantity
+ *
+ * @typedef {object} PurchaseSelection
+ * @property {string | null} variantId
+ * @property {boolean} available
+ * @property {QuantityConstraints | null} quantityConstraints
+ */
+
+/**
+ * Reads the purchase state of a child product whose page omits the variant picker.
+ * @param {Document} html - The section response before morphing the page.
+ * @param {URL} productUrl - The requested selection, including the child product path.
+ * @returns {PurchaseSelection}
+ */
+export function readMainPurchaseSelection(html, productUrl) {
+  const forms = html.querySelectorAll('main .product-details product-form-component[data-product-url]');
+  const productForm = Array.from(forms).find((element) => {
+    const formUrl = element.getAttribute('data-product-url');
+    return formUrl && new URL(formUrl, productUrl.origin).pathname === productUrl.pathname;
+  });
+  const input = productForm?.querySelector('form input[name="id"][ref="variantId"]');
+  const form = input?.closest('form');
+  const button = form?.querySelector('button[ref="addToCartButton"]');
+  const variantId = input instanceof HTMLInputElement ? input.value.trim() : '';
+  const available = Boolean(variantId && button && !button.matches(':disabled'));
+
+  return { variantId: available ? variantId : null, available, quantityConstraints: readQuantityConstraints(form) };
+}
+
+/**
+ * @param {Document | Element | null | undefined} html
+ * @returns {QuantityConstraints | null}
+ */
+export function readQuantityConstraints(html) {
+  const input = html?.querySelector('quantity-selector-component input[ref="quantityInput"]');
+  if (!(input instanceof HTMLInputElement)) return null;
+
+  return {
+    min: input.min,
+    max: input.max || null,
+    step: input.step,
+    cartQuantity: input.getAttribute('data-cart-quantity'),
+  };
+}
+
+/**
  * @param {string | null | undefined} value
  * @returns {string | null}
  */
