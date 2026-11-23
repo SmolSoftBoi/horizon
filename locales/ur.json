@@ -413,6 +413,34 @@
       "faq_heading": "Frequently Asked Questions",
       "refund_policy": "Read our returns policy"
     },
+    "search_page": {
+      "intro": "اپنی نئی پسندیدہ خوشبو تلاش کریں۔",
+      "results_for": "”{{ query }}“ کے لیے تلاش کے نتائج",
+      "all": "تمام نتائج",
+      "articles": "بلاگ پوسٹ",
+      "result_count": {
+        "one": "{{ count }} آئٹم",
+        "other": "{{ count }} آئٹم"
+      },
+      "product_count": {
+        "one": "{{ count }} پروڈکٹ",
+        "other": "{{ count }} پروڈکٹ"
+      },
+      "article_count": {
+        "one": "{{ count }} آئٹم",
+        "other": "{{ count }} آئٹم"
+      },
+      "filter_results": "فلٹر",
+      "apply_filters": "لاگو کریں",
+      "sort_by": "ترتیب دیں",
+      "browse_candles": "تمام خوشبوئیں دیکھیں",
+      "browse_collections": "کلیکشن",
+      "recommendations": "آپ کو یہ بھی پسند آ سکتے ہیں",
+      "loading_collections": "کلیکشنز تلاش کی جا رہی ہیں…",
+      "no_collections": "کوئی نتائج نہیں ملے",
+      "collections_unavailable": "کلیکشنز کی تلاش کے نتائج عارضی طور پر دستیاب نہیں ہیں۔",
+      "collections_shown": "دکھائی گئی کلیکشنز: {{ count }}"
+    },
     "catalogue": {
       "product_view": "مصنوعات کی نمائش",
       "grid_view": "گرڈ کی صورت میں",

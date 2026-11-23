@@ -413,6 +413,34 @@
       "faq_heading": "Frequently Asked Questions",
       "refund_policy": "Read our returns policy"
     },
+    "search_page": {
+      "intro": "次のお気に入りの香りを見つけましょう。",
+      "results_for": "「{{ query }}」の検索結果",
+      "all": "すべての結果",
+      "articles": "ブログ記事",
+      "result_count": {
+        "one": "{{ count }}個のアイテム",
+        "other": "{{ count }}個のアイテム"
+      },
+      "product_count": {
+        "one": "{{ count }}個の商品",
+        "other": "{{ count }}個の商品"
+      },
+      "article_count": {
+        "one": "{{ count }}個のアイテム",
+        "other": "{{ count }}個のアイテム"
+      },
+      "filter_results": "絞り込み",
+      "apply_filters": "適用",
+      "sort_by": "並び替え",
+      "browse_candles": "すべての香りを見る",
+      "browse_collections": "コレクション",
+      "recommendations": "こちらもおすすめ",
+      "loading_collections": "コレクションを検索中…",
+      "no_collections": "結果は見つかりませんでした",
+      "collections_unavailable": "現在、コレクションの検索結果を表示できません。",
+      "collections_shown": "表示中のコレクション：{{ count }}件"
+    },
     "catalogue": {
       "product_view": "商品表示",
       "grid_view": "グリッド表示",

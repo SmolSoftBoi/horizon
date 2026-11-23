@@ -413,6 +413,34 @@
       "faq_heading": "Frequently Asked Questions",
       "refund_policy": "Read our returns policy"
     },
+    "search_page": {
+      "intro": "Löydä uusi suosikkituoksusi.",
+      "results_for": "Hakutulokset haulle ”{{ query }}”",
+      "all": "Kaikki tulokset",
+      "articles": "Blogipostaukset",
+      "result_count": {
+        "one": "{{ count }} tuote",
+        "other": "{{ count }} tuotetta"
+      },
+      "product_count": {
+        "one": "{{ count }} tuote",
+        "other": "{{ count }} tuotetta"
+      },
+      "article_count": {
+        "one": "{{ count }} tuote",
+        "other": "{{ count }} tuotetta"
+      },
+      "filter_results": "Suodattimet",
+      "apply_filters": "Käytä",
+      "sort_by": "Lajittele",
+      "browse_candles": "Tutustu kaikkiin tuoksuihin",
+      "browse_collections": "Kokoelmat",
+      "recommendations": "Saatat pitää myös näistä",
+      "loading_collections": "Haetaan kokoelmia…",
+      "no_collections": "Tuloksia ei löytynyt",
+      "collections_unavailable": "Kokoelmien hakutulokset eivät ole tilapäisesti käytettävissä.",
+      "collections_shown": "Näytetyt kokoelmat: {{ count }}"
+    },
     "catalogue": {
       "product_view": "Tuotenäkymä",
       "grid_view": "Ruudukkonäkymä",

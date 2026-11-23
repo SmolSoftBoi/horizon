@@ -413,6 +413,34 @@
       "faq_heading": "Frequently Asked Questions",
       "refund_policy": "Read our returns policy"
     },
+    "search_page": {
+      "intro": "Yeni favori kokunuzu keşfedin.",
+      "results_for": "“{{ query }}” için sonuçlar",
+      "all": "Tüm sonuçlar",
+      "articles": "Blog gönderileri",
+      "result_count": {
+        "one": "{{ count }} ürün",
+        "other": "{{ count }} ürün"
+      },
+      "product_count": {
+        "one": "{{ count }} ürün",
+        "other": "{{ count }} ürün"
+      },
+      "article_count": {
+        "one": "{{ count }} ürün",
+        "other": "{{ count }} ürün"
+      },
+      "filter_results": "Filtreler",
+      "apply_filters": "Uygula",
+      "sort_by": "Sırala",
+      "browse_candles": "Tüm kokuları keşfet",
+      "browse_collections": "Koleksiyonlar",
+      "recommendations": "Şunları da beğenebilirsiniz",
+      "loading_collections": "Koleksiyonlar aranıyor…",
+      "no_collections": "Sonuç bulunamadı",
+      "collections_unavailable": "Koleksiyon sonuçları geçici olarak kullanılamıyor.",
+      "collections_shown": "Gösterilen koleksiyon sayısı: {{ count }}"
+    },
     "catalogue": {
       "product_view": "Ürün görünümü",
       "grid_view": "Izgara görünümü",

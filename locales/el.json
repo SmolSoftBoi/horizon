@@ -413,6 +413,34 @@
       "faq_heading": "Frequently Asked Questions",
       "refund_policy": "Read our returns policy"
     },
+    "search_page": {
+      "intro": "Βρείτε το επόμενο αγαπημένο σας άρωμα.",
+      "results_for": "Αποτελέσματα για «{{ query }}»",
+      "all": "Όλα τα αποτελέσματα",
+      "articles": "Αναρτήσεις ιστολογίου",
+      "result_count": {
+        "one": "{{ count }} προϊόν",
+        "other": "{{ count }} προϊόντα"
+      },
+      "product_count": {
+        "one": "{{ count }} προϊόν",
+        "other": "{{ count }} προϊόντα"
+      },
+      "article_count": {
+        "one": "{{ count }} προϊόν",
+        "other": "{{ count }} προϊόντα"
+      },
+      "filter_results": "Φίλτρα",
+      "apply_filters": "Εφαρμογή",
+      "sort_by": "Ταξινόμηση",
+      "browse_candles": "Ανακαλύψτε όλα τα αρώματα",
+      "browse_collections": "Συλλογές",
+      "recommendations": "Ίσως σας αρέσουν επίσης",
+      "loading_collections": "Αναζήτηση συλλογών…",
+      "no_collections": "Δεν βρέθηκαν αποτελέσματα",
+      "collections_unavailable": "Τα αποτελέσματα για συλλογές δεν είναι προσωρινά διαθέσιμα.",
+      "collections_shown": "Συλλογές που εμφανίζονται: {{ count }}"
+    },
     "catalogue": {
       "product_view": "Προβολή προϊόντων",
       "grid_view": "Προβολή πλέγματος",

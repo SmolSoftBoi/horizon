@@ -427,6 +427,40 @@
       "faq_heading": "Frequently Asked Questions",
       "refund_policy": "Read our returns policy"
     },
+    "search_page": {
+      "intro": "Nájdite svoju novú obľúbenú vôňu.",
+      "results_for": "Výsledky pre „{{ query }}“",
+      "all": "Všetky výsledky",
+      "articles": "Blogový príspevok",
+      "result_count": {
+        "one": "{{ count }} položka",
+        "other": "Položky: {{ count }}",
+        "few": "Položky: {{ count }}",
+        "many": "Položky: {{ count }}"
+      },
+      "product_count": {
+        "one": "{{ count }} produkt",
+        "other": "{{ count }} produkty",
+        "few": "{{ count }} produkty",
+        "many": "{{ count }} produkty"
+      },
+      "article_count": {
+        "one": "{{ count }} položka",
+        "other": "Položky: {{ count }}",
+        "few": "Položky: {{ count }}",
+        "many": "Položky: {{ count }}"
+      },
+      "filter_results": "Filtre",
+      "apply_filters": "Použiť",
+      "sort_by": "Zoradiť",
+      "browse_candles": "Zobraziť všetky vône",
+      "browse_collections": "Kolekcie",
+      "recommendations": "Mohlo by sa vám tiež páčiť",
+      "loading_collections": "Vyhľadávajú sa kolekcie…",
+      "no_collections": "Nenašli sa žiadne výsledky",
+      "collections_unavailable": "Výsledky vyhľadávania kolekcií sú dočasne nedostupné.",
+      "collections_shown": "Zobrazené kolekcie: {{ count }}"
+    },
     "catalogue": {
       "product_view": "Zobrazenie produktov",
       "grid_view": "Mriežkové zobrazenie",

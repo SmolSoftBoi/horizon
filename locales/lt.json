@@ -427,6 +427,40 @@
       "faq_heading": "Frequently Asked Questions",
       "refund_policy": "Read our returns policy"
     },
+    "search_page": {
+      "intro": "Atraskite savo naują mėgstamiausią kvapą.",
+      "results_for": "„{{ query }}“ paieškos rezultatai",
+      "all": "Visi rezultatai",
+      "articles": "Tinklaraščio įrašai",
+      "result_count": {
+        "one": "{{ count }} prekė",
+        "other": "{{ count }} prekės (-ių)",
+        "few": "{{ count }} prekės (-ių)",
+        "many": "{{ count }} prekės (-ių)"
+      },
+      "product_count": {
+        "one": "{{ count }} gaminys",
+        "other": "{{ count }} gaminiai (-ių)",
+        "few": "{{ count }} gaminiai (-ių)",
+        "many": "{{ count }} gaminiai (-ių)"
+      },
+      "article_count": {
+        "one": "{{ count }} prekė",
+        "other": "{{ count }} prekės (-ių)",
+        "few": "{{ count }} prekės (-ių)",
+        "many": "{{ count }} prekės (-ių)"
+      },
+      "filter_results": "Filtrai",
+      "apply_filters": "Taikyti",
+      "sort_by": "Rūšiuoti",
+      "browse_candles": "Peržiūrėti visus kvapus",
+      "browse_collections": "Kolekcijos",
+      "recommendations": "Jums taip pat gali patikti",
+      "loading_collections": "Ieškoma kolekcijų…",
+      "no_collections": "Rezultatų nerasta",
+      "collections_unavailable": "Kolekcijų paieškos rezultatai laikinai nepasiekiami.",
+      "collections_shown": "Rodomos kolekcijos: {{ count }}"
+    },
     "catalogue": {
       "product_view": "Produktų rodinys",
       "grid_view": "Tinklelio rodinys",

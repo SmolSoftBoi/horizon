@@ -441,6 +441,46 @@
       "faq_heading": "Frequently Asked Questions",
       "refund_policy": "Read our returns policy"
     },
+    "search_page": {
+      "intro": "اكتشف رائحتك المفضّلة الجديدة.",
+      "results_for": "نتائج البحث عن «{{ query }}»",
+      "all": "كل النتائج",
+      "articles": "منشورات المدونة",
+      "result_count": {
+        "one": "{{ count }} عنصر",
+        "other": "{{ count }} من العناصر",
+        "few": "{{ count }} من العناصر",
+        "many": "{{ count }} من العناصر",
+        "two": "{{ count }} من العناصر",
+        "zero": "{{ count }} من العناصر"
+      },
+      "product_count": {
+        "one": "{{ count }} منتج",
+        "other": "{{ count }} من المنتجات",
+        "few": "{{ count }} من المنتجات",
+        "many": "{{ count }} من المنتجات",
+        "two": "{{ count }} من المنتجات",
+        "zero": "{{ count }} من المنتجات"
+      },
+      "article_count": {
+        "one": "{{ count }} عنصر",
+        "other": "{{ count }} من العناصر",
+        "few": "{{ count }} من العناصر",
+        "many": "{{ count }} من العناصر",
+        "two": "{{ count }} من العناصر",
+        "zero": "{{ count }} من العناصر"
+      },
+      "filter_results": "عوامل التصفية",
+      "apply_filters": "تطبيق",
+      "sort_by": "فرز",
+      "browse_candles": "تسوّق جميع الروائح",
+      "browse_collections": "المجموعات",
+      "recommendations": "قد يعجبك أيضاً",
+      "loading_collections": "جارٍ البحث عن المجموعات…",
+      "no_collections": "لم يتم العثور على نتائج",
+      "collections_unavailable": "نتائج المجموعات غير متاحة مؤقتًا.",
+      "collections_shown": "المجموعات المطابقة (المعروض: {{ count }})"
+    },
     "catalogue": {
       "product_view": "طريقة عرض المنتجات",
       "grid_view": "عرض الشبكة",

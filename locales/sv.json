@@ -413,6 +413,34 @@
       "faq_heading": "Frequently Asked Questions",
       "refund_policy": "Read our returns policy"
     },
+    "search_page": {
+      "intro": "Hitta din nästa favoritdoft.",
+      "results_for": "Resultat för ”{{ query }}”",
+      "all": "Alla resultat",
+      "articles": "Bloggposter",
+      "result_count": {
+        "one": "{{ count }} artikel",
+        "other": "{{ count }} artiklar"
+      },
+      "product_count": {
+        "one": "{{ count }} produkt",
+        "other": "{{ count }} produkter"
+      },
+      "article_count": {
+        "one": "{{ count }} artikel",
+        "other": "{{ count }} artiklar"
+      },
+      "filter_results": "Filter",
+      "apply_filters": "Tillämpa",
+      "sort_by": "Sortera",
+      "browse_candles": "Visa alla dofter",
+      "browse_collections": "Produktserier",
+      "recommendations": "Du kanske också gillar",
+      "loading_collections": "Söker efter kollektioner…",
+      "no_collections": "Inga resultat hittades",
+      "collections_unavailable": "Sökresultat för kollektioner är tillfälligt otillgängliga.",
+      "collections_shown": "Visade kollektioner: {{ count }}"
+    },
     "catalogue": {
       "product_view": "Produktvy",
       "grid_view": "Rutnätsvy",

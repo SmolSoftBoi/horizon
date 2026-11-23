@@ -420,6 +420,37 @@
       "faq_heading": "Frequently Asked Questions",
       "refund_policy": "Read our returns policy"
     },
+    "search_page": {
+      "intro": "Trouvez votre prochain parfum préféré.",
+      "results_for": "Résultats pour « {{ query }} »",
+      "all": "Tous les résultats",
+      "articles": "Articles de blog",
+      "result_count": {
+        "one": "{{ count }} article",
+        "other": "{{ count }} articles",
+        "many": "{{ count }} articles"
+      },
+      "product_count": {
+        "one": "{{ count }} produit",
+        "other": "{{ count }} produits",
+        "many": "{{ count }} produits"
+      },
+      "article_count": {
+        "one": "{{ count }} article",
+        "other": "{{ count }} articles",
+        "many": "{{ count }} articles"
+      },
+      "filter_results": "Filtres",
+      "apply_filters": "Appliquer",
+      "sort_by": "Trier",
+      "browse_candles": "Découvrir toutes les senteurs",
+      "browse_collections": "Collections",
+      "recommendations": "Vous aimerez peut-être aussi",
+      "loading_collections": "Recherche de collections…",
+      "no_collections": "Aucun résultat trouvé",
+      "collections_unavailable": "Les résultats des collections sont temporairement indisponibles.",
+      "collections_shown": "Collections affichées : {{ count }}"
+    },
     "catalogue": {
       "product_view": "Affichage des produits",
       "grid_view": "Vue en grille",

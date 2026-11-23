@@ -427,6 +427,40 @@
       "faq_heading": "Frequently Asked Questions",
       "refund_policy": "Read our returns policy"
     },
+    "search_page": {
+      "intro": "Poiščite svojo novo najljubšo dišavo.",
+      "results_for": "Rezultati za »{{ query }}«",
+      "all": "Vsi rezultati",
+      "articles": "Objave v spletnem dnevniku",
+      "result_count": {
+        "one": "{{ count }} artikel",
+        "other": "Št. artiklov: {{ count }}",
+        "few": "Št. artiklov: {{ count }}",
+        "two": "Št. artiklov: {{ count }}"
+      },
+      "product_count": {
+        "one": "{{ count }} izdelek",
+        "other": "Št. izdelkov: {{ count }}",
+        "few": "Št. izdelkov: {{ count }}",
+        "two": "Št. izdelkov: {{ count }}"
+      },
+      "article_count": {
+        "one": "{{ count }} artikel",
+        "other": "Št. artiklov: {{ count }}",
+        "few": "Št. artiklov: {{ count }}",
+        "two": "Št. artiklov: {{ count }}"
+      },
+      "filter_results": "Filtri",
+      "apply_filters": "Uporabi",
+      "sort_by": "Razvrsti",
+      "browse_candles": "Oglej si vse dišave",
+      "browse_collections": "Zbirke",
+      "recommendations": "Morda vam bo všeč tudi",
+      "loading_collections": "Iskanje zbirk…",
+      "no_collections": "Nobenega rezultata ni bilo mogoče najti",
+      "collections_unavailable": "Rezultati iskanja zbirk začasno niso na voljo.",
+      "collections_shown": "Prikazane zbirke: {{ count }}"
+    },
     "catalogue": {
       "product_view": "Prikaz izdelkov",
       "grid_view": "Mrežni prikaz",

@@ -413,6 +413,34 @@
       "faq_heading": "Frequently Asked Questions",
       "refund_policy": "Read our returns policy"
     },
+    "search_page": {
+      "intro": "Vind je nieuwe favoriete geur.",
+      "results_for": "Resultaten voor ‘{{ query }}’",
+      "all": "Alle resultaten",
+      "articles": "Blogposts",
+      "result_count": {
+        "one": "{{ count }} artikel",
+        "other": "{{ count }} artikelen"
+      },
+      "product_count": {
+        "one": "{{ count }} product",
+        "other": "{{ count }} producten"
+      },
+      "article_count": {
+        "one": "{{ count }} artikel",
+        "other": "{{ count }} artikelen"
+      },
+      "filter_results": "Filters",
+      "apply_filters": "Toepassen",
+      "sort_by": "Sorteren",
+      "browse_candles": "Bekijk alle geuren",
+      "browse_collections": "Collecties",
+      "recommendations": "Misschien vind je dit ook leuk",
+      "loading_collections": "Collecties zoeken…",
+      "no_collections": "Geen resultaten gevonden",
+      "collections_unavailable": "Zoekresultaten voor collecties zijn tijdelijk niet beschikbaar.",
+      "collections_shown": "Weergegeven collecties: {{ count }}"
+    },
     "catalogue": {
       "product_view": "Productweergave",
       "grid_view": "Rasterweergave",

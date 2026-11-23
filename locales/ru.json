@@ -427,6 +427,40 @@
       "faq_heading": "Frequently Asked Questions",
       "refund_policy": "Read our returns policy"
     },
+    "search_page": {
+      "intro": "Найдите свой новый любимый аромат.",
+      "results_for": "Результаты поиска по запросу «{{ query }}»",
+      "all": "Все результаты",
+      "articles": "Статьи в блоге",
+      "result_count": {
+        "one": "{{ count }} товар",
+        "other": "{{ count }} товаров",
+        "few": "{{ count }} товаров",
+        "many": "{{ count }} товаров"
+      },
+      "product_count": {
+        "one": "{{ count }} товар",
+        "other": "Товаров: {{ count }}",
+        "few": "Товаров: {{ count }}",
+        "many": "Товаров: {{ count }}"
+      },
+      "article_count": {
+        "one": "{{ count }} товар",
+        "other": "{{ count }} товаров",
+        "few": "{{ count }} товаров",
+        "many": "{{ count }} товаров"
+      },
+      "filter_results": "Фильтры",
+      "apply_filters": "Применить",
+      "sort_by": "Сортировать",
+      "browse_candles": "Посмотреть все ароматы",
+      "browse_collections": "Коллекции",
+      "recommendations": "Вам также может понравиться",
+      "loading_collections": "Поиск коллекций…",
+      "no_collections": "Результатов не найдено",
+      "collections_unavailable": "Результаты поиска коллекций временно недоступны.",
+      "collections_shown": "Показано коллекций: {{ count }}"
+    },
     "catalogue": {
       "product_view": "Вид товаров",
       "grid_view": "Вид сеткой",

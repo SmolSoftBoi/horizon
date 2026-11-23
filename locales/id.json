@@ -413,6 +413,34 @@
       "faq_heading": "Frequently Asked Questions",
       "refund_policy": "Read our returns policy"
     },
+    "search_page": {
+      "intro": "Temukan aroma favorit baru Anda.",
+      "results_for": "Hasil untuk “{{ query }}”",
+      "all": "Semua hasil",
+      "articles": "Postingan blog",
+      "result_count": {
+        "one": "{{ count }} item",
+        "other": "{{ count }} item"
+      },
+      "product_count": {
+        "one": "{{ count }} produk",
+        "other": "{{ count }} produk"
+      },
+      "article_count": {
+        "one": "{{ count }} item",
+        "other": "{{ count }} item"
+      },
+      "filter_results": "Filter",
+      "apply_filters": "Terapkan",
+      "sort_by": "Urutkan",
+      "browse_candles": "Lihat semua aroma",
+      "browse_collections": "Koleksi",
+      "recommendations": "Anda mungkin juga menyukai",
+      "loading_collections": "Mencari koleksi…",
+      "no_collections": "Hasil tidak ditemukan",
+      "collections_unavailable": "Hasil pencarian koleksi untuk sementara tidak tersedia.",
+      "collections_shown": "Koleksi yang ditampilkan: {{ count }}"
+    },
     "catalogue": {
       "product_view": "Tampilan produk",
       "grid_view": "Tampilan kisi",

@@ -1,0 +1,40 @@
+{% doc %}
+  Renders search facets within their GET form.
+  @param {object} filters - The Shopify search filters.
+  @param {string} clear_url - The unfiltered search URL for the same query and sort.
+  @param {number} active_filter_count - The number of selected filter values.
+{% enddoc %}
+
+<div class="smelly-search__facets-heading">
+  <h3>{{- 'icon-filter.svg' | inline_asset_content -}}{{ 'smelly.search_page.filter_results' | t }}</h3>
+  {% if active_filter_count > 0 %}
+    <a href="{{ clear_url | escape }}">{{ 'actions.clear_all' | t }}</a>
+  {% endif %}
+</div>
+
+{% for filter in filters %}
+  <details class="smelly-catalogue__filter" open>
+    <summary>
+      <span>{{ filter.label | escape }}</span>
+      {{- 'icon-caret.svg' | inline_asset_content -}}
+    </summary>
+    <div class="smelly-catalogue__filter-options">
+      {% case filter.type %}
+        {% when 'boolean', 'list' %}
+          <fieldset>
+            <legend class="visually-hidden">{{ filter.label | escape }}</legend>
+            {% for value in filter.values %}
+              <label class="smelly-catalogue__checkbox">
+                <input type="checkbox" name="{{ value.param_name | escape }}" value="{{ value.value | escape }}"{% if value.active %} checked{% elsif value.count == 0 %} disabled{% endif %}>
+                <span>{{ value.label | escape }} ({{ value.count }})</span>
+              </label>
+            {% endfor %}
+          </fieldset>
+        {% when 'price_range' %}
+          {% render 'smelly-catalogue-price', filter: filter %}
+      {% endcase %}
+    </div>
+  </details>
+{% endfor %}
+
+<button class="smelly-button smelly-button--small smelly-search__filter-apply" type="submit">{{ 'smelly.search_page.apply_filters' | t }}</button>

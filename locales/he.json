@@ -427,6 +427,40 @@
       "faq_heading": "Frequently Asked Questions",
       "refund_policy": "Read our returns policy"
     },
+    "search_page": {
+      "intro": "גלו את הריח האהוב הבא שלכם.",
+      "results_for": "תוצאות עבור ״{{ query }}״",
+      "all": "כל התוצאות",
+      "articles": "פוסטים בבלוג",
+      "result_count": {
+        "one": "פריט {{ count }}",
+        "other": "{{ count }} פריטים",
+        "many": "{{ count }} פריטים",
+        "two": "{{ count }} פריטים"
+      },
+      "product_count": {
+        "one": "מוצר {{ count }}",
+        "other": "{{ count }} מוצרים",
+        "many": "{{ count }} מוצרים",
+        "two": "{{ count }} מוצרים"
+      },
+      "article_count": {
+        "one": "פריט {{ count }}",
+        "other": "{{ count }} פריטים",
+        "many": "{{ count }} פריטים",
+        "two": "{{ count }} פריטים"
+      },
+      "filter_results": "מסננים",
+      "apply_filters": "החלה",
+      "sort_by": "מיון",
+      "browse_candles": "לכל הניחוחות",
+      "browse_collections": "אוספים",
+      "recommendations": "אולי יעניינו אותך גם",
+      "loading_collections": "מחפשים קולקציות…",
+      "no_collections": "לא נמצאו תוצאות",
+      "collections_unavailable": "תוצאות הקולקציות אינן זמינות כרגע.",
+      "collections_shown": "מספר הקולקציות שמוצגות: {{ count }}"
+    },
     "catalogue": {
       "product_view": "תצוגת מוצרים",
       "grid_view": "תצוגת רשת",

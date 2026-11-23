@@ -427,6 +427,40 @@
       "faq_heading": "Frequently Asked Questions",
       "refund_policy": "Read our returns policy"
     },
+    "search_page": {
+      "intro": "Znajdź swój nowy ulubiony zapach.",
+      "results_for": "Wyniki dla „{{ query }}”",
+      "all": "Wszystkie wyniki",
+      "articles": "Posty na blogu",
+      "result_count": {
+        "one": "{{ count }} pozycja",
+        "other": "Pozycje: {{ count }}",
+        "few": "Pozycje: {{ count }}",
+        "many": "Pozycje: {{ count }}"
+      },
+      "product_count": {
+        "one": "{{ count }} produkt",
+        "other": "{{ count }} produktów",
+        "few": "{{ count }} produktów",
+        "many": "{{ count }} produktów"
+      },
+      "article_count": {
+        "one": "{{ count }} pozycja",
+        "other": "Pozycje: {{ count }}",
+        "few": "Pozycje: {{ count }}",
+        "many": "Pozycje: {{ count }}"
+      },
+      "filter_results": "Filtry",
+      "apply_filters": "Zastosuj",
+      "sort_by": "Sortuj",
+      "browse_candles": "Zobacz wszystkie zapachy",
+      "browse_collections": "Kolekcje",
+      "recommendations": "Może Ci się też spodobać",
+      "loading_collections": "Wyszukiwanie kolekcji…",
+      "no_collections": "Nie znaleziono wyników",
+      "collections_unavailable": "Wyniki wyszukiwania kolekcji są tymczasowo niedostępne.",
+      "collections_shown": "Wyświetlone kolekcje: {{ count }}"
+    },
     "catalogue": {
       "product_view": "Widok produktów",
       "grid_view": "Widok siatki",
