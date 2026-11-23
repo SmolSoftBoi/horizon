@@ -371,6 +371,23 @@
     }
   },
   "smelly": {
+    "password": {
+      "heading": "Questo negozio è protetto da password",
+      "intro": "Inserisci la password qui sotto per accedere a {{ shop }}",
+      "placeholder": "Inserisci la password del negozio",
+      "show_password": "Mostra password",
+      "enter": "Entra nel negozio",
+      "need_access": "Ti serve l’accesso?",
+      "contact": "Contattaci",
+      "hand_poured": "Colate a mano",
+      "hand_poured_detail": "in piccoli lotti",
+      "vegan": "Adatte ai vegani",
+      "vegan_detail": "Senza ingredienti di origine animale",
+      "packaging": "Confezioni curate",
+      "packaging_detail": "Riciclabili dove possibile",
+      "scents": "Fragranze favolose",
+      "scents_detail": "Per la tua casa"
+    },
     "basket": {
       "title": "Il tuo carrello",
       "intro": "Qualche fragranza davvero speciale, pronta per te.",

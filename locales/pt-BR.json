@@ -371,6 +371,23 @@
     }
   },
   "smelly": {
+    "password": {
+      "heading": "Esta loja é protegida por senha",
+      "intro": "Digite a senha abaixo para acessar {{ shop }}",
+      "placeholder": "Digite a senha da loja",
+      "show_password": "Mostrar senha",
+      "enter": "Entrar na loja",
+      "need_access": "Precisa de acesso?",
+      "contact": "Fale conosco",
+      "hand_poured": "Feitas à mão",
+      "hand_poured_detail": "em pequenos lotes",
+      "vegan": "Adequadas para veganos",
+      "vegan_detail": "Sem ingredientes de origem animal",
+      "packaging": "Embalagem bem pensada",
+      "packaging_detail": "Reciclável sempre que possível",
+      "scents": "Aromas incríveis",
+      "scents_detail": "Para a sua casa"
+    },
     "basket": {
       "title": "Seu carrinho",
       "intro": "Algumas fragrâncias incríveis prontas para você.",

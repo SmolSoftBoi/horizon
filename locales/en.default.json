@@ -383,6 +383,23 @@
     }
   },
   "smelly": {
+    "password": {
+      "heading": "This Store is Password Protected",
+      "intro": "Enter the password below to access {{ shop }}",
+      "placeholder": "Enter store password",
+      "show_password": "Show password",
+      "enter": "Enter Store",
+      "need_access": "Need access?",
+      "contact": "Contact us",
+      "hand_poured": "Hand-poured",
+      "hand_poured_detail": "in small batches",
+      "vegan": "Vegan friendly",
+      "vegan_detail": "No animal products",
+      "packaging": "Thoughtful packaging",
+      "packaging_detail": "Recyclable where possible",
+      "scents": "Awesome scents",
+      "scents_detail": "For your home"
+    },
     "basket": {
       "title": "Your Basket",
       "intro": "A few seriously good scents, ready to go.",

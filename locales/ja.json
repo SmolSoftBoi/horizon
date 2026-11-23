@@ -364,6 +364,23 @@
     }
   },
   "smelly": {
+    "password": {
+      "heading": "このストアはパスワードで保護されています",
+      "intro": "{{ shop }} にアクセスするには、下にパスワードを入力してください。",
+      "placeholder": "ストアのパスワードを入力",
+      "show_password": "パスワードを表示",
+      "enter": "ストアに入る",
+      "need_access": "アクセスが必要ですか？",
+      "contact": "お問い合わせ",
+      "hand_poured": "手作業で注いだキャンドル",
+      "hand_poured_detail": "少量ずつ製造",
+      "vegan": "ヴィーガン対応",
+      "vegan_detail": "動物由来の原料は不使用",
+      "packaging": "丁寧に選んだパッケージ",
+      "packaging_detail": "可能な限りリサイクル可能",
+      "scents": "魅力的な香り",
+      "scents_detail": "お部屋に"
+    },
     "basket": {
       "title": "あなたのカート",
       "intro": "とっておきの香りをお届けします。",

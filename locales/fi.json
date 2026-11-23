@@ -364,6 +364,23 @@
     }
   },
   "smelly": {
+    "password": {
+      "heading": "Tämä kauppa on suojattu salasanalla",
+      "intro": "Syötä salasana alla, niin pääset kauppaan {{ shop }}",
+      "placeholder": "Syötä kaupan salasana",
+      "show_password": "Näytä salasana",
+      "enter": "Siirry kauppaan",
+      "need_access": "Tarvitsetko pääsyn?",
+      "contact": "Ota yhteyttä",
+      "hand_poured": "Käsin valettuja",
+      "hand_poured_detail": "pienissä erissä",
+      "vegan": "Sopivat vegaaneille",
+      "vegan_detail": "Ei eläinperäisiä ainesosia",
+      "packaging": "Harkittu pakkaus",
+      "packaging_detail": "Kierrätettävä mahdollisuuksien mukaan",
+      "scents": "Ihania tuoksuja",
+      "scents_detail": "Kotiisi"
+    },
     "basket": {
       "title": "Ostoskorisi",
       "intro": "Muutama todella hyvä tuoksu on valmiina sinulle.",

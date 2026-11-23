@@ -364,6 +364,23 @@
     }
   },
   "smelly": {
+    "password": {
+      "heading": "Den här butiken är lösenordsskyddad",
+      "intro": "Ange lösenordet nedan för att komma in på {{ shop }}",
+      "placeholder": "Ange butikens lösenord",
+      "show_password": "Visa lösenord",
+      "enter": "Gå till butiken",
+      "need_access": "Behöver du åtkomst?",
+      "contact": "Kontakta oss",
+      "hand_poured": "Handgjutna",
+      "hand_poured_detail": "i små omgångar",
+      "vegan": "Passar veganer",
+      "vegan_detail": "Inga animaliska ingredienser",
+      "packaging": "Genomtänkt förpackning",
+      "packaging_detail": "Återvinningsbar där det är möjligt",
+      "scents": "Underbara dofter",
+      "scents_detail": "För ditt hem"
+    },
     "basket": {
       "title": "Din varukorg",
       "intro": "Några riktigt härliga dofter väntar på dig.",

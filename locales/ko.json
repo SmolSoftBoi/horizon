@@ -364,6 +364,23 @@
     }
   },
   "smelly": {
+    "password": {
+      "heading": "이 스토어는 비밀번호로 보호됩니다",
+      "intro": "{{ shop }}에 접속하려면 아래에 비밀번호를 입력하세요.",
+      "placeholder": "스토어 비밀번호 입력",
+      "show_password": "비밀번호 표시",
+      "enter": "스토어 입장",
+      "need_access": "접근 권한이 필요하신가요?",
+      "contact": "문의하기",
+      "hand_poured": "손으로 부어 만든 캔들",
+      "hand_poured_detail": "소량씩 제작",
+      "vegan": "비건 친화적",
+      "vegan_detail": "동물성 원료 미사용",
+      "packaging": "세심하게 고른 포장",
+      "packaging_detail": "가능한 경우 재활용 가능",
+      "scents": "멋진 향기",
+      "scents_detail": "집 안을 위한 향"
+    },
     "basket": {
       "title": "카트",
       "intro": "기분 좋은 향들이 기다리고 있어요.",

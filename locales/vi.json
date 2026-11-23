@@ -364,6 +364,23 @@
     }
   },
   "smelly": {
+    "password": {
+      "heading": "Cửa hàng này được bảo vệ bằng mật khẩu",
+      "intro": "Nhập mật khẩu bên dưới để truy cập {{ shop }}",
+      "placeholder": "Nhập mật khẩu cửa hàng",
+      "show_password": "Hiện mật khẩu",
+      "enter": "Vào cửa hàng",
+      "need_access": "Bạn cần quyền truy cập?",
+      "contact": "Liên hệ với chúng tôi",
+      "hand_poured": "Rót thủ công",
+      "hand_poured_detail": "theo từng mẻ nhỏ",
+      "vegan": "Phù hợp với người ăn thuần chay",
+      "vegan_detail": "Không có thành phần từ động vật",
+      "packaging": "Bao bì được chọn kỹ",
+      "packaging_detail": "Có thể tái chế khi điều kiện cho phép",
+      "scents": "Hương thơm tuyệt vời",
+      "scents_detail": "Cho ngôi nhà của bạn"
+    },
     "basket": {
       "title": "Giỏ hàng của bạn",
       "intro": "Vài mùi hương tuyệt vời đang chờ bạn.",

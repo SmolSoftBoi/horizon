@@ -364,6 +364,23 @@
     }
   },
   "smelly": {
+    "password": {
+      "heading": "Dieser Shop ist passwortgeschützt",
+      "intro": "Gib unten das Passwort ein, um auf {{ shop }} zuzugreifen.",
+      "placeholder": "Shop-Passwort eingeben",
+      "show_password": "Passwort anzeigen",
+      "enter": "Shop betreten",
+      "need_access": "Brauchst du Zugang?",
+      "contact": "Kontaktiere uns",
+      "hand_poured": "Handgegossen",
+      "hand_poured_detail": "in kleinen Chargen",
+      "vegan": "Für Veganer geeignet",
+      "vegan_detail": "Ohne tierische Bestandteile",
+      "packaging": "Durchdachte Verpackung",
+      "packaging_detail": "Recycelbar, wo möglich",
+      "scents": "Wunderbare Düfte",
+      "scents_detail": "Für dein Zuhause"
+    },
     "basket": {
       "title": "Dein Warenkorb",
       "intro": "Ein paar richtig gute Düfte warten auf dich.",

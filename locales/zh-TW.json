@@ -364,6 +364,23 @@
     }
   },
   "smelly": {
+    "password": {
+      "heading": "此商店設有密碼保護",
+      "intro": "請在下方輸入密碼，以進入 {{ shop }}。",
+      "placeholder": "輸入商店密碼",
+      "show_password": "顯示密碼",
+      "enter": "進入商店",
+      "need_access": "需要存取權限？",
+      "contact": "聯絡我們",
+      "hand_poured": "手工灌注",
+      "hand_poured_detail": "小批量製作",
+      "vegan": "純素友善",
+      "vegan_detail": "不含動物成分",
+      "packaging": "用心設計的包裝",
+      "packaging_detail": "盡可能採用可回收材料",
+      "scents": "迷人香氣",
+      "scents_detail": "為家中添香"
+    },
     "basket": {
       "title": "您的購物車",
       "intro": "幾款好聞的香氛已經為你準備好了。",
