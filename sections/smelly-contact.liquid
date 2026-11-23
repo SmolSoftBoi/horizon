@@ -1,0 +1,628 @@
+{% liquid
+  assign heading = 'smelly.contact_page.heading' | t
+  assign heading = section.settings.heading | strip | default: heading
+  assign form_id = section.id | prepend: 'ContactForm-'
+  assign contact_email = section.settings.contact_email | strip
+  assign hours = section.settings.hours | strip_html | strip
+  assign section_index = section.index | default: 1
+  assign image_loading = 'eager'
+  assign image_priority = 'high'
+  if section_index > 1
+    assign image_loading = 'lazy'
+    assign image_priority = 'auto'
+  endif
+%}
+
+{% capture social_links %}
+  {% assign platforms = 'Instagram,Facebook,TikTok,YouTube' | split: ',' %}
+  {% for platform in platforms %}
+    {% assign icon = platform | downcase %}
+    {% assign setting_key = icon | append: '_url' %}
+    {% capture href %}{% render 'smelly-link-href', url: section.settings[setting_key] %}{% endcapture %}
+    {% if href != blank %}
+      <li>
+        <a href="{{ href }}" aria-label="{{ platform }}">
+          <svg width="28" height="28" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false">
+            {% render 'icon', icon: icon %}
+          </svg>
+        </a>
+      </li>
+    {% endif %}
+  {% endfor %}
+{% endcapture %}
+
+{% capture questions %}
+  {% for block in section.blocks %}
+    {% if block.settings.question != blank and block.settings.answer != blank %}
+      <details class="smelly-contact__question" {{ block.shopify_attributes }}>
+        <summary>
+          {{ block.settings.question | escape }}
+          {{- 'icon-caret.svg' | inline_asset_content -}}
+        </summary>
+        <div class="smelly-contact__answer rte">
+          {{ block.settings.answer }}
+          {% if block.settings.link_refund_policy and shop.refund_policy.body != blank %}
+            <p><a href="{{ shop.refund_policy.url | escape }}">{{ 'smelly.contact_page.refund_policy' | t }}</a></p>
+          {% endif %}
+        </div>
+      </details>
+    {% endif %}
+  {% endfor %}
+{% endcapture %}
+
+<div class="smelly-section smelly-contact">
+  <header class="smelly-contact__hero">
+    {% if section.settings.banner_image != blank %}
+      {{
+        section.settings.banner_image
+        | image_url: width: 2400
+        | image_tag:
+          widths: '480, 750, 1100, 1500, 2000, 2400',
+          sizes: '100vw',
+          class: 'smelly-contact__photo',
+          loading: image_loading,
+          fetchpriority: image_priority,
+          alt: ''
+      }}
+    {% else %}
+      <picture class="smelly-contact__photo smelly-contact__photo--bundled">
+        <source media="(max-width: 1099px)" srcset="{{ 'smelly-collection-hero-small.webp' | asset_url }}">
+        <img
+          src="{{ 'smelly-collection-hero.webp' | asset_url }}"
+          width="2000"
+          height="667"
+          loading="{{ image_loading }}"
+          fetchpriority="{{ image_priority }}"
+          alt=""
+        >
+      </picture>
+    {% endif %}
+    <div class="smelly-contact__shell smelly-contact__hero-inner">
+      <nav class="smelly-contact__breadcrumbs" aria-label="{{ 'smelly.product.breadcrumbs' | t }}">
+        <ol role="list">
+          <li><a href="{{ routes.root_url | escape }}" aria-label="{{ 'smelly.home' | t }}">{% render 'smelly-contact-icon', icon: 'home' %}</a></li>
+          <li aria-current="page">{{ 'smelly.contact_page.breadcrumb' | t }}</li>
+        </ol>
+      </nav>
+      <h1>{{ heading | escape }} <span class="smelly-contact__heart">{% render 'smelly-illustration', kind: 'heart' %}</span></h1>
+      {% if section.settings.banner_intro != blank %}
+        <p class="smelly-contact__hero-intro">{{ section.settings.banner_intro | escape | newline_to_br }}</p>
+      {% endif %}
+    </div>
+  </header>
+
+  <div class="smelly-contact__shell smelly-contact__body">
+    <div class="smelly-contact__layout">
+      <div class="smelly-contact__information">
+        <div class="smelly-contact__intro">
+          <h2>{{ 'smelly.contact_page.get_in_touch' | t }} <span class="smelly-contact__heart">{% render 'smelly-illustration', kind: 'heart' %}</span></h2>
+          <p>{{ 'smelly.contact_page.intro' | t }}</p>
+        </div>
+
+        <ul class="smelly-contact__cards" role="list">
+          <li>
+            <a
+              class="smelly-contact__card"
+              {% if contact_email == blank %}
+                href="#{{ form_id }}" data-smelly-contact-subject="{{ 'smelly.contact_page.topic_general' | t | escape }}"
+              {% else %}
+                href="mailto:{{ contact_email | url_encode | replace: '%40', '@' | escape }}"
+              {% endif %}
+            >
+              {% render 'smelly-contact-icon', icon: 'email' %}
+              {% if contact_email == blank %}
+                <strong>{{ 'smelly.contact_page.general_enquiries' | t }}</strong>
+                <span>{{ 'smelly.contact_page.general_help' | t }}</span>
+              {% else %}
+                <strong>{{ 'smelly.contact_page.email_us' | t }}</strong>
+                <span class="smelly-contact__email">{{ contact_email | escape }}</span>
+                {% if section.settings.response_time != blank %}
+                  <span>{{ section.settings.response_time | escape }}</span>
+                {% endif %}
+              {% endif %}
+            </a>
+          </li>
+          <li>
+            <a class="smelly-contact__card" href="#{{ form_id }}" data-smelly-contact-subject="{{ 'smelly.contact_page.topic_order' | t | escape }}">
+              <svg width="24" height="24" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false">
+                {% render 'icon', icon: 'box' %}
+              </svg>
+              <strong>{{ 'smelly.contact_page.topic_order' | t }}</strong>
+              <span>{{ 'smelly.contact_page.order_help' | t }}</span>
+            </a>
+          </li>
+          <li>
+            <a class="smelly-contact__card" href="#{{ form_id }}" data-smelly-contact-subject="{{ 'smelly.contact_page.topic_wholesale' | t | escape }}">
+              {% render 'smelly-contact-icon', icon: 'wholesale' %}
+              <strong>{{ 'smelly.contact_page.topic_wholesale' | t }}</strong>
+              <span>{{ 'smelly.contact_page.wholesale_help' | t }}</span>
+            </a>
+          </li>
+        </ul>
+
+        {% if hours != blank %}
+          <div class="smelly-contact__hours">
+            <h3>{% render 'smelly-contact-icon', icon: 'calendar' %} {{ 'smelly.contact_page.hours' | t }}</h3>
+            <div class="smelly-contact__hours-copy rte">{{ section.settings.hours }}</div>
+          </div>
+        {% endif %}
+
+        {% if social_links != blank %}
+          <div class="smelly-contact__social">
+            <div>
+              <h3>{{ 'smelly.contact_page.social_heading' | t }} <span class="smelly-contact__heart">{% render 'smelly-illustration', kind: 'heart' %}</span></h3>
+              <p>{{ 'smelly.contact_page.social_intro' | t }}</p>
+            </div>
+            <ul role="list">{{ social_links }}</ul>
+          </div>
+        {% endif %}
+      </div>
+
+      <section class="smelly-contact__panel" aria-labelledby="{{ form_id }}-heading">
+        <h2 id="{{ form_id }}-heading">{{ 'smelly.contact_page.form_heading' | t }}</h2>
+        {% render 'smelly-contact-form', form_id: form_id %}
+      </section>
+    </div>
+
+    {% if section.settings.show_page_content and page.content != blank %}
+      <div class="smelly-contact__page-content rte">
+        <rte-formatter>{{ page.content }}</rte-formatter>
+      </div>
+    {% endif %}
+
+    {% if questions != blank %}
+      <section class="smelly-contact__faq" aria-labelledby="ContactQuestions-{{ section.id }}">
+        <h2 id="ContactQuestions-{{ section.id }}">{{ 'smelly.contact_page.faq_heading' | t }}</h2>
+        <div class="smelly-contact__faq-list">{{ questions }}</div>
+      </section>
+    {% endif %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .smelly-contact {
+    --contact-panel: #fcebe8;
+    --contact-panel-hover: #f9dce2;
+    --contact-field: #fffdf9;
+    --contact-radius: 24px;
+    --contact-hero-direction: to right;
+
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+  }
+
+  .smelly-contact:dir(rtl) { --contact-hero-direction: to left; }
+
+  .smelly-contact__shell {
+    width: min(1480px, calc(100% - clamp(32px, 5vw, 80px)));
+    margin-inline: auto;
+  }
+
+  .smelly-contact__hero {
+    position: relative;
+    isolation: isolate;
+    background: #24120b;
+    color: #fffaf5;
+  }
+
+  .smelly-contact__hero::after {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background: linear-gradient(var(--contact-hero-direction), #24120b 14%, #24120bcc 35%, #24120b42 57%, transparent 76%);
+    content: '';
+  }
+
+  .smelly-contact__photo {
+    position: absolute;
+    z-index: -2;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  :is(img.smelly-contact__photo, .smelly-contact__photo img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .smelly-contact__photo--bundled img { object-position: 50% 41%; }
+
+  .smelly-contact__hero-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: clamp(216px, 14.5vw, 288px);
+    padding: 10px clamp(0px, 2.1vw, 32px) 16px;
+  }
+
+  .smelly-contact__breadcrumbs ol {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+
+  .smelly-contact__breadcrumbs a {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 36px;
+    margin-inline-start: -7px;
+  }
+
+  .smelly-contact__breadcrumbs a:focus-visible { outline-color: currentColor; outline-offset: -2px; }
+  .smelly-contact__breadcrumbs svg { width: 18px; height: 18px; }
+  .smelly-contact__breadcrumbs li + li::before {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin-inline-end: 10px;
+    border-block-start: 1px solid;
+    border-inline-end: 1px solid;
+    vertical-align: .18em;
+    rotate: 45deg;
+    content: '';
+  }
+
+  .smelly-contact__breadcrumbs:dir(rtl) li + li::before { rotate: -45deg; }
+
+  .smelly-contact__hero h1 {
+    max-width: 100%;
+    font-size: clamp(2.75rem, 5vw, 5rem);
+    line-height: 1.02;
+    letter-spacing: -.05em;
+    text-wrap: wrap;
+    text-shadow: 0 1px 10px #24120b70;
+  }
+
+  .smelly-contact__heart {
+    display: inline-block;
+    width: .88em;
+    height: .7em;
+    vertical-align: .02em;
+    color: var(--smelly-pink);
+    rotate: -12deg;
+  }
+
+  .smelly-contact__heart svg { stroke-width: 6; }
+  .smelly-contact__hero .smelly-contact__heart { color: #ff6c91; }
+
+  .smelly-contact .smelly-contact__hero-intro {
+    max-width: 34ch;
+    margin-block-start: 7px;
+    font-size: clamp(1.0625rem, 1.5vw, 1.375rem);
+    line-height: 1.35;
+    text-wrap: pretty;
+  }
+
+  .smelly-contact__hero-intro::after {
+    display: block;
+    width: 116px;
+    height: 8px;
+    margin-block-start: 9px;
+    margin-inline-start: min(28%, 120px);
+    border-block-start: 3px solid #ff6c91;
+    border-radius: 50%;
+    rotate: -4deg;
+    content: '';
+  }
+
+  .smelly-contact__body {
+    display: grid;
+    gap: clamp(24px, 2vw, 32px);
+    padding-block: clamp(20px, 1.6vw, 26px) clamp(32px, 3vw, 48px);
+  }
+
+  .smelly-contact__layout {
+    display: grid;
+    align-items: start;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(20px, 2vw, 32px);
+  }
+
+  .smelly-contact__information { display: grid; gap: 14px; min-width: 0; }
+  .smelly-contact__intro { padding: 0 clamp(0px, 1.2vw, 20px) 5px; }
+
+  .smelly-contact .smelly-contact__intro p {
+    max-width: 62ch;
+    margin-block-start: 5px;
+    font-size: clamp(1rem, 1.25vw, 1.1875rem);
+    text-wrap: pretty;
+  }
+
+  .smelly-contact__cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(8px, .8vw, 14px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .smelly-contact__card {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: clamp(12px, 1.4vw, 22px) clamp(10px, 1.3vw, 20px);
+    border-radius: var(--contact-radius);
+    background: var(--contact-panel);
+    text-align: center;
+  }
+
+  .smelly-contact__card svg { flex: none; width: 42px; height: 42px; color: var(--smelly-pink); }
+  .smelly-contact__card strong { font-size: clamp(1.0625rem, 1.5vw, 1.375rem); line-height: 1.15; }
+  .smelly-contact__card span { font-size: .9375rem; line-height: 1.4; }
+  .smelly-contact__email { font-weight: 700; text-decoration: underline; text-underline-offset: .15em; }
+
+  .smelly-contact__hours,
+  .smelly-contact__panel,
+  .smelly-contact__faq { border-radius: var(--contact-radius); background: var(--contact-panel); }
+
+  .smelly-contact__hours,
+  .smelly-contact__social {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px clamp(16px, 2vw, 30px);
+    padding: 12px clamp(14px, 1.6vw, 25px);
+  }
+
+  .smelly-contact .smelly-contact__hours h3 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font: 700 clamp(1.125rem, 1.5vw, 1.375rem)/1.2 var(--font-body--family, sans-serif);
+    letter-spacing: normal;
+  }
+
+  .smelly-contact__hours svg { flex: none; width: 34px; height: 34px; color: var(--smelly-pink); }
+  .smelly-contact__hours-copy { flex: 1 1 16rem; }
+  .smelly-contact__social { justify-content: space-between; padding-block: 6px; }
+  .smelly-contact__social > div { flex: 1 1 12rem; }
+  .smelly-contact .smelly-contact__social h3 { font-size: clamp(1.5rem, 2.8vw, 2.25rem); line-height: 1.08; }
+  .smelly-contact__social p { max-width: 41ch; font-size: .9375rem; }
+  .smelly-contact__social ul { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+
+  .smelly-contact__social a {
+    display: grid;
+    place-items: center;
+    width: clamp(44px, 3.8vw, 60px);
+    height: clamp(44px, 3.8vw, 60px);
+    border-radius: 16px;
+    background: var(--contact-panel);
+    color: var(--smelly-pink);
+  }
+
+  .smelly-contact :is(.smelly-contact__card, .smelly-contact__social a, .smelly-contact__question summary):hover { background: var(--contact-panel-hover); }
+  .smelly-contact__panel { padding: clamp(16px, 1.6vw, 25px); }
+  .smelly-contact__panel h2 { text-wrap: wrap; }
+
+  .smelly-contact__form {
+    display: grid;
+    gap: 12px;
+    margin-block-start: 14px;
+    scroll-margin-block-start: calc(var(--header-group-height, 0px) + 20px);
+  }
+
+  .smelly-contact__form-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px clamp(12px, 1.4vw, 22px); }
+  .smelly-contact__field { display: grid; min-width: 0; gap: 4px; }
+  .smelly-contact__field label { font-weight: 700; }
+  .smelly-contact__field label span { color: var(--smelly-pink); }
+
+  .smelly-contact__field :is(input, select, textarea) {
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding: 9px 14px;
+    border: 1px solid #9e8584;
+    border-radius: 13px;
+    background: var(--contact-field);
+    color: var(--smelly-ink);
+    font: inherit;
+    font-size: max(1rem, 16px);
+  }
+
+  .smelly-contact__field :is(input, textarea)::placeholder { color: #65565d; opacity: 1; }
+  .smelly-contact__field :is(input, select, textarea):focus-visible { outline: 2px solid var(--smelly-pink); outline-offset: 2px; }
+  .smelly-contact__field [aria-invalid='true'] { border-color: var(--smelly-pink); }
+  .smelly-contact__field textarea { resize: vertical; min-height: 140px; }
+  .smelly-contact__select { position: relative; min-width: 0; }
+  .smelly-contact__select select { appearance: none; padding-inline-end: 38px; cursor: pointer; }
+  .smelly-contact__select select:invalid { color: #65565d; }
+  .smelly-contact__select option { color: var(--smelly-ink); }
+
+  .smelly-contact__select svg {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-end: 14px;
+    width: 14px;
+    height: 14px;
+    translate: 0 -50%;
+    pointer-events: none;
+  }
+
+  .smelly-contact .smelly-contact__form .smelly-button {
+    width: 100%;
+    gap: 10px;
+    margin-block-start: 6px;
+    border-radius: 18px;
+    font-size: clamp(1rem, 1.4vw, 1.1875rem);
+  }
+
+  .smelly-contact__form button svg { flex: none; }
+
+  .smelly-contact__notice {
+    padding: 12px 14px;
+    border: 1px solid #667a53;
+    border-radius: 12px;
+    background: #f7faef;
+  }
+
+  .smelly-contact__notice--error { border-color: var(--smelly-pink); background: var(--contact-field); }
+  .smelly-contact__notice ul { margin-block: 4px 0; }
+  .smelly-contact__notice:focus { outline: 2px solid currentColor; outline-offset: 2px; }
+
+  .smelly-contact__faq {
+    display: grid;
+    align-items: start;
+    gap: 12px clamp(20px, 2.4vw, 36px);
+    padding: clamp(16px, 1.7vw, 26px);
+  }
+
+  .smelly-contact .smelly-contact__faq h2 { font-size: clamp(1.75rem, 2.8vw, 2.75rem); }
+  .smelly-contact__faq-list { display: grid; align-items: start; gap: 6px clamp(12px, 2vw, 30px); }
+  .smelly-contact__question { min-width: 0; border-radius: 14px; background: #fbe4e4; }
+
+  .smelly-contact__question summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 44px;
+    padding: 10px 16px;
+    border-radius: inherit;
+    list-style: none;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .smelly-contact__question summary::-webkit-details-marker { display: none; }
+  .smelly-contact__question summary svg { flex: none; width: 14px; height: 14px; }
+  .smelly-contact__question[open] summary svg { rotate: 180deg; }
+  .smelly-contact__answer { padding: 0 16px 14px; font-size: .9375rem; }
+  .smelly-contact__answer p + p { margin-block-start: 6px; }
+
+  .smelly-contact :is(.smelly-contact__answer, .smelly-contact__page-content, .smelly-contact__hours-copy) a {
+    text-decoration: underline;
+    text-underline-offset: .15em;
+  }
+
+  @media (min-width: 750px) {
+    .smelly-contact__faq-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (min-width: 990px) {
+    .smelly-contact__layout { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .smelly-contact__hero h1 { max-width: min(60%, 15ch); }
+    .smelly-contact__photo--bundled { width: 87%; inset-inline-start: auto; }
+    .smelly-contact__panel { padding-block-start: 12px; }
+    .smelly-contact__faq { grid-template-columns: minmax(0, 1fr) minmax(0, 2.8fr); }
+  }
+
+  @media (max-width: 749px) {
+    .smelly-contact__hero::after {
+      background: linear-gradient(var(--contact-hero-direction), #24120bf0, #24120bcc 52%, #24120b9e);
+    }
+
+    .smelly-contact__photo--bundled img { object-position: 50% 50%; }
+  }
+
+  @media (max-width: 479px) {
+    .smelly-contact__cards,
+    .smelly-contact__form-row { grid-template-columns: minmax(0, 1fr); }
+
+    .smelly-contact__card {
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr);
+      column-gap: 12px;
+      row-gap: 4px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      text-align: start;
+    }
+
+    .smelly-contact__card svg { grid-row: 1 / span 2; width: 32px; height: 32px; }
+    .smelly-contact__card :is(strong, span) { grid-column: 2; }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  const contactFormSelector = '.smelly-contact__form';
+  const contactSubjectSelector = 'select[name="contact[Enquiry type]"]';
+  const contactSubjectStorageKey = (form) => `smelly-contact-subject:${form.id}`;
+
+  document.addEventListener('click', (event) => {
+    const link = event.target.closest('[data-smelly-contact-subject]');
+    if (!link || event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+    const subject = link.closest('.smelly-contact')?.querySelector(contactSubjectSelector);
+    if (subject) subject.value = link.dataset.smellyContactSubject;
+  });
+
+  document.addEventListener('formdata', ({ target: form }) => {
+    if (!form.matches(contactFormSelector)) return;
+
+    const subject = form.querySelector(contactSubjectSelector);
+    const topic = subject?.selectedOptions[0]?.dataset.smellyContactTopic;
+    if (!topic) return;
+
+    try {
+      sessionStorage.setItem(contactSubjectStorageKey(form), topic);
+    } catch {
+      // Browser storage is optional for the native form.
+    }
+  });
+
+  for (const form of document.querySelectorAll(contactFormSelector)) {
+    try {
+      const storageKey = contactSubjectStorageKey(form);
+      if (!form.querySelector('.smelly-contact__notice--error')) {
+        sessionStorage.removeItem(storageKey);
+        continue;
+      }
+
+      const subject = form.querySelector(contactSubjectSelector);
+      const savedTopic = sessionStorage.getItem(storageKey);
+      if (!subject || subject.value || !savedTopic) continue;
+
+      const option = Array.from(subject.options).find((choice) => choice.dataset.smellyContactTopic === savedTopic);
+      if (option) option.selected = true;
+    } catch {
+      // The subject stays selectable when storage is blocked.
+    }
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Smelly A.F. contact",
+  "limit": 1,
+  "enabled_on": { "templates": ["page"] },
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Banner heading", "info": "Defaults to Contact Us." },
+    { "type": "textarea", "id": "banner_intro", "label": "Banner introduction", "default": "We’re here to help, answer questions and talk all things candles." },
+    { "type": "image_picker", "id": "banner_image", "label": "Banner image", "info": "Defaults to the lit Pink Bubblegum candle." },
+    { "type": "text", "id": "contact_email", "label": "Public email address", "info": "Without an address, the first card opens the contact form." },
+    { "type": "text", "id": "response_time", "label": "Usual reply time", "visible_if": "{{ section.settings.contact_email != blank }}" },
+    { "type": "richtext", "id": "hours", "label": "Support hours" },
+    { "type": "url", "id": "instagram_url", "label": "Instagram profile" },
+    { "type": "url", "id": "facebook_url", "label": "Facebook page" },
+    { "type": "url", "id": "tiktok_url", "label": "TikTok profile" },
+    { "type": "url", "id": "youtube_url", "label": "YouTube channel" },
+    { "type": "checkbox", "id": "show_page_content", "label": "Show content from Pages", "default": true }
+  ],
+  "max_blocks": 8,
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question", "default": "How are your candles made?" },
+        { "type": "richtext", "id": "answer", "label": "Answer", "default": "<p>We hand-pour our candles using soy wax.</p>" },
+        { "type": "checkbox", "id": "link_refund_policy", "label": "Link to the store’s returns policy", "default": false }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Smelly A.F. contact" }]
+}
+{% endschema %}

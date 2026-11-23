@@ -23,7 +23,7 @@ A Smelly A.F. storefront built on this checkout of Shopify Horizon. The theme us
 - Scent guide (`page.scents`) template.
 - A branded default product template with a large media gallery, serif product title, live price, product description, quantity selector and pink Add to basket control. It retains Horizon’s variant picker, gallery thumbnails, image zoom, accelerated checkout, sticky basket bar, product recommendations, disclosures and analytics. The handwritten photograph caption and care information are editable; shipping and refund links use the store’s configured policies and stay hidden when unavailable. Products without media use Horizon’s centred details layout.
 - The branded basket uses Horizon’s quantity, discount and checkout controls. Its **Cart** section can suggest products from a selected collection. Set **Free UK delivery threshold (£)** only when one order minimum qualifies every eligible UK basket for free delivery. Leave it blank if shipping profiles or locations can add a charge above that amount. Shopify calculates the final rate at checkout. [Combined shipping rates](https://help.shopify.com/en/manual/fulfillment/setup/shipping-profiles/combined-shipping-rates)
-- Horizon’s existing search, contact, journal and article templates use the shared brand palette and typography. Its original collection section remains available in the theme source.
+- The **contact** page template pairs a candle banner and enquiry cards with Shopify’s contact form and editable FAQs. Horizon’s search, journal and article templates use the shared brand palette and typography. Its original collection section remains available in the theme source.
 - Shopify product forms for featured products, including sold-out states. Products with variants or selling plans link to the product page for selection. Direct adds start at the variant’s minimum order quantity, round the resulting basket quantity to its required increment, and respect maximums and managed stock. Each submission takes shoppers to the basket.
   Shopify requires quantity-rule minima and maxima to be multiples of the increment, as enforced by [quantity rule validation](https://shopify.dev/docs/api/admin-graphql/2026-10/mutations/quantityRulesAdd). The direct-add calculation follows that contract.
 - A Shopify customer newsletter form with error and success messages, an explicit marketing notice and the store’s privacy-policy link when configured.
@@ -45,6 +45,8 @@ A Smelly A.F. storefront built on this checkout of Shopify Horizon. The theme us
 The default product template uses the product’s media, description, prices, variants and availability from Shopify. The thumbnail position, gallery zoom and purchase controls are editable in **Smelly A.F. product**. **Smelly A.F. care & info** controls the fallback care copy and links to the shipping and refund policies configured in Shopify.
 
 Preview the **gift-card** template with an existing Shopify gift card product. When the template is available on the published theme, assign it to that product in Shopify admin and link the product under **Shop** in the main menu. Manage the amounts on the product and check the expiry and fulfilment settings before reviewing the FAQ copy.
+
+Assign the **contact** template to the Contact page. In **Smelly A.F. contact**, add the public email address, usual reply time, support hours and social profiles once confirmed. Until then, the General Enquiries card opens the form and the optional hours and social areas stay hidden. Shopify sends contact form submissions to the store’s configured sender email. [Shopify Help](https://help.shopify.com/en/manual/online-store/themes/customizing-themes/common-customizations/add-contact-page#view-contact-form-submissions)
 
 Add the optional product metafield definitions under **Settings → Custom data → Products**. Enter the verified values on each relevant product. Omitted fields leave no gap on the page.
 
@@ -79,7 +81,7 @@ When the hero is the first section under a transparent header, it reserves the m
 
 Hand-poured soy wax and 150g are supported by the supplied labels. No mock prices, reviews, discounts, testimonials, burn times, delivery promises or vegan/plastic-free claims have been added. Replace the proposed brand copy where necessary before launch.
 
-The shared `shop_all` label and product-page interface strings are translated across all 34 storefront locales under `smelly`. Other Smelly A.F. strings use UK English defaults. Translate those strings and merchant-entered content before enabling another storefront language.
+The shared `shop_all` label and product-page interface strings are translated across all 34 storefront locales under `smelly`. The contact form reuses Horizon’s translated field labels and provides translated subject choices in the same locales. The remaining brand copy uses UK English defaults. Translate that copy and merchant-entered content before enabling another storefront language.
 
 ## Local verification
 
