@@ -60,10 +60,17 @@ export function resolveVariantId(drainState) {
  * @returns {PurchaseSelection}
  */
 export function readMainPurchaseSelection(html, productUrl) {
+  const handle = productUrl.pathname.match(/\/products\/([^/]+)\/?$/)?.[1];
+  if (!handle) return { variantId: null, available: false, quantityConstraints: null };
+
   const forms = html.querySelectorAll('main .product-details product-form-component[data-product-url]');
   const productForm = Array.from(forms).find((element) => {
     const formUrl = element.getAttribute('data-product-url');
-    return formUrl && new URL(formUrl, productUrl.origin).pathname === productUrl.pathname;
+    if (!formUrl) return false;
+
+    const url = new URL(formUrl, productUrl.origin);
+    // The option and purchase form URLs may use different locale prefixes for the same product.
+    return url.origin === productUrl.origin && url.pathname.match(/\/products\/([^/]+)\/?$/)?.[1] === handle;
   });
   const input = productForm?.querySelector('form input[name="id"][ref="variantId"]');
   const form = input?.closest('form');
