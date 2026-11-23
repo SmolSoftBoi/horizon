@@ -1,0 +1,97 @@
+{% doc %}
+  Renders the native Shopify form on the Smelly A.F. contact page.
+  @param {string} form_id - Section-specific form and message anchor.
+{% enddoc %}
+
+{%- form 'contact', id: form_id, class: 'smelly-contact__form', tabindex: '-1' -%}
+  <input type="hidden" name="contact[id]" value="{{ form_id }}">
+
+  {% liquid
+    assign form_errors = nil
+    assign form_success = false
+    assign field_name = customer.name
+    assign field_email = customer.email
+    assign field_body = ''
+    if form.id == form_id or form.id == blank
+      assign form_errors = form.errors
+      assign form_success = form.posted_successfully?
+      assign field_name = form.name | default: field_name
+      assign field_email = form.email | default: field_email
+      assign field_body = form.body
+    endif
+  %}
+
+  {% if form_errors %}
+    <div class="smelly-contact__notice smelly-contact__notice--error" id="{{ form_id }}-errors" tabindex="-1" autofocus>
+      <p>{{ 'smelly.contact_page.error_heading' | t }}</p>
+      {{ form_errors | default_errors }}
+    </div>
+  {% elsif form_success %}
+    <p class="smelly-contact__notice" tabindex="-1" autofocus>{{ 'blocks.contact_form.post_success' | t }}</p>
+  {% endif %}
+
+  <div class="smelly-contact__form-row">
+    <div class="smelly-contact__field">
+      <label for="{{ form_id }}-name">{{ 'blocks.contact_form.name' | t }} <span aria-hidden="true">*</span></label>
+      <input
+        id="{{ form_id }}-name"
+        type="text"
+        name="contact[name]"
+        autocomplete="name"
+        value="{{ field_name | escape }}"
+        placeholder="{{ 'smelly.contact_page.name_example' | t | escape }}"
+        required
+      >
+    </div>
+    <div class="smelly-contact__field">
+      <label for="{{ form_id }}-email">{{ 'blocks.contact_form.email' | t }} <span aria-hidden="true">*</span></label>
+      <input
+        id="{{ form_id }}-email"
+        type="email"
+        name="contact[email]"
+        autocomplete="email"
+        spellcheck="false"
+        autocapitalize="off"
+        value="{{ field_email | escape }}"
+        placeholder="{{ 'smelly.contact_page.email_example' | t | escape }}"
+        {% if form_errors contains 'email' %}
+          aria-invalid="true"
+          aria-describedby="{{ form_id }}-errors"
+        {% endif %}
+        required
+      >
+    </div>
+  </div>
+
+  <div class="smelly-contact__field">
+    <label for="{{ form_id }}-subject">{{ 'smelly.contact_page.subject' | t }} <span aria-hidden="true">*</span></label>
+    <div class="smelly-contact__select">
+      <select id="{{ form_id }}-subject" name="contact[subject]" required>
+        <option value="" disabled selected>{{ 'smelly.contact_page.choose_subject' | t }}</option>
+        {% assign topics = 'general,order,wholesale,product' | split: ',' %}
+        {% for topic in topics %}
+          {% assign topic_key = topic | prepend: 'smelly.contact_page.topic_' %}
+          {% assign topic_label = topic_key | t %}
+          <option value="{{ topic_label | escape }}">{{ topic_label | escape }}</option>
+        {% endfor %}
+      </select>
+      {{- 'icon-caret.svg' | inline_asset_content -}}
+    </div>
+  </div>
+
+  <div class="smelly-contact__field">
+    <label for="{{ form_id }}-body">{{ 'blogs.comment_form.message' | t }} <span aria-hidden="true">*</span></label>
+    <textarea
+      id="{{ form_id }}-body"
+      name="contact[body]"
+      rows="5"
+      placeholder="{{ 'smelly.contact_page.message_example' | t | escape }}"
+      required
+    >{{ field_body | escape }}</textarea>
+  </div>
+
+  <button type="submit" class="smelly-button">
+    {% render 'smelly-contact-icon', icon: 'send' %}
+    {{ 'smelly.contact_page.send' | t }}
+  </button>
+{%- endform -%}
