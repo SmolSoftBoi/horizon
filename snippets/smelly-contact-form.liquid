@@ -66,7 +66,7 @@
   <div class="smelly-contact__field">
     <label for="{{ form_id }}-subject">{{ 'smelly.contact_page.subject' | t }} <span aria-hidden="true">*</span></label>
     <div class="smelly-contact__select">
-      <select id="{{ form_id }}-subject" name="contact[subject]" required>
+      <select id="{{ form_id }}-subject" name="contact[Enquiry type]" required>
         <option value="" disabled selected>{{ 'smelly.contact_page.choose_subject' | t }}</option>
         {% assign topics = 'general,order,wholesale,product' | split: ',' %}
         {% for topic in topics %}
