@@ -8,21 +8,21 @@
           "type": "question",
           "settings": {
             "question": "Where’s my order?",
-            "answer": "<p>Check your dispatch email for tracking details. If you need a hand, choose Order support in the form and include your order number.</p>"
+            "answer": "<p>Check your dispatch email for tracking details. If you need a hand, send us a message with your order number.</p>"
           }
         },
         "wholesale": {
           "type": "question",
           "settings": {
             "question": "Do you offer wholesale?",
-            "answer": "<p>We’d love to hear from retailers, event organisers and prospective stockists. Choose Wholesale in the form and tell us about your business and what you’re looking for.</p>"
+            "answer": "<p>We’d love to hear from retailers, event organisers and prospective stockists. Use the form to tell us about your business and what you’re looking for.</p>"
           }
         },
         "returns": {
           "type": "question",
           "settings": {
             "question": "Can I return an item?",
-            "answer": "<p>Choose Order support in the form and include your order number and the item you’d like to return.</p>",
+            "answer": "<p>Send us a message with your order number and the item you’d like to return.</p>",
             "link_refund_policy": true
           }
         },

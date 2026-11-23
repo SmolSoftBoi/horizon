@@ -547,13 +547,50 @@
 {% endstylesheet %}
 
 {% javascript %}
+  const contactFormSelector = '.smelly-contact__form';
+  const contactSubjectSelector = 'select[name="contact[subject]"]';
+  const contactSubjectStorageKey = (form) => `smelly-contact-subject:${form.id}`;
+
   document.addEventListener('click', (event) => {
     const link = event.target.closest('[data-smelly-contact-subject]');
     if (!link || event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
 
-    const subject = link.closest('.smelly-contact')?.querySelector('select[name="contact[subject]"]');
+    const subject = link.closest('.smelly-contact')?.querySelector(contactSubjectSelector);
     if (subject) subject.value = link.dataset.smellyContactSubject;
   });
+
+  document.addEventListener('formdata', ({ target: form }) => {
+    if (!form.matches(contactFormSelector)) return;
+
+    const subject = form.querySelector(contactSubjectSelector);
+    const topic = subject?.selectedOptions[0]?.dataset.smellyContactTopic;
+    if (!topic) return;
+
+    try {
+      sessionStorage.setItem(contactSubjectStorageKey(form), topic);
+    } catch {
+      // Browser storage is optional for the native form.
+    }
+  });
+
+  for (const form of document.querySelectorAll(contactFormSelector)) {
+    try {
+      const storageKey = contactSubjectStorageKey(form);
+      if (!form.querySelector('.smelly-contact__notice--error')) {
+        sessionStorage.removeItem(storageKey);
+        continue;
+      }
+
+      const subject = form.querySelector(contactSubjectSelector);
+      const savedTopic = sessionStorage.getItem(storageKey);
+      if (!subject || subject.value || !savedTopic) continue;
+
+      const option = Array.from(subject.options).find((choice) => choice.dataset.smellyContactTopic === savedTopic);
+      if (option) option.selected = true;
+    } catch {
+      // The subject stays selectable when storage is blocked.
+    }
+  }
 {% endjavascript %}
 
 {% schema %}

@@ -72,7 +72,7 @@
         {% for topic in topics %}
           {% assign topic_key = topic | prepend: 'smelly.contact_page.topic_' %}
           {% assign topic_label = topic_key | t %}
-          <option value="{{ topic_label | escape }}">{{ topic_label | escape }}</option>
+          <option value="{{ topic_label | escape }}" data-smelly-contact-topic="{{ topic }}">{{ topic_label | escape }}</option>
         {% endfor %}
       </select>
       {{- 'icon-caret.svg' | inline_asset_content -}}
