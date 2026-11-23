@@ -420,6 +420,37 @@
       "faq_heading": "Frequently Asked Questions",
       "refund_policy": "Read our returns policy"
     },
+    "search_page": {
+      "intro": "Encuentra tu próximo aroma favorito.",
+      "results_for": "Resultados para «{{ query }}»",
+      "all": "Todos los resultados",
+      "articles": "Artículos del blog",
+      "result_count": {
+        "one": "{{ count }} artículo",
+        "other": "{{ count }} artículos",
+        "many": "{{ count }} artículos"
+      },
+      "product_count": {
+        "one": "{{ count }} producto",
+        "other": "{{ count }} productos",
+        "many": "{{ count }} productos"
+      },
+      "article_count": {
+        "one": "{{ count }} artículo",
+        "other": "{{ count }} artículos",
+        "many": "{{ count }} artículos"
+      },
+      "filter_results": "Filtros",
+      "apply_filters": "Aplicar",
+      "sort_by": "Ordenar",
+      "browse_candles": "Ver todos los aromas",
+      "browse_collections": "Colecciones",
+      "recommendations": "También te puede gustar",
+      "loading_collections": "Buscando colecciones…",
+      "no_collections": "No se han encontrado resultados",
+      "collections_unavailable": "Los resultados de colecciones no están disponibles temporalmente.",
+      "collections_shown": "Colecciones mostradas: {{ count }}"
+    },
     "catalogue": {
       "product_view": "Vista de productos",
       "grid_view": "Vista de cuadrícula",

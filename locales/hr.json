@@ -420,6 +420,37 @@
       "faq_heading": "Frequently Asked Questions",
       "refund_policy": "Read our returns policy"
     },
+    "search_page": {
+      "intro": "Pronađite svoj novi omiljeni miris.",
+      "results_for": "Rezultati za „{{ query }}”",
+      "all": "Svi rezultati",
+      "articles": "Objava na blogu",
+      "result_count": {
+        "one": "{{ count }} artikl",
+        "other": "Broj artikala: {{ count }}",
+        "few": "Broj artikala: {{ count }}"
+      },
+      "product_count": {
+        "one": "{{ count }} proizvod",
+        "other": "Broj proizvoda: {{ count }}",
+        "few": "Broj proizvoda: {{ count }}"
+      },
+      "article_count": {
+        "one": "{{ count }} artikl",
+        "other": "Broj artikala: {{ count }}",
+        "few": "Broj artikala: {{ count }}"
+      },
+      "filter_results": "Filtri",
+      "apply_filters": "Primijeni",
+      "sort_by": "Razvrstaj",
+      "browse_candles": "Pogledaj sve mirise",
+      "browse_collections": "Kolekcije",
+      "recommendations": "Moglo bi vam se svidjeti i",
+      "loading_collections": "Traženje kolekcija…",
+      "no_collections": "Nema pronađenih rezultata",
+      "collections_unavailable": "Rezultati pretraživanja kolekcija privremeno su nedostupni.",
+      "collections_shown": "Prikazane kolekcije: {{ count }}"
+    },
     "catalogue": {
       "product_view": "Prikaz proizvoda",
       "grid_view": "Mrežni prikaz",

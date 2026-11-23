@@ -413,6 +413,34 @@
       "faq_heading": "Frequently Asked Questions",
       "refund_policy": "Read our returns policy"
     },
+    "search_page": {
+      "intro": "Tìm hương thơm yêu thích tiếp theo của bạn.",
+      "results_for": "Kết quả cho “{{ query }}”",
+      "all": "Tất cả kết quả",
+      "articles": "Bài viết blog",
+      "result_count": {
+        "one": "{{ count }} mặt hàng",
+        "other": "{{ count }} mặt hàng"
+      },
+      "product_count": {
+        "one": "{{ count }} sản phẩm",
+        "other": "{{ count }} sản phẩm"
+      },
+      "article_count": {
+        "one": "{{ count }} mặt hàng",
+        "other": "{{ count }} mặt hàng"
+      },
+      "filter_results": "Bộ lọc",
+      "apply_filters": "Áp dụng",
+      "sort_by": "Sắp xếp",
+      "browse_candles": "Xem tất cả mùi hương",
+      "browse_collections": "Bộ sưu tập",
+      "recommendations": "Có thể bạn cũng thích",
+      "loading_collections": "Đang tìm bộ sưu tập…",
+      "no_collections": "Không tìm thấy kết quả nào",
+      "collections_unavailable": "Kết quả tìm kiếm bộ sưu tập tạm thời không có sẵn.",
+      "collections_shown": "Số bộ sưu tập hiển thị: {{ count }}"
+    },
     "catalogue": {
       "product_view": "Cách hiển thị sản phẩm",
       "grid_view": "Dạng lưới",

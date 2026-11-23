@@ -413,6 +413,34 @@
       "faq_heading": "Frequently Asked Questions",
       "refund_policy": "Read our returns policy"
     },
+    "search_page": {
+      "intro": "Find din næste yndlingsduft.",
+      "results_for": "Resultater for »{{ query }}«",
+      "all": "Alle resultater",
+      "articles": "Blogopslag",
+      "result_count": {
+        "one": "{{ count }} vare",
+        "other": "{{ count }} varer"
+      },
+      "product_count": {
+        "one": "{{ count }} produkt",
+        "other": "{{ count }} produkter"
+      },
+      "article_count": {
+        "one": "{{ count }} vare",
+        "other": "{{ count }} varer"
+      },
+      "filter_results": "Filtre",
+      "apply_filters": "Anvend",
+      "sort_by": "Sortér",
+      "browse_candles": "Se alle dufte",
+      "browse_collections": "Kollektioner",
+      "recommendations": "Du vil måske også synes om",
+      "loading_collections": "Søger efter kollektioner…",
+      "no_collections": "Der blev ikke fundet nogen resultater",
+      "collections_unavailable": "Søgeresultater for kollektioner er midlertidigt utilgængelige.",
+      "collections_shown": "Viste kollektioner: {{ count }}"
+    },
     "catalogue": {
       "product_view": "Produktvisning",
       "grid_view": "Gittervisning",

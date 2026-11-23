@@ -420,6 +420,37 @@
       "faq_heading": "Frequently Asked Questions",
       "refund_policy": "Read our returns policy"
     },
+    "search_page": {
+      "intro": "Descoperă următorul tău parfum preferat.",
+      "results_for": "Rezultate pentru „{{ query }}”",
+      "all": "Toate rezultatele",
+      "articles": "Postări pe blog",
+      "result_count": {
+        "one": "{{ count }} articol",
+        "other": "{{ count }} articole",
+        "few": "{{ count }} articole"
+      },
+      "product_count": {
+        "one": "{{ count }} produs",
+        "other": "{{ count }} produse",
+        "few": "{{ count }} produse"
+      },
+      "article_count": {
+        "one": "{{ count }} articol",
+        "other": "{{ count }} articole",
+        "few": "{{ count }} articole"
+      },
+      "filter_results": "Filtre",
+      "apply_filters": "Aplicați",
+      "sort_by": "Sortează",
+      "browse_candles": "Descoperiți toate aromele",
+      "browse_collections": "Colecții",
+      "recommendations": "S-ar putea să îți placă și",
+      "loading_collections": "Se caută colecții…",
+      "no_collections": "Nu s-a găsit niciun rezultat",
+      "collections_unavailable": "Rezultatele pentru colecții sunt temporar indisponibile.",
+      "collections_shown": "Colecții afișate: {{ count }}"
+    },
     "catalogue": {
       "product_view": "Afișarea produselor",
       "grid_view": "Vizualizare grilă",

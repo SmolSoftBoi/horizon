@@ -413,6 +413,34 @@
       "faq_heading": "Frequently Asked Questions",
       "refund_policy": "Read our returns policy"
     },
+    "search_page": {
+      "intro": "Entdecke deinen nächsten Lieblingsduft.",
+      "results_for": "Ergebnisse für „{{ query }}“",
+      "all": "Alle Ergebnisse",
+      "articles": "Blog-Beiträge",
+      "result_count": {
+        "one": "{{ count }} Artikel",
+        "other": "{{ count }} Artikel"
+      },
+      "product_count": {
+        "one": "{{ count }} Produkt",
+        "other": "{{ count }} Produkte"
+      },
+      "article_count": {
+        "one": "{{ count }} Artikel",
+        "other": "{{ count }} Artikel"
+      },
+      "filter_results": "Filter",
+      "apply_filters": "Anwenden",
+      "sort_by": "Sortieren",
+      "browse_candles": "Alle Düfte entdecken",
+      "browse_collections": "Kollektionen",
+      "recommendations": "Das könnte dir auch gefallen",
+      "loading_collections": "Kollektionen werden gesucht…",
+      "no_collections": "Keine Ergebnisse gefunden",
+      "collections_unavailable": "Ergebnisse für Kollektionen sind vorübergehend nicht verfügbar.",
+      "collections_shown": "Angezeigte Kollektionen: {{ count }}"
+    },
     "catalogue": {
       "product_view": "Produktansicht",
       "grid_view": "Rasteransicht",

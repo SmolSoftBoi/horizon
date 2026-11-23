@@ -1,0 +1,528 @@
+.smelly-search {
+  --search-paper: #fcf7f4;
+  --search-blush: #fbe9ea;
+  --search-line: #efd9d6;
+  --search-accent: #cb0a4a;
+  --catalogue-direction: to right;
+
+  background: var(--search-paper);
+  padding-block-end: clamp(32px, 4vw, 64px);
+}
+
+.smelly-search:dir(rtl) { --catalogue-direction: to left; }
+
+.smelly-theme .header .search-action .header-actions__action {
+  color: var(--search-accent, #cb0a4a);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 7px;
+}
+
+.smelly-theme .header .search-action .header-actions__action .svg-wrapper {
+  border-block-end: 2px solid currentColor;
+  padding-block-end: 4px;
+}
+
+.smelly-search__shell {
+  width: min(1500px, calc(100% - clamp(32px, 4vw, 64px)));
+  margin-inline: auto;
+  padding-block-start: clamp(18px, 1.6vw, 26px);
+}
+
+.smelly-search__hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #2d170e;
+  color: #fff9f3;
+}
+
+.smelly-search__hero::after {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(var(--catalogue-direction), #241208 0%, rgb(36 18 8 / 82%) 42%, rgb(36 18 8 / 15%) 100%);
+  content: '';
+}
+
+.smelly-search__banner {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.smelly-search__banner img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 70%;
+}
+
+.smelly-search__hero-inner {
+  display: grid;
+  align-items: center;
+  gap: 20px clamp(24px, 2.65vw, 42px);
+  width: min(1396px, calc(100% - clamp(32px, 9vw, 140px)));
+  min-height: 208px;
+  margin-inline: auto;
+  padding-block: 20px 28px;
+}
+
+.smelly-search__breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  list-style: none;
+}
+
+.smelly-search__breadcrumbs li,
+.smelly-search__breadcrumbs a {
+  display: inline-flex;
+  align-items: center;
+}
+
+.smelly-search__breadcrumbs a { min-height: 28px; }
+.smelly-search__breadcrumbs svg { width: 20px; height: 20px; }
+.smelly-search__breadcrumbs li + li::before {
+  width: 6px;
+  height: 6px;
+  margin-inline-end: 12px;
+  border-block-start: 1px solid currentColor;
+  border-inline-end: 1px solid currentColor;
+  transform: rotate(45deg);
+  content: '';
+}
+.smelly-search__breadcrumbs:dir(rtl) li + li::before { transform: rotate(-45deg); }
+
+.smelly-search__intro h1 {
+  font-size: clamp(2.8rem, 4.6vw, 4.6rem);
+  letter-spacing: -0.045em;
+  line-height: 1;
+}
+
+.smelly-search__intro p {
+  position: relative;
+  width: fit-content;
+  font-size: clamp(1rem, 1.5vw, 1.42rem);
+  line-height: 1.35;
+  margin-block-start: 4px;
+}
+
+.smelly-search__intro p::after {
+  position: absolute;
+  inset-block-start: calc(100% + 12px);
+  inset-inline-start: 24%;
+  width: 46%;
+  height: 12px;
+  border-block-start: 3px solid #ff6c93;
+  border-radius: 55%;
+  transform: rotate(-4deg);
+  content: '';
+}
+
+.smelly-search__heart {
+  display: inline-block;
+  width: 1.34em;
+  height: 0.95em;
+  margin-inline-start: -0.12em;
+  color: var(--search-accent);
+  vertical-align: -0.13em;
+  transform: rotate(11deg);
+}
+
+.smelly-search__heart .smelly-illustration { stroke-width: 6; }
+.smelly-search__hero .smelly-search__heart { width: 1.08em; color: #ff6c93; }
+
+.smelly-search__form {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  min-width: 0;
+}
+
+.smelly-search__field {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  color: var(--smelly-ink);
+}
+
+.smelly-search__field > svg {
+  position: absolute;
+  inset-inline-start: clamp(12px, 1.6vw, 24px);
+  inset-block-start: 50%;
+  width: clamp(20px, 2vw, 28px);
+  height: auto;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.smelly-search__field input {
+  width: 100%;
+  min-height: 50px;
+  height: 100%;
+  border: 1px solid #dacec9;
+  border-radius: 999px;
+  padding: 8px 44px;
+  padding-inline-start: clamp(40px, 4.4vw, 66px);
+  background: #fff;
+  color: inherit;
+  font: inherit;
+  font-size: clamp(1rem, 1.35vw, 1.25rem);
+}
+
+.smelly-search__field input::-webkit-search-cancel-button { appearance: none; }
+.smelly-search__field input:placeholder-shown ~ .smelly-search__reset { display: none; }
+
+.smelly-search__reset {
+  position: absolute;
+  inset-inline-end: 6px;
+  inset-block-start: 50%;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  transform: translateY(-50%);
+}
+
+.smelly-search__reset svg { width: 18px; height: 18px; }
+.smelly-search__reset:hover { background: var(--search-blush); }
+
+.smelly-search__form .smelly-button {
+  min-height: 50px;
+  padding: 9px clamp(15px, 2.7vw, 42px);
+  border: 2px solid #fff;
+  background: var(--search-accent);
+  font-size: clamp(0.9rem, 1.28vw, 1.2rem);
+}
+.smelly-search__form .smelly-button:hover { border-color: #fff; }
+.smelly-search__hero :is(a, input, button):focus-visible { outline-color: #ff9bb8; outline-offset: 3px; }
+
+.smelly-search__layout {
+  position: relative;
+  grid-template-areas: 'toolbar' 'results';
+  column-gap: clamp(16px, 1.8vw, 28px);
+  row-gap: 18px;
+}
+
+.smelly-search__toolbar {
+  grid-area: toolbar;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 10px 16px;
+  min-width: 0;
+}
+
+.smelly-search__toolbar h2,
+.smelly-search__suggestions h2 {
+  font-size: clamp(1.75rem, 2.7vw, 2.55rem);
+  letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
+  text-wrap: wrap;
+}
+
+.smelly-search__toolbar h2,
+.smelly-search__types { grid-column: 1 / -1; }
+
+.smelly-search__types,
+.smelly-search__tools,
+.smelly-search__sort {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.smelly-search__types a,
+.smelly-search__filter-label,
+.smelly-search__sort-apply {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 0;
+  padding: 5px clamp(10px, 1.35vw, 21px);
+  gap: clamp(5px, 0.65vw, 10px);
+  border-radius: 999px;
+  background: var(--search-blush);
+  font-size: clamp(0.8rem, 1.14vw, 1rem);
+  font-weight: 600;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.smelly-search__types a:hover,
+.smelly-search__filter-label:hover,
+.smelly-search__sort-apply:hover { background: var(--smelly-blush); }
+
+.smelly-search__types a[aria-current],
+.smelly-search__filter-toggle:checked + label {
+  background: var(--search-accent);
+  color: #fff;
+}
+
+.smelly-search__types svg { width: clamp(17px, 1.55vw, 25px); height: auto; flex: none; }
+.smelly-search__count { align-self: center; font-size: 1rem; font-weight: 600; }
+.smelly-search__tools { justify-content: flex-end; }
+.smelly-search__filter-label { cursor: pointer; }
+.smelly-search__filter-label svg { width: 18px; height: 18px; }
+.smelly-search__filter-toggle:focus-visible + label,
+.smelly-search__sort select:focus-visible { outline: 3px solid var(--search-accent); outline-offset: 2px; }
+
+.smelly-search__sort label { font-size: 0.9rem; font-weight: 700; }
+.smelly-search__sort select {
+  min-width: 0;
+  max-width: min(44vw, 16rem);
+  min-height: 44px;
+  border: 1px solid #d6c9c7;
+  border-radius: 999px;
+  padding: 7px 14px;
+  background: #fff;
+  color: inherit;
+  font: inherit;
+  font-size: 0.9rem;
+}
+.smelly-search__sort-apply { cursor: pointer; border: 0; color: inherit; }
+.smelly-search__layout[data-auto-sort] .smelly-search__sort-apply { display: none; }
+
+.smelly-search__facets {
+  display: none;
+  grid-area: filters;
+  align-self: start;
+  min-width: 0;
+  padding: 16px clamp(14px, 1.45vw, 24px);
+  border-radius: 18px;
+  background: var(--search-blush);
+  overflow-wrap: anywhere;
+}
+
+.smelly-search__layout:not([data-collections-active]):has(.smelly-search__filter-toggle:checked) .smelly-search__facets:not([hidden]) { display: block; }
+.smelly-search__facets-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 8px;
+  margin-block-end: 8px;
+}
+.smelly-search__facets-heading h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 700 clamp(1.06rem, 1.42vw, 1.3rem)/1.25 var(--font-body--family, sans-serif);
+  letter-spacing: -0.018em;
+}
+.smelly-search__facets-heading svg { width: 22px; height: 22px; flex: none; }
+.smelly-search__facets-heading a { color: var(--search-accent); font-size: 0.84rem; font-weight: 700; }
+.smelly-search__facets-heading a:hover { text-decoration: underline; }
+.smelly-search__facets .smelly-catalogue__filter {
+  margin-block-start: 0;
+  padding-block: 4px 6px;
+  border-color: var(--search-line);
+}
+.smelly-search__facets .smelly-catalogue__filter summary {
+  min-height: 32px;
+  font: 700 1rem/1.25 var(--font-body--family, sans-serif);
+}
+.smelly-search__facets .smelly-catalogue__filter summary svg { width: 13px; height: 13px; }
+.smelly-search__facets .smelly-catalogue__checkbox { font-size: 0.925rem; }
+.smelly-search__facets .smelly-catalogue__checkbox input { flex-basis: 19px; width: 19px; height: 19px; }
+.smelly-search__facets .smelly-search__filter-apply {
+  margin-block-start: 8px;
+  background: var(--search-accent);
+}
+
+.smelly-search__results { grid-area: results; min-width: 0; }
+body:has(#header-component[sticky]) .smelly-search__results {
+  scroll-margin-block-start: calc(var(--header-height, 0px) + 8px);
+}
+
+.smelly-search__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--search-columns, 2), minmax(0, 1fr));
+  gap: clamp(10px, 1.1vw, 17px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.smelly-search__grid > li { min-width: 0; }
+
+.smelly-search .smelly-product-card__view { display: block; height: 100%; }
+.smelly-search .smelly-product-card,
+.smelly-search__resource {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 0;
+  border: 1px solid var(--search-line);
+  border-radius: 18px;
+  background: linear-gradient(#fffdfb, #fbefed);
+  overflow-wrap: anywhere;
+}
+.smelly-search .smelly-product-card { padding-block-end: 13px; }
+.smelly-search .smelly-product-card__media,
+.smelly-search__resource img { margin: -1px -1px 0; }
+.smelly-search .smelly-product-card__image,
+.smelly-search__resource img { aspect-ratio: 1.04; border-radius: 17px; }
+.smelly-search__resource img { width: calc(100% + 2px); height: auto; object-fit: cover; }
+.smelly-search .smelly-product-card__image img { object-position: center 54%; }
+.smelly-search .smelly-product-card__details { flex: 1; padding: 7px clamp(8px, 0.9vw, 14px) 3px; }
+.smelly-search .smelly-product-card__details h3,
+.smelly-search__resource h3 {
+  font-size: clamp(1.05rem, 1.6vw, 1.52rem);
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  text-wrap: wrap;
+}
+.smelly-search__resource h3 { padding: 14px; }
+.smelly-search__resource:hover h3 { text-decoration: underline; text-underline-offset: 3px; }
+.smelly-search .smelly-product-card__range {
+  display: inline-block;
+  max-width: 100%;
+  margin-block: 6px 2px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--smelly-blush);
+  color: #a40b3d;
+  font-size: 0.83rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+.smelly-search .smelly-product-card__range--spooky-a-f { background: #fce3ce; color: #762e0d; }
+.smelly-search .smelly-product-card__range--fresh-a-f { background: #e5ecd8; color: #314620; }
+.smelly-search .smelly-product-card__rating { padding-block: 4px 1px; flex-wrap: wrap; gap: 3px 6px; }
+.smelly-search .smelly-product-card__price {
+  margin: 0 clamp(8px, 0.9vw, 14px) !important;
+  font-size: clamp(1.05rem, 1.55vw, 1.45rem);
+  font-weight: 750;
+  line-height: 1.25;
+}
+.smelly-search .smelly-product-card__price s { font-size: 0.8em; font-weight: 500; }
+.smelly-search .smelly-product-card > :is(a, form) { margin: 8px clamp(8px, 0.9vw, 14px) 0; }
+.smelly-search .smelly-product-card > a { width: auto; }
+.smelly-search .smelly-product-card .smelly-button {
+  gap: 6px;
+  padding: 8px 5px;
+  font-size: clamp(0.78rem, 1.1vw, 0.98rem);
+}
+.smelly-search .smelly-product-card .smelly-button--outline { color: var(--search-accent); border-color: var(--search-accent); }
+.smelly-search .smelly-product-card .smelly-button--outline:hover { color: #fff; background: var(--search-accent); }
+.smelly-search .smelly-product-card .svg-wrapper { width: 19px; height: 19px; flex: none; }
+
+.smelly-search__empty { padding: 18px 20px; border-radius: 18px; background: var(--search-blush); }
+.smelly-search__suggestions h2,
+.smelly-search .smelly-search__collection-status { margin-block-end: 12px; }
+.smelly-search__results .smelly-text-link { margin-block-start: 8px; }
+
+.smelly-search__recommendations {
+  display: grid;
+  align-items: center;
+  gap: 14px 25px;
+  max-width: 1300px;
+  margin-block-start: 16px;
+  margin-inline-start: auto;
+  border-radius: 20px;
+  padding: 16px clamp(14px, 1.8vw, 28px);
+  background: var(--search-blush);
+}
+.smelly-search__recommendations h2 { font-size: clamp(1.35rem, 1.9vw, 1.9rem); letter-spacing: -0.03em; }
+.smelly-search__recommendations ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 126px), 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.smelly-search__recommendations a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(6px, 0.8vw, 12px);
+  height: 100%;
+  min-height: 52px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: #fff8f6;
+  font-weight: 700;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.smelly-search__recommendations a:hover { background: #fff; text-decoration: underline; text-underline-offset: 3px; }
+.smelly-search__recommendations a svg { width: 12px; height: 12px; flex: none; }
+.smelly-search__recommendations a > svg:first-child { width: clamp(22px, 2.45vw, 37px); height: auto; color: var(--search-accent); }
+.smelly-search__recommendations a:dir(rtl) > svg:last-child { transform: scaleX(-1); }
+
+.smelly-search [hidden],
+.smelly-search__layout[data-collections-active] [data-native-search] { display: none; }
+
+@media (max-width: 599px) {
+  .smelly-search__tools { grid-column: 1 / -1; justify-content: space-between; }
+}
+
+@media (max-width: 749px) {
+  .smelly-search .smelly-product-card--desktop-quick-add > :is(a, form) { display: none; }
+}
+
+@media (max-width: 989px) {
+  .smelly-search__layout:not([data-collections-active]):has(.smelly-search__filter-toggle:checked) {
+    grid-template-areas: 'toolbar' 'filters' 'results';
+  }
+}
+
+@media (min-width: 750px) {
+  .smelly-search { --search-columns: 3; }
+  .smelly-search__hero-inner {
+    grid-template-columns: minmax(0, max-content) minmax(0, min(52vw, 740px));
+  }
+  .smelly-search__form .smelly-button { min-height: 58px; }
+  .smelly-search__banner--bundled {
+    inset-inline-start: 45%;
+    width: 65%;
+    mask-image: linear-gradient(var(--catalogue-direction), transparent, #000 28%);
+  }
+  .smelly-search__banner--bundled img { object-position: center 59%; }
+  .smelly-search__hero::after {
+    background: linear-gradient(var(--catalogue-direction), #241208 0%, rgb(36 18 8 / 91%) 35%, rgb(36 18 8 / 15%) 71%, transparent 100%);
+  }
+}
+
+@media (min-width: 990px) {
+  .smelly-search { --search-columns: 4; }
+  .smelly-search__layout--facets:not([data-collections-active]) {
+    --search-columns: 3;
+    grid-template-areas: 'filters toolbar' 'filters results';
+    grid-template-columns: clamp(218px, 19.5vw, 300px) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+  }
+  .smelly-search__facets:not([hidden]) { display: block; }
+  .smelly-search__layout .smelly-search__filter-toggle,
+  .smelly-search__filter-label { display: none; }
+  .smelly-search__recommendations { grid-template-columns: minmax(13rem, 23%) minmax(0, 1fr); }
+  .smelly-search__recommendations h2 { padding-inline-end: 14px; border-inline-end: 1px solid #e7afb7; }
+}
+
+@media (min-width: 1200px) {
+  .smelly-search { --search-columns: 5; }
+  .smelly-search__layout--facets:not([data-collections-active]) { --search-columns: 4; }
+  .smelly-search__toolbar h2,
+  .smelly-search__types { grid-column: auto; }
+  .smelly-search__types { justify-content: flex-end; max-width: min(52vw, 720px); }
+  .smelly-search__types a { padding-inline: 12px; }
+  .smelly-search__types svg { width: 20px; }
+}
+
+@media (min-width: 1440px) {
+  .smelly-search__layout--facets:not([data-collections-active]) { --search-columns: 5; }
+}

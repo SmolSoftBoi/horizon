@@ -437,6 +437,34 @@
       "grid_view": "Grid view",
       "list_view": "List view"
     },
+    "search_page": {
+      "intro": "Find your next favourite scent.",
+      "results_for": "Results for “{{ query }}”",
+      "all": "All results",
+      "articles": "Articles",
+      "result_count": {
+        "one": "{{ count }} result found",
+        "other": "{{ count }} results found"
+      },
+      "product_count": {
+        "one": "{{ count }} product found",
+        "other": "{{ count }} products found"
+      },
+      "article_count": {
+        "one": "{{ count }} article found",
+        "other": "{{ count }} articles found"
+      },
+      "filter_results": "Filter results",
+      "apply_filters": "Apply filters",
+      "sort_by": "Sort by",
+      "browse_candles": "Browse candles",
+      "browse_collections": "Browse all collections",
+      "recommendations": "You might also be interested in",
+      "loading_collections": "Finding collections…",
+      "no_collections": "No matching collections found.",
+      "collections_unavailable": "Collection results are temporarily unavailable.",
+      "collections_shown": "Collection matches ({{ count }} shown)"
+    },
     "product": {
       "breadcrumbs": "Breadcrumbs",
       "size": "Size",

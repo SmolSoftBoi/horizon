@@ -413,6 +413,34 @@
       "faq_heading": "Frequently Asked Questions",
       "refund_policy": "Read our returns policy"
     },
+    "search_page": {
+      "intro": "发现下一款心仪的香氛。",
+      "results_for": "“{{ query }}”的搜索结果",
+      "all": "所有结果",
+      "articles": "博客文章",
+      "result_count": {
+        "one": "{{ count }} 件商品",
+        "other": "{{ count }} 件商品"
+      },
+      "product_count": {
+        "one": "{{ count }} 件产品",
+        "other": "{{ count }} 件产品"
+      },
+      "article_count": {
+        "one": "{{ count }} 件商品",
+        "other": "{{ count }} 件商品"
+      },
+      "filter_results": "筛选条件",
+      "apply_filters": "应用",
+      "sort_by": "排序",
+      "browse_candles": "选购所有香氛",
+      "browse_collections": "产品系列",
+      "recommendations": "你可能还喜欢",
+      "loading_collections": "正在查找系列…",
+      "no_collections": "未找到结果",
+      "collections_unavailable": "暂时无法显示系列搜索结果。",
+      "collections_shown": "已显示 {{ count }} 个系列"
+    },
     "catalogue": {
       "product_view": "商品视图",
       "grid_view": "网格视图",

@@ -420,6 +420,37 @@
       "faq_heading": "Frequently Asked Questions",
       "refund_policy": "Read our returns policy"
     },
+    "search_page": {
+      "intro": "Encontra a tua próxima fragrância favorita.",
+      "results_for": "Resultados para «{{ query }}»",
+      "all": "Todos os resultados",
+      "articles": "Publicações no blogue",
+      "result_count": {
+        "one": "{{ count }} item",
+        "other": "{{ count }} itens",
+        "many": "{{ count }} itens"
+      },
+      "product_count": {
+        "one": "{{ count }} produto",
+        "other": "{{ count }} produtos",
+        "many": "{{ count }} produtos"
+      },
+      "article_count": {
+        "one": "{{ count }} item",
+        "other": "{{ count }} itens",
+        "many": "{{ count }} itens"
+      },
+      "filter_results": "Filtros",
+      "apply_filters": "Aplicar",
+      "sort_by": "Ordenar",
+      "browse_candles": "Ver todas as fragrâncias",
+      "browse_collections": "Coleções",
+      "recommendations": "Também poderá gostar",
+      "loading_collections": "A pesquisar coleções…",
+      "no_collections": "Não foram encontrados resultados",
+      "collections_unavailable": "Os resultados de coleções estão temporariamente indisponíveis.",
+      "collections_shown": "Coleções apresentadas: {{ count }}"
+    },
     "catalogue": {
       "product_view": "Vista de produtos",
       "grid_view": "Vista em grelha",

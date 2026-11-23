@@ -413,6 +413,34 @@
       "faq_heading": "Frequently Asked Questions",
       "refund_policy": "Read our returns policy"
     },
+    "search_page": {
+      "intro": "Открий следващия си любим аромат.",
+      "results_for": "Резултати за „{{ query }}“",
+      "all": "Всички резултати",
+      "articles": "Публикации в блог",
+      "result_count": {
+        "one": "{{ count }} артикул",
+        "other": "{{ count }} артикула"
+      },
+      "product_count": {
+        "one": "{{ count }} продукт",
+        "other": "{{ count }} продукта"
+      },
+      "article_count": {
+        "one": "{{ count }} артикул",
+        "other": "{{ count }} артикула"
+      },
+      "filter_results": "Филтри",
+      "apply_filters": "Приложи",
+      "sort_by": "Сортиране",
+      "browse_candles": "Разгледай всички аромати",
+      "browse_collections": "Колекции",
+      "recommendations": "Може да ви хареса и",
+      "loading_collections": "Търсене на колекции…",
+      "no_collections": "Не са открити резултати",
+      "collections_unavailable": "Резултатите за колекции временно не са достъпни.",
+      "collections_shown": "Показани колекции: {{ count }}"
+    },
     "catalogue": {
       "product_view": "Изглед на продуктите",
       "grid_view": "Изглед в мрежа",

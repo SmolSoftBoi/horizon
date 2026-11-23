@@ -413,6 +413,34 @@
       "faq_heading": "Frequently Asked Questions",
       "refund_policy": "Read our returns policy"
     },
+    "search_page": {
+      "intro": "새로운 최애 향을 찾아보세요.",
+      "results_for": "‘{{ query }}’ 검색 결과",
+      "all": "전체 결과",
+      "articles": "블로그 게시물",
+      "result_count": {
+        "one": "{{ count }}개 품목",
+        "other": "{{ count }}개 품목"
+      },
+      "product_count": {
+        "one": "제품 {{ count }}개",
+        "other": "제품 {{ count }}개"
+      },
+      "article_count": {
+        "one": "{{ count }}개 품목",
+        "other": "{{ count }}개 품목"
+      },
+      "filter_results": "필터",
+      "apply_filters": "적용",
+      "sort_by": "정렬",
+      "browse_candles": "모든 향 보기",
+      "browse_collections": "컬렉션",
+      "recommendations": "이 상품도 마음에 드실 거예요",
+      "loading_collections": "컬렉션 검색 중…",
+      "no_collections": "결과 없음",
+      "collections_unavailable": "일시적으로 컬렉션 검색 결과를 표시할 수 없습니다.",
+      "collections_shown": "표시된 컬렉션 {{ count }}개"
+    },
     "catalogue": {
       "product_view": "상품 보기",
       "grid_view": "격자 보기",

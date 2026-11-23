@@ -413,6 +413,34 @@
       "faq_heading": "Frequently Asked Questions",
       "refund_policy": "Read our returns policy"
     },
+    "search_page": {
+      "intro": "ค้นหากลิ่นโปรดกลิ่นใหม่ของคุณ",
+      "results_for": "ผลการค้นหาสำหรับ “{{ query }}”",
+      "all": "ผลลัพธ์ทั้งหมด",
+      "articles": "โพสต์บล็อก",
+      "result_count": {
+        "one": "{{ count }} รายการ",
+        "other": "{{ count }} รายการ"
+      },
+      "product_count": {
+        "one": "สินค้า {{ count }} รายการ",
+        "other": "สินค้า {{ count }} รายการ"
+      },
+      "article_count": {
+        "one": "{{ count }} รายการ",
+        "other": "{{ count }} รายการ"
+      },
+      "filter_results": "ตัวกรอง",
+      "apply_filters": "นำไปใช้",
+      "sort_by": "จัดเรียง",
+      "browse_candles": "เลือกซื้อทุกกลิ่น",
+      "browse_collections": "คอลเลกชัน",
+      "recommendations": "คุณอาจชอบสินค้าเหล่านี้ด้วย",
+      "loading_collections": "กำลังค้นหาคอลเลกชัน…",
+      "no_collections": "ไม่พบผลลัพธ์",
+      "collections_unavailable": "ไม่สามารถแสดงผลการค้นหาคอลเลกชันได้ชั่วคราว",
+      "collections_shown": "แสดง {{ count }} คอลเลกชัน"
+    },
     "catalogue": {
       "product_view": "มุมมองสินค้า",
       "grid_view": "มุมมองตาราง",

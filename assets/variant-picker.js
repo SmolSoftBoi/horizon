@@ -3,6 +3,7 @@ import { morph, MORPH_OPTIONS } from '@theme/morph';
 import { OverflowList } from '@theme/overflow-list';
 import { yieldToMainThread, getViewParameterValue, ResizeNotifier } from '@theme/utilities';
 import { ProductSelectEvent } from '@shopify/events';
+import { readMainPurchaseSelection } from '@theme/variant-resolution';
 
 /**
  * @typedef {object} VariantPickerRefs
@@ -308,6 +309,7 @@ export default class VariantPicker extends Component {
    */
   fetchUpdatedSection(requestUrl, { morphElementSelector, detail = {} } = {}) {
     const { optionValueId = '', variantId, connectedProductUrl = '' } = detail;
+    const updatesMain = morphElementSelector === 'main';
     // We use this to abort the previous fetch request if it's still pending.
     this.#abortController?.abort();
     const controller = new AbortController();
@@ -328,6 +330,8 @@ export default class VariantPicker extends Component {
           optionValueId,
           variantId,
           connectedProductUrl,
+          requestUrl,
+          updatesMain,
         },
         promise: deferredEventPromise.promise,
       })
@@ -345,7 +349,6 @@ export default class VariantPicker extends Component {
         // Defer is only useful for the initial rendering of the page. Remove it here.
         html.querySelector('overflow-list[defer]')?.removeAttribute('defer');
 
-        const updatesMain = morphElementSelector === 'main';
         const previousProductId = this.dataset.productId ?? '';
         const variantPickerJsonScript = html.querySelector(
           updatesMain
@@ -355,7 +358,11 @@ export default class VariantPicker extends Component {
         const textContent = variantPickerJsonScript?.textContent;
         const updatedProductId = variantPickerJsonScript?.closest('variant-picker')?.getAttribute('data-product-id');
 
-        // A combined-listing child can render without a variant picker.
+        // Morphing can move nodes out of the response. Capture the child's purchase state first.
+        const purchaseSelection =
+          updatesMain && !textContent
+            ? readMainPurchaseSelection(html, new URL(requestUrl, window.location.href))
+            : undefined;
         if (updatesMain) this.updateMain(html);
 
         if (!textContent) {
@@ -366,6 +373,7 @@ export default class VariantPicker extends Component {
               productId: previousProductId,
               sourceId: updatesMain ? optionValueId : this.selectedOptionId,
               resource: updatesMain ? undefined : null,
+              purchaseSelection,
             },
           });
           return;

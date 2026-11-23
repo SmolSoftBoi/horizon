@@ -413,6 +413,34 @@
       "faq_heading": "Frequently Asked Questions",
       "refund_policy": "Read our returns policy"
     },
+    "search_page": {
+      "intro": "Találd meg a következő kedvenc illatodat.",
+      "results_for": "Találatok erre: „{{ query }}”",
+      "all": "Összes találat",
+      "articles": "Blogbejegyzések",
+      "result_count": {
+        "one": "{{ count }} termék",
+        "other": "{{ count }} termék"
+      },
+      "product_count": {
+        "one": "{{ count }} termék",
+        "other": "{{ count }} termék"
+      },
+      "article_count": {
+        "one": "{{ count }} termék",
+        "other": "{{ count }} termék"
+      },
+      "filter_results": "Szűrők",
+      "apply_filters": "Alkalmazás",
+      "sort_by": "Rendezés",
+      "browse_candles": "Összes illat megtekintése",
+      "browse_collections": "Kollekciók",
+      "recommendations": "Ezek is tetszhetnek",
+      "loading_collections": "Kollekciók keresése…",
+      "no_collections": "Nincs találat",
+      "collections_unavailable": "A kollekciók keresési eredményei átmenetileg nem érhetők el.",
+      "collections_shown": "Megjelenített kollekciók: {{ count }}"
+    },
     "catalogue": {
       "product_view": "Terméknézet",
       "grid_view": "Rácsnézet",

@@ -8,6 +8,7 @@
   @param {string} [product_view_context] - Context for Horizon's standard product view event.
   @param {boolean} [compact_add] - Show an icon on the direct add button.
   @param {boolean} [catalogue_layout] - Show the collection card layout and product summary.
+  @param {boolean} [search_layout] - Show the search card with its range badge and labelled basket button.
   @param {boolean} [show_wishlist] - Enable the collection card wishlist toggle.
 {% enddoc %}
 
@@ -52,8 +53,22 @@
   if card_product.requires_selling_plan or card_product.selling_plan_groups.size > 0
     assign uses_selling_plans = true
   endif
+  assign show_card_actions = true
+  if search_layout
+    assign catalogue_layout = true
+    assign show_card_actions = settings.quick_add
+    assign range_handles = 'spooky-a-f,festive-a-f,sweet-a-f,fresh-a-f' | split: ','
+    for product_collection in card_product.collections
+      if range_handles contains product_collection.handle
+        assign search_range = product_collection
+        break
+      endif
+    endfor
+  endif
   if catalogue_layout
-    assign description = card_product.description | replace: '</p>', ' ' | strip_html | strip | truncatewords: 24
+    unless search_layout
+      assign description = card_product.description | replace: '</p>', ' ' | strip_html | strip | truncatewords: 24
+    endunless
     assign rating = card_product.metafields.reviews.rating.value
     assign review_count = card_product.metafields.reviews.rating_count.value | plus: 0
     if review_count > 0 and rating.rating > 0 and rating.scale_max > 0
@@ -83,7 +98,7 @@
 {% if product_view_context != blank %}
   <product-component class="smelly-product-card__view" view-event-payload="{{ card_product | standard_event_data: 'view', context: product_view_context | escape }}">
 {% endif %}
-<article class="smelly-product-card">
+<article class="smelly-product-card{% if search_layout and show_card_actions and settings.mobile_quick_add != true %} smelly-product-card--desktop-quick-add{% endif %}">
   {% if catalogue_layout %}<div class="smelly-product-card__media">{% endif %}
     <a class="smelly-product-card__image" href="{{ card_product.url }}" aria-label="{{ card_product.title | escape }}">
       {% if card_product.featured_image != blank %}
@@ -101,7 +116,14 @@
   {% endif %}
   <div class="smelly-product-card__details">
     {% if catalogue_layout %}
-      <h2><a href="{{ card_product.url }}">{{ card_product.title | escape }}</a></h2>
+      {% if search_layout %}
+        <h3><a href="{{ card_product.url }}">{{ card_product.title | escape }}</a></h3>
+        {% if search_range != blank %}
+          <a class="smelly-product-card__range smelly-product-card__range--{{ search_range.handle | escape }}" href="{{ search_range.url | escape }}">{{ search_range.title | escape }}</a>
+        {% endif %}
+      {% else %}
+        <h2><a href="{{ card_product.url }}">{{ card_product.title | escape }}</a></h2>
+      {% endif %}
       {% if description != blank %}
         <p class="smelly-product-card__description">{{ description | escape_once }}</p>
       {% endif %}
@@ -118,13 +140,13 @@
     {% endif %}
   </div>
   {% if catalogue_layout %}{{ price }}{% endif %}
-  {% if card_product.has_only_default_variant and uses_selling_plans == false %}
+  {% if show_card_actions and card_product.has_only_default_variant and uses_selling_plans == false %}
     {% form 'product', card_product, id: product_form_id, class: 'smelly-product-form' %}
       <input type="hidden" name="id" value="{{ product_variant.id }}">
       <input type="hidden" name="quantity" value="{{ quantity_to_add }}">
       <input type="hidden" name="return_to" value="{{ routes.cart_url }}">
       <button
-        class="smelly-button smelly-button--small{% if compact_add and can_add_to_cart %} smelly-product-card__icon-add{% endif %}"
+        class="smelly-button smelly-button--small{% if search_layout and can_add_to_cart %} smelly-button--outline{% elsif compact_add and can_add_to_cart %} smelly-product-card__icon-add{% endif %}"
         type="submit"
         {% unless can_add_to_cart %}disabled{% endunless %}
       >
@@ -132,12 +154,13 @@
           <span class="svg-wrapper" aria-hidden="true">{{ 'icon-add-to-cart.svg' | inline_asset_content }}</span>
           <span class="visually-hidden">{{ add_to_cart_text }} — {{ card_product.title | escape }}</span>
         {% else %}
+          {% if search_layout and can_add_to_cart %}<span class="svg-wrapper" aria-hidden="true">{{ 'icon-add-to-cart.svg' | inline_asset_content }}</span>{% endif %}
           {{ add_to_cart_text }}{% if can_add_to_cart %}<span class="visually-hidden"> — {{ card_product.title | escape }}</span>{% endif %}
         {% endif %}
       </button>
       {{ form.errors | default_errors }}
     {% endform %}
-  {% else %}
+  {% elsif show_card_actions %}
     <a class="smelly-button smelly-button--small smelly-button--outline" href="{{ card_product.url }}">{{ 'smelly.choose_options' | t }}<span class="visually-hidden"> — {{ card_product.title | escape }}</span></a>
   {% endif %}
 </article>

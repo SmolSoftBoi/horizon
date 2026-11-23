@@ -3,7 +3,7 @@ import { fetchConfig, preloadImage, onAnimationEnd, yieldToMainThread, parseIntO
 import { cartPerformance } from '@theme/performance';
 import { morph } from '@theme/morph';
 import { CartLinesUpdateEvent, CartErrorEvent, ProductSelectEvent, StandardEvents } from '@shopify/events';
-import { resolveVariantId } from '@theme/variant-resolution';
+import { readMainPurchaseSelection, readQuantityConstraints, resolveVariantId } from '@theme/variant-resolution';
 
 // Error message display duration - gives users time to read the message
 const ERROR_MESSAGE_DISPLAY_DURATION = 10000;
@@ -188,21 +188,22 @@ if (!customElements.get('add-to-cart-component')) {
  * @property {HTMLElement | undefined} quantityLabel - The quantity label element.
  * @property {HTMLElement | undefined} pricePerItem - The price per item component.
  *
+ * @typedef {object} PendingVariantSelection
+ * @property {Promise<unknown>} promise - The server response for the current selection.
+ * @property {string | null} requestUrl - The URL that requested that selection.
+ * @property {boolean} updatesMain - Whether the response switches the main product.
+ * @property {string | null} intendedVariantId - The variant ID supplied by the option that changed.
+ *
  * @typedef {object} QueuedAddToCartItem
  * @property {number} quantity - The quantity captured when Add was clicked.
  * @property {number} generation - The variant-change generation active when Add was clicked.
- * @property {string | null} intendedVariantId - The selected option's data-variant-id, when present.
- * @property {Promise<unknown> | null} pendingVariantChange - The server-side section fetch for the clicked selection.
- * @property {string | null} variantResolutionUrl - A section-rendering URL that resolves the clicked selection.
+ * @property {PendingVariantSelection | null} selection - The request active when Add was clicked.
  * @property {Record<string, string> | undefined} properties - Text line item properties captured when Add was clicked.
  *
  * @typedef {{variantId: string, quantity: number, properties?: Record<string, string>}} ResolvedAddToCartItem
  *
- * @typedef {object} QuantityConstraints
- * @property {string} min
- * @property {string | null} max
- * @property {string} step
- * @property {string | null} cartQuantity
+ * @typedef {import('@theme/variant-resolution').QuantityConstraints} QuantityConstraints
+ * @typedef {import('@theme/variant-resolution').PurchaseSelection} PurchaseSelection
  *
  * @extends Component<ProductFormRefs>
  */
@@ -227,11 +228,10 @@ class ProductFormComponent extends Component {
   #addToCartQueue = [];
 
   /**
-   * The in-flight variant-change section fetch promise. The queue drain awaits this before
-   * reading the resolved variant id.
-   * @type {Promise<unknown> | null}
+   * The in-flight selection. A queued add keeps this snapshot if a later selection supersedes it.
+   * @type {PendingVariantSelection | null}
    */
-  #pendingVariantChange = null;
+  #pendingVariantSelection = null;
 
   connectedCallback() {
     super.connectedCallback();
@@ -345,8 +345,6 @@ class ProductFormComponent extends Component {
 
   /** @returns {QueuedAddToCartItem} */
   #createQueuedAddToCartItem() {
-    const picker = this.#getVariantPicker();
-    const selectedOption = picker?.selectedOption;
     const formData = new FormData(this.querySelector('form') ?? undefined);
     /** @type {Array<[string, string]>} */
     const properties = [];
@@ -358,9 +356,7 @@ class ProductFormComponent extends Component {
     return {
       quantity: this.#getQuantity(),
       generation: this.#variantChangeGeneration,
-      intendedVariantId: selectedOption?.dataset.variantId ?? null,
-      pendingVariantChange: this.#pendingVariantChange,
-      variantResolutionUrl: picker && selectedOption ? picker.buildRequestUrl(selectedOption) : null,
+      selection: this.#pendingVariantSelection,
       properties: properties.length ? Object.fromEntries(properties) : undefined,
     };
   }
@@ -797,9 +793,13 @@ class ProductFormComponent extends Component {
     // while a newer variant selection is still pending.
     const generation = ++this.#variantChangeGeneration;
     this.#variantChangeInProgress = true;
-    // Hold the in-flight section-fetch promise so the queue drain can await it before reading the
-    // resolved variant id.
-    this.#pendingVariantChange = event.promise;
+    const { requestUrl, updatesMain, variantId: intendedVariantId } = event.detail ?? {};
+    this.#pendingVariantSelection = {
+      promise: event.promise,
+      requestUrl: typeof requestUrl === 'string' ? requestUrl : null,
+      updatesMain: updatesMain === true,
+      intendedVariantId: typeof intendedVariantId === 'string' ? intendedVariantId : null,
+    };
     this.refs.acceleratedCheckoutButtonContainer?.setAttribute('inert', '');
 
     try {
@@ -962,6 +962,7 @@ class ProductFormComponent extends Component {
       // Only clear the flag if no newer variant selection has started
       if (generation === this.#variantChangeGeneration) {
         this.#variantChangeInProgress = false;
+        this.#pendingVariantSelection = null;
         this.refs.acceleratedCheckoutButtonContainer?.removeAttribute('inert');
 
         // Drain any queued add-to-cart requests that accumulated during the variant change
@@ -1016,6 +1017,7 @@ class ProductFormComponent extends Component {
    * @returns {Promise<{variantId: string | null, quantityConstraints: QuantityConstraints | null}>}
    */
   async #resolveQueuedVariant(item) {
+    const { selection } = item;
     /** @type {string | null} */
     let resolvedVariantId = null;
     /** @type {boolean | undefined} */
@@ -1023,13 +1025,17 @@ class ProductFormComponent extends Component {
     /** @type {QuantityConstraints | null} */
     let quantityConstraints = null;
 
-    if (item.pendingVariantChange) {
+    if (selection) {
       try {
-        const result = /** @type {{detail?: {resource?: any, html?: Document | Element}}} */ (
-          await item.pendingVariantChange
+        const { detail } = /** @type {{detail?: {resource?: any, html?: Document | Element, purchaseSelection?: PurchaseSelection}}} */ (
+          await selection.promise
         );
-        const resource = result?.detail?.resource;
-        quantityConstraints = this.#getQuantityConstraintsFromHtml(result?.detail?.html);
+        const resource = detail?.resource;
+        if (selection.updatesMain && resource === undefined) {
+          return detail?.purchaseSelection ?? { variantId: null, quantityConstraints: null };
+        }
+
+        quantityConstraints = readQuantityConstraints(detail?.html);
         if (resource === null) {
           available = false;
         } else if (resource) {
@@ -1037,7 +1043,7 @@ class ProductFormComponent extends Component {
           available = resource.available !== false;
         }
       } catch {
-        const resolvedVariant = await this.#resolveVariantFromUrl(item.variantResolutionUrl).catch(() => ({
+        const resolvedVariant = await this.#resolveVariantFromUrl(selection).catch(() => ({
           variantId: null,
           available: false,
           quantityConstraints: null,
@@ -1051,7 +1057,7 @@ class ProductFormComponent extends Component {
     const isLatestGeneration = item.generation === this.#variantChangeGeneration;
     const variantId = resolveVariantId({
       resolvedVariantId,
-      intendedVariantId: item.intendedVariantId,
+      intendedVariantId: selection?.intendedVariantId,
       hiddenInputValue: isLatestGeneration ? this.#getVariantIdInput() ?? null : null,
       available: available ?? (isLatestGeneration ? !this.#isAddToCartDisabled() : undefined),
     });
@@ -1082,38 +1088,22 @@ class ProductFormComponent extends Component {
   }
 
   /**
-   * @param {Document | Element | null | undefined} html
-   * @returns {QuantityConstraints | null}
-   */
-  #getQuantityConstraintsFromHtml(html) {
-    const quantityInput = /** @type {HTMLInputElement | null} */ (
-      html?.querySelector?.('quantity-selector-component input[ref="quantityInput"]') ?? null
-    );
-    if (!quantityInput) return null;
-
-    return {
-      min: quantityInput.min,
-      max: quantityInput.max || null,
-      step: quantityInput.step,
-      cartQuantity: quantityInput.getAttribute('data-cart-quantity'),
-    };
-  }
-
-  /**
    * Resolves a queued selection using the server-side section renderer when the original in-flight
    * request was aborted by a later variant selection.
-   * @param {string | null} variantResolutionUrl
+   * @param {PendingVariantSelection} selection
    * @returns {Promise<{variantId: string | null, available: boolean | undefined, quantityConstraints: QuantityConstraints | null}>}
    */
-  async #resolveVariantFromUrl(variantResolutionUrl) {
-    if (!variantResolutionUrl) return { variantId: null, available: undefined, quantityConstraints: null };
+  async #resolveVariantFromUrl({ requestUrl, updatesMain }) {
+    if (!requestUrl) return { variantId: null, available: undefined, quantityConstraints: null };
 
-    const response = await fetch(variantResolutionUrl, { credentials: 'same-origin' });
+    const response = await fetch(requestUrl, { credentials: 'same-origin' });
     if (!response.ok) return { variantId: null, available: false, quantityConstraints: null };
 
     const html = new DOMParser().parseFromString(await response.text(), 'text/html');
-    const quantityConstraints = this.#getQuantityConstraintsFromHtml(html);
-    const textContent = html.querySelector('variant-picker script[type="application/json"]')?.textContent;
+    const pickerSelector = updatesMain ? 'main variant-picker[data-template-product-match="true"]' : 'variant-picker';
+    const textContent = html.querySelector(`${pickerSelector} script[type="application/json"]`)?.textContent;
+    if (!textContent && updatesMain) return readMainPurchaseSelection(html, new URL(requestUrl, window.location.href));
+    const quantityConstraints = readQuantityConstraints(html);
     if (!textContent) return { variantId: null, available: false, quantityConstraints };
 
     const resource = JSON.parse(textContent);
@@ -1124,24 +1114,6 @@ class ProductFormComponent extends Component {
       available: resource.available !== false,
       quantityConstraints,
     };
-  }
-
-  /**
-   * @returns {import('@theme/variant-picker').default | null}
-   */
-  #getVariantPicker() {
-    const container = this.closest('product-card') ?? this.closest('dialog') ?? this.closest('.shopify-section');
-    const pickers = /** @type {import('@theme/variant-picker').default[]} */ (
-      Array.from(container?.querySelectorAll('variant-picker, swatches-variant-picker-component') ?? [])
-    );
-    const productId = this.dataset.productId;
-
-    if (productId) {
-      const matchingPicker = pickers.find((picker) => picker.dataset.productId === productId);
-      if (matchingPicker) return matchingPicker;
-    }
-
-    return pickers.length === 1 ? pickers[0] ?? null : null;
   }
 
   /**
