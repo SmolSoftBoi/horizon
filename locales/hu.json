@@ -364,6 +364,23 @@
     }
   },
   "smelly": {
+    "password": {
+      "heading": "Ezt az üzletet jelszó védi",
+      "intro": "A(z) {{ shop }} eléréséhez add meg az alábbi jelszót.",
+      "placeholder": "Add meg az üzlet jelszavát",
+      "show_password": "Jelszó megjelenítése",
+      "enter": "Belépés az üzletbe",
+      "need_access": "Hozzáférésre van szükséged?",
+      "contact": "Kapcsolat",
+      "hand_poured": "Kézzel öntött",
+      "hand_poured_detail": "kis tételekben",
+      "vegan": "Vegánbarát",
+      "vegan_detail": "Állati eredetű összetevők nélkül",
+      "packaging": "Átgondolt csomagolás",
+      "packaging_detail": "Lehetőség szerint újrahasznosítható",
+      "scents": "Remek illatok",
+      "scents_detail": "Az otthonodba"
+    },
     "basket": {
       "title": "Kosár",
       "intro": "Néhány igazán jó illat már vár rád.",

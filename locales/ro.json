@@ -371,6 +371,23 @@
     }
   },
   "smelly": {
+    "password": {
+      "heading": "Acest magazin este protejat prin parolă",
+      "intro": "Introdu parola de mai jos pentru a accesa {{ shop }}",
+      "placeholder": "Introdu parola magazinului",
+      "show_password": "Afișează parola",
+      "enter": "Intră în magazin",
+      "need_access": "Ai nevoie de acces?",
+      "contact": "Contactează-ne",
+      "hand_poured": "Turnate manual",
+      "hand_poured_detail": "în loturi mici",
+      "vegan": "Potrivite pentru vegani",
+      "vegan_detail": "Fără ingrediente de origine animală",
+      "packaging": "Ambalaj ales cu grijă",
+      "packaging_detail": "Reciclabil când este posibil",
+      "scents": "Arome minunate",
+      "scents_detail": "Pentru casa ta"
+    },
     "basket": {
       "title": "Coșul tău",
       "intro": "Câteva arome grozave te așteaptă.",

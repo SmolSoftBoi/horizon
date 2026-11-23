@@ -371,6 +371,23 @@
     }
   },
   "smelly": {
+    "password": {
+      "heading": "Cette boutique est protégée par un mot de passe",
+      "intro": "Saisissez le mot de passe ci-dessous pour accéder à {{ shop }}",
+      "placeholder": "Saisissez le mot de passe de la boutique",
+      "show_password": "Afficher le mot de passe",
+      "enter": "Accéder à la boutique",
+      "need_access": "Besoin d’un accès ?",
+      "contact": "Contactez-nous",
+      "hand_poured": "Coulées à la main",
+      "hand_poured_detail": "en petites séries",
+      "vegan": "Adaptées aux véganes",
+      "vegan_detail": "Sans ingrédients d’origine animale",
+      "packaging": "Emballage soigné",
+      "packaging_detail": "Recyclable dans la mesure du possible",
+      "scents": "Des parfums irrésistibles",
+      "scents_detail": "Pour votre intérieur"
+    },
     "basket": {
       "title": "Votre panier",
       "intro": "Quelques parfums qui valent le détour, prêts à partir.",

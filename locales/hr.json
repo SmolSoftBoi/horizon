@@ -371,6 +371,23 @@
     }
   },
   "smelly": {
+    "password": {
+      "heading": "Ova je trgovina zaštićena lozinkom",
+      "intro": "Unesite lozinku u nastavku za pristup trgovini {{ shop }}",
+      "placeholder": "Unesite lozinku trgovine",
+      "show_password": "Prikaži lozinku",
+      "enter": "Uđi u trgovinu",
+      "need_access": "Trebate pristup?",
+      "contact": "Kontaktirajte nas",
+      "hand_poured": "Ručno lijevane",
+      "hand_poured_detail": "u malim serijama",
+      "vegan": "Prikladne za vegane",
+      "vegan_detail": "Bez sastojaka životinjskog podrijetla",
+      "packaging": "Promišljena ambalaža",
+      "packaging_detail": "Može se reciklirati gdje je to moguće",
+      "scents": "Predivni mirisi",
+      "scents_detail": "Za vaš dom"
+    },
     "basket": {
       "title": "Vaša košarica",
       "intro": "Nekoliko zaista dobrih mirisa spremno je za vas.",

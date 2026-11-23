@@ -378,6 +378,23 @@
     }
   },
   "smelly": {
+    "password": {
+      "heading": "Ši parduotuvė apsaugota slaptažodžiu",
+      "intro": "Įveskite slaptažodį žemiau, kad patektumėte į {{ shop }}",
+      "placeholder": "Įveskite parduotuvės slaptažodį",
+      "show_password": "Rodyti slaptažodį",
+      "enter": "Įeiti į parduotuvę",
+      "need_access": "Reikia prieigos?",
+      "contact": "Susisiekite su mumis",
+      "hand_poured": "Lietos rankomis",
+      "hand_poured_detail": "mažomis partijomis",
+      "vegan": "Tinka veganams",
+      "vegan_detail": "Be gyvūninės kilmės ingredientų",
+      "packaging": "Apgalvota pakuotė",
+      "packaging_detail": "Perdirbama, kai įmanoma",
+      "scents": "Nuostabūs kvapai",
+      "scents_detail": "Jūsų namams"
+    },
     "basket": {
       "title": "Jūsų krepšelis",
       "intro": "Keli puikūs aromatai jau laukia jūsų.",

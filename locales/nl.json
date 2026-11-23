@@ -364,6 +364,23 @@
     }
   },
   "smelly": {
+    "password": {
+      "heading": "Deze winkel is beveiligd met een wachtwoord",
+      "intro": "Voer hieronder het wachtwoord in voor toegang tot {{ shop }}",
+      "placeholder": "Voer het winkelwachtwoord in",
+      "show_password": "Wachtwoord tonen",
+      "enter": "Naar de winkel",
+      "need_access": "Toegang nodig?",
+      "contact": "Neem contact op",
+      "hand_poured": "Met de hand gegoten",
+      "hand_poured_detail": "in kleine oplagen",
+      "vegan": "Geschikt voor veganisten",
+      "vegan_detail": "Zonder dierlijke ingrediënten",
+      "packaging": "Doordachte verpakking",
+      "packaging_detail": "Waar mogelijk recyclebaar",
+      "scents": "Heerlijke geuren",
+      "scents_detail": "Voor je huis"
+    },
     "basket": {
       "title": "Je winkelwagen",
       "intro": "Een paar heerlijke geuren, klaar voor jou.",

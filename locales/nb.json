@@ -364,6 +364,23 @@
     }
   },
   "smelly": {
+    "password": {
+      "heading": "Denne butikken er passordbeskyttet",
+      "intro": "Skriv inn passordet nedenfor for å få tilgang til {{ shop }}",
+      "placeholder": "Skriv inn butikkens passord",
+      "show_password": "Vis passord",
+      "enter": "Gå til butikken",
+      "need_access": "Trenger du tilgang?",
+      "contact": "Kontakt oss",
+      "hand_poured": "Håndstøpt",
+      "hand_poured_detail": "i små partier",
+      "vegan": "Vegansk",
+      "vegan_detail": "Uten animalske ingredienser",
+      "packaging": "Gjennomtenkt emballasje",
+      "packaging_detail": "Resirkulerbar der det er mulig",
+      "scents": "Fantastiske dufter",
+      "scents_detail": "Til hjemmet ditt"
+    },
     "basket": {
       "title": "Handlekurven din",
       "intro": "Noen skikkelig gode dufter, klare for deg.",

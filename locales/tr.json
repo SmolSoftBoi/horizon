@@ -364,6 +364,23 @@
     }
   },
   "smelly": {
+    "password": {
+      "heading": "Bu mağaza şifre korumalıdır",
+      "intro": "{{ shop }} mağazasına erişmek için aşağıya şifreyi girin.",
+      "placeholder": "Mağaza şifresini girin",
+      "show_password": "Şifreyi göster",
+      "enter": "Mağazaya gir",
+      "need_access": "Erişim mi gerekiyor?",
+      "contact": "Bize ulaşın",
+      "hand_poured": "Elle dökülür",
+      "hand_poured_detail": "küçük partiler hâlinde",
+      "vegan": "Vegan dostu",
+      "vegan_detail": "Hayvansal içerik yok",
+      "packaging": "Özenle seçilmiş ambalaj",
+      "packaging_detail": "Mümkün olduğunda geri dönüştürülebilir",
+      "scents": "Harika kokular",
+      "scents_detail": "Eviniz için"
+    },
     "basket": {
       "title": "Sepetiniz",
       "intro": "Birkaç harika koku sizi bekliyor.",

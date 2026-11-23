@@ -364,6 +364,23 @@
     }
   },
   "smelly": {
+    "password": {
+      "heading": "Toko ini dilindungi kata sandi",
+      "intro": "Masukkan kata sandi di bawah ini untuk mengakses {{ shop }}",
+      "placeholder": "Masukkan kata sandi toko",
+      "show_password": "Tampilkan kata sandi",
+      "enter": "Masuk ke toko",
+      "need_access": "Perlu akses?",
+      "contact": "Hubungi kami",
+      "hand_poured": "Dituang dengan tangan",
+      "hand_poured_detail": "dalam jumlah kecil",
+      "vegan": "Cocok untuk vegan",
+      "vegan_detail": "Tanpa bahan hewani",
+      "packaging": "Kemasan yang dirancang dengan cermat",
+      "packaging_detail": "Dapat didaur ulang jika memungkinkan",
+      "scents": "Aroma yang menawan",
+      "scents_detail": "Untuk rumah Anda"
+    },
     "basket": {
       "title": "Keranjang Anda",
       "intro": "Beberapa aroma istimewa siap untuk Anda.",

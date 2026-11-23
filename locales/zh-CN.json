@@ -364,6 +364,23 @@
     }
   },
   "smelly": {
+    "password": {
+      "heading": "此商店受密码保护",
+      "intro": "请输入下方的密码以访问 {{ shop }}。",
+      "placeholder": "输入商店密码",
+      "show_password": "显示密码",
+      "enter": "进入商店",
+      "need_access": "需要访问权限？",
+      "contact": "联系我们",
+      "hand_poured": "手工灌注",
+      "hand_poured_detail": "小批量制作",
+      "vegan": "纯素友好",
+      "vegan_detail": "不含动物成分",
+      "packaging": "用心设计的包装",
+      "packaging_detail": "尽可能采用可回收材料",
+      "scents": "美妙香气",
+      "scents_detail": "为家中添香"
+    },
     "basket": {
       "title": "您的购物车",
       "intro": "几款好闻的香氛已经为你准备好了。",

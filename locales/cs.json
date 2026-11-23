@@ -378,6 +378,23 @@
     }
   },
   "smelly": {
+    "password": {
+      "heading": "Tento obchod je chráněn heslem",
+      "intro": "Pro přístup do obchodu {{ shop }} zadejte heslo níže.",
+      "placeholder": "Zadejte heslo obchodu",
+      "show_password": "Zobrazit heslo",
+      "enter": "Vstoupit do obchodu",
+      "need_access": "Potřebujete přístup?",
+      "contact": "Kontaktujte nás",
+      "hand_poured": "Ručně odlévané",
+      "hand_poured_detail": "v malých sériích",
+      "vegan": "Vhodné pro vegany",
+      "vegan_detail": "Bez živočišných složek",
+      "packaging": "Promyšlený obal",
+      "packaging_detail": "Recyklovatelný, kde je to možné",
+      "scents": "Skvělé vůně",
+      "scents_detail": "Pro váš domov"
+    },
     "basket": {
       "title": "Váš košík",
       "intro": "Několik opravdu skvělých vůní je připraveno.",
