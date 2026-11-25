@@ -141,11 +141,12 @@
   </div>
   {% if catalogue_layout %}{{ price }}{% endif %}
   {% if show_card_actions and card_product.has_only_default_variant and uses_selling_plans == false %}
-    {% form 'product', card_product, id: product_form_id, class: 'smelly-product-form' %}
+    {% form 'product', card_product, id: product_form_id, class: 'smelly-product-form', data-section-id: section_id %}
       <input type="hidden" name="id" value="{{ product_variant.id }}">
-      <input type="hidden" name="quantity" value="{{ quantity_to_add }}">
+      <input type="hidden" name="quantity" value="{{ quantity_to_add }}" data-hydration-key="{{ product_form_id }}-quantity">
       <input type="hidden" name="return_to" value="{{ routes.cart_url }}">
       <button
+        data-hydration-key="{{ product_form_id }}-add"
         class="smelly-button smelly-button--small{% if search_layout and can_add_to_cart %} smelly-button--outline{% elsif compact_add and can_add_to_cart %} smelly-product-card__icon-add{% endif %}"
         type="submit"
         {% unless can_add_to_cart %}disabled{% endunless %}
@@ -167,6 +168,39 @@
 {% if product_view_context != blank %}</product-component>{% endif %}
 
 {% javascript %}
+  async function refreshCardForms() {
+    const sectionIds = new Set();
+    for (const form of document.querySelectorAll('.smelly-product-form[data-section-id]')) {
+      // These components already refresh their own cards after basket changes.
+      if (!form.closest('cart-items-component, product-recommendations[data-refresh-on-cart-update]')) {
+        sectionIds.add(form.dataset.sectionId);
+      }
+    }
+    if (!sectionIds.size) return;
+
+    // Liquid calculates inventory, quantity rules and translated labels together.
+    // Hydrate only the forms so filters, wishlist controls and keyboard focus stay in place.
+    const { buildSectionSelector, sectionRenderer } = await import('@theme/section-renderer');
+    await Promise.all(Array.from(sectionIds, (sectionId) => {
+      const section = document.getElementById(buildSectionSelector(sectionId));
+      if (!section) return;
+      return sectionRenderer.renderSection(sectionId, {
+        cache: false,
+        mode: 'hydration',
+        shouldRender: () => section.isConnected && !section.querySelector('[data-smelly-submitting="true"]'),
+      });
+    }));
+  }
+
+  document.addEventListener('shopify:cart:lines-update', (event) => {
+    event.promise?.then((result) => {
+      if (!result || result.detail?.didError || result.userErrors?.length) return;
+      return refreshCardForms();
+    }).catch((error) => {
+      if (error?.name !== 'AbortError') console.warn('[smelly-product-card] Basket update:', error);
+    });
+  });
+
   document.addEventListener('submit', (event) => {
     const form = event.target;
     if (!(form instanceof HTMLFormElement) || !form.matches('.smelly-product-form') || event.defaultPrevented) return;
@@ -186,13 +220,19 @@
     button.disabled = true;
   });
 
-  // Back/forward restoration can retain the button disabled by the previous submission.
-  window.addEventListener('pageshow', () => {
+  // History can restore both a submission lock and quantities from before the basket changed.
+  window.addEventListener('pageshow', (event) => {
+    const navigation = performance.getEntriesByType('navigation')[0];
+    if (!event.persisted && navigation?.type !== 'back_forward') return;
+
     document.querySelectorAll('.smelly-product-form[data-smelly-submitting="true"]').forEach((form) => {
       if (!(form instanceof HTMLFormElement)) return;
       delete form.dataset.smellySubmitting;
       const button = form.querySelector('button[type="submit"]');
       if (button instanceof HTMLButtonElement) button.disabled = false;
+    });
+    refreshCardForms().catch((error) => {
+      if (error?.name !== 'AbortError') console.warn('[smelly-product-card] History restore:', error);
     });
   });
 {% endjavascript %}
