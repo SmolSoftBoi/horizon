@@ -56,7 +56,6 @@
   assign show_card_actions = true
   if search_layout
     assign catalogue_layout = true
-    assign show_card_actions = settings.quick_add
     assign range_handles = 'spooky-a-f,festive-a-f,sweet-a-f,fresh-a-f' | split: ','
     for product_collection in card_product.collections
       if range_handles contains product_collection.handle
@@ -66,6 +65,7 @@
     endfor
   endif
   if catalogue_layout
+    assign show_card_actions = settings.quick_add
     unless search_layout
       assign description = card_product.description | replace: '</p>', ' ' | strip_html | strip | truncatewords: 24
     endunless
@@ -98,7 +98,7 @@
 {% if product_view_context != blank %}
   <product-component class="smelly-product-card__view" view-event-payload="{{ card_product | standard_event_data: 'view', context: product_view_context | escape }}">
 {% endif %}
-<article class="smelly-product-card{% if search_layout and show_card_actions and settings.mobile_quick_add != true %} smelly-product-card--desktop-quick-add{% endif %}">
+<article class="smelly-product-card{% if catalogue_layout and show_card_actions and settings.mobile_quick_add != true %} smelly-product-card--desktop-quick-add{% endif %}">
   {% if catalogue_layout %}<div class="smelly-product-card__media">{% endif %}
     <a class="smelly-product-card__image" href="{{ card_product.url }}" aria-label="{{ card_product.title | escape }}">
       {% if card_product.featured_image != blank %}

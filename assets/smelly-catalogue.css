@@ -761,6 +761,7 @@
 .smelly-catalogue .pagination__link::before { content: none; }
 
 @media (max-width: 749px) {
+  .smelly-product-card--desktop-quick-add > :is(form.smelly-product-form, a.smelly-button) { display: none; }
   .smelly-catalogue__hero-inner { min-height: 218px; }
   .smelly-catalogue__hero::after {
     background: linear-gradient(var(--catalogue-direction), #25150ef2, #25150ed6 56%, #25150e99);

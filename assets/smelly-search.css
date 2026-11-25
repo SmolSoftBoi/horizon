@@ -471,10 +471,6 @@ body:has(#header-component[sticky]) .smelly-search__results {
   .smelly-search__tools { grid-column: 1 / -1; justify-content: space-between; }
 }
 
-@media (max-width: 749px) {
-  .smelly-search .smelly-product-card--desktop-quick-add > :is(a, form) { display: none; }
-}
-
 @media (max-width: 989px) {
   .smelly-search__layout:not([data-collections-active]):has(.smelly-search__filter-toggle:checked) {
     grid-template-areas: 'toolbar' 'filters' 'results';
