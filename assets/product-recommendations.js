@@ -68,11 +68,23 @@ class ProductRecommendations extends Component {
       return;
     }
 
+    ProductRecommendations.#refreshBasketRecommendations();
+  };
+
+  /** @param {PageTransitionEvent} event */
+  static refreshAfterHistoryRestore = (event) => {
+    const navigation = performance.getEntriesByType('navigation')[0];
+    if (!event.persisted && navigation?.type !== 'back_forward') return;
+
+    ProductRecommendations.#refreshBasketRecommendations();
+  };
+
+  static #refreshBasketRecommendations() {
     // Select the current elements after the update in case a product changed during it.
     for (const element of document.querySelectorAll('product-recommendations[data-refresh-on-cart-update]')) {
       if (element instanceof ProductRecommendations) element.#loadRecommendations(true);
     }
-  };
+  }
 
   connectedCallback() {
     super.connectedCallback();
@@ -90,7 +102,7 @@ class ProductRecommendations extends Component {
 
   /**
    * Load the product recommendations
-   * @param {boolean} [refresh] - Reload the section after a basket change.
+   * @param {boolean} [refresh] - Reload the section after a basket change or history restore.
    */
   #loadRecommendations(refresh = false) {
     if (!this.isConnected) return;
@@ -186,4 +198,5 @@ class ProductRecommendations extends Component {
 if (!customElements.get('product-recommendations')) {
   customElements.define('product-recommendations', ProductRecommendations);
   document.addEventListener(StandardEvents.cartLinesUpdate, ProductRecommendations.refreshAfterCartUpdate);
+  window.addEventListener('pageshow', ProductRecommendations.refreshAfterHistoryRestore);
 }
