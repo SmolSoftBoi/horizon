@@ -453,6 +453,7 @@
 }
 
 @media (max-width: 749px) {
+  .smelly-product-card--desktop-quick-add > :is(form.smelly-product-form, a.smelly-button) { display: none; }
   .smelly-bestsellers__heading { flex-direction: column; align-items: start; }
   .smelly-bestsellers__description { font-size: 14px; margin-top: 14px !important; }
   .smelly-bestsellers .smelly-button--small { font-size: 13px; padding-inline: 12px; }
@@ -777,22 +778,28 @@
   .smelly-footer__bottom .smelly-handwritten { flex-basis: 100%; }
 }
 
-@media (prefers-reduced-motion: no-preference) {
+@media screen and (prefers-reduced-motion: no-preference) {
   .smelly-button > span[aria-hidden],
   .smelly-text-link > span[aria-hidden] { transition: transform 200ms ease; }
   .smelly-product-card__image img { transition: transform 450ms cubic-bezier(0.22, 1, 0.36, 1); }
   .smelly-range-card__illustration { transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1); }
   .smelly-faq__item summary span { transition: transform 200ms ease; }
-  .smelly-faq__item[open] > div { animation: smelly-answer-enter 220ms ease-out; }
+  .smelly-faq__item[open] > div,
+  .smelly-contact__question[open] > .smelly-contact__answer {
+    animation: smelly-answer-enter 220ms ease-out;
+  }
 
-  :where(#MainContent[data-template='index']) :is(.smelly-hero__copy, .smelly-hero__annotation) {
+  .smelly-hero__copy,
+  .smelly-hero__annotation,
+  .smelly-basket__banner .smelly-basket__heart,
+  :is(.smelly-about-hero__copy, .smelly-contact__hero-inner, .smelly-search__intro, .smelly-catalogue__intro) > h1 {
     animation: smelly-reveal 420ms ease-out;
   }
 
   .smelly-bestsellers__item > .smelly-product-card,
-  :where(#MainContent[data-template='index']) .smelly-range-card { transition: transform 220ms ease-out; }
-  :where(#MainContent[data-template='index']) .smelly-range-card__arrow { transition: transform 200ms ease-out; }
-  :where(#MainContent[data-template='index']) .smelly-range-card:focus-visible .smelly-range-card__arrow {
+  .smelly-range-card { transition: transform 220ms ease-out; }
+  .smelly-range-card__arrow { transition: transform 200ms ease-out; }
+  .smelly-range-card:focus-visible .smelly-range-card__arrow {
     transform: translateY(-2px);
   }
 
@@ -812,8 +819,8 @@
 
   @supports (animation-timeline: view()) and (animation-range: entry) {
     /* Reveal individual cards and pieces of copy so long sections can settle as people scroll. */
-    .smelly-bestsellers__item:not(:focus-within),
-    :where(#MainContent[data-template='index']) :where(
+    :where(#MainContent) :where(
+      .smelly-bestsellers__item,
       .smelly-benefits__item,
       .smelly-ranges-heading,
       .smelly-range-grid__item,
@@ -823,6 +830,8 @@
       .smelly-story__copy,
       .smelly-about__frame,
       .smelly-about__copy,
+      .smelly-about-story__photo,
+      .blog-post-item,
       .smelly-testimonials__heading,
       .smelly-testimonials__item,
       .smelly-journal__heading,
@@ -833,7 +842,7 @@
       .smelly-journey__item,
       .smelly-journey__follow
     ):not(:focus-within),
-    :where(.page-wrapper:has(> #MainContent[data-template='index'])) .smelly-footer :where(
+    .smelly-footer :where(
       .smelly-newsletter > div:first-child,
       .smelly-footer__brand,
       .smelly-footer__nav
@@ -856,18 +865,13 @@
     .smelly-bestsellers__item:hover > .smelly-product-card { transform: translateY(-4px); }
     .smelly-bestsellers__heading > .smelly-text-link:hover::after { transform: scaleX(1); }
     .smelly-range-card:hover .smelly-range-card__illustration { transform: rotate(-5deg) translateY(-3px); }
-    :where(#MainContent[data-template='index']) .smelly-range-grid__item:hover > .smelly-range-card {
+    .smelly-range-grid__item:hover > .smelly-range-card {
       transform: translateY(-3px);
     }
-    :where(#MainContent[data-template='index']) .smelly-range-card:hover .smelly-range-card__arrow {
+    .smelly-range-card:hover .smelly-range-card__arrow {
       transform: translateY(-2px);
     }
   }
-}
-
-@keyframes smelly-reveal {
-  from { opacity: 0.88; translate: 0 8px; }
-  to { opacity: 1; translate: none; }
 }
 
 @keyframes smelly-answer-enter {

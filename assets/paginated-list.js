@@ -144,8 +144,13 @@ export default class PaginatedList extends Component {
       return;
     }
 
-    await this.#fetchSpecificPage(page.page, page.url);
-    resolvePromise();
+    try {
+      await this.#fetchSpecificPage(page.page, page.url);
+    } catch (error) {
+      console.warn('[paginated-list] Could not fetch page:', error);
+    } finally {
+      resolvePromise();
+    }
   }
 
   /**
