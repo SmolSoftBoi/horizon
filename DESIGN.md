@@ -26,7 +26,7 @@ Use `--smelly-serif` for bold Georgia-led headings and the wordmark. Keep body c
 - Use `.smelly-shell` and `.smelly-section-space` for the shared editorial width and rhythm. Give headlines and photographs room to breathe. On mobile, stack editorial content in reading order and keep the primary action near the copy or price it supports.
 - Use a pink pill button for the primary action and an outlined treatment for a secondary action. Underline links in prose and keep keyboard focus visible on all controls. Preserve the header’s centred logo and 44 px touch targets for its main controls.
 - Make product photography, title and price easy to find in product cards. Keep availability and purchasing controls legible even when names run long. Use warm editorial accents around catalogue results and basket summaries, while keeping filters, quantities and checkout actions clear.
-- Give the range cards arched colour panels, cream artwork backdrops and a divided Explore link within a single card link. The full range grid uses four columns from 990 px and two columns below that when all four ranges are present. Centre shorter rows. [Range section](sections/smelly-ranges.liquid) · [Brand stylesheet](assets/smelly-af.css)
+- Give the range cards arched colour panels and cream artwork backdrops. Use one link for the whole card and place the Explore label beneath the divider, so each card has one keyboard stop. The full range grid uses four columns from 990 px and two columns below that when all four ranges are present. Centre shorter rows. [Range section](sections/smelly-ranges.liquid) · [Brand stylesheet](assets/smelly-af.css)
 
 ## Photography and illustration
 
