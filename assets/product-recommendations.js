@@ -175,7 +175,10 @@ class ProductRecommendations extends Component {
    */
   #handleError(error) {
     console.error('Product recommendations error:', error.message);
-    this.classList.add('hidden');
+    // Real cards link to a product. Loading skeletons and onboarding cards do not.
+    if (!this.querySelector('.product-card__link[href], .smelly-product-card__image[href]')) {
+      this.classList.add('hidden');
+    }
     this.dataset.error = 'Error loading product recommendations';
   }
 }
