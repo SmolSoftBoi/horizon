@@ -168,7 +168,10 @@
 {% if product_view_context != blank %}</product-component>{% endif %}
 
 {% javascript %}
+  let cardRefreshRevision = 0;
+
   async function refreshCardForms() {
+    const revision = ++cardRefreshRevision;
     const sectionIds = new Set();
     for (const form of document.querySelectorAll('.smelly-product-form[data-section-id]')) {
       // These components already refresh their own cards after basket changes.
@@ -181,14 +184,23 @@
     // Liquid calculates inventory, quantity rules and translated labels together.
     // Hydrate only the forms so filters, wishlist controls and keyboard focus stay in place.
     const { buildSectionSelector, sectionRenderer } = await import('@theme/section-renderer');
-    await Promise.all(Array.from(sectionIds, (sectionId) => {
+    await Promise.all(Array.from(sectionIds, async (sectionId) => {
       const section = document.getElementById(buildSectionSelector(sectionId));
       if (!section) return;
-      return sectionRenderer.renderSection(sectionId, {
-        cache: false,
-        mode: 'hydration',
-        shouldRender: () => section.isConnected && !section.querySelector('[data-smelly-submitting="true"]'),
-      });
+      const shouldRender = () =>
+        revision === cardRefreshRevision &&
+        section.isConnected &&
+        !section.querySelector('[data-smelly-submitting="true"]');
+      if (!shouldRender()) return;
+
+      const render = () => sectionRenderer.renderSection(sectionId, { cache: false, mode: 'hydration', shouldRender });
+      try {
+        await render();
+      } catch (error) {
+        if (error?.name === 'AbortError' || !shouldRender()) return;
+        // Retry this section once while the current page and basket revision still match.
+        await render();
+      }
     }));
   }
 

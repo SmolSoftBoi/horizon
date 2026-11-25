@@ -288,7 +288,8 @@ class FacetInputsComponent extends Component {
 
     if (inputElement.checked) url.searchParams.delete(inputElement.name, inputElement.value);
 
-    sectionRenderer.getSectionHTML(this.sectionId, true, url);
+    // A failed prefetch leaves the normal render available when the filter is selected.
+    sectionRenderer.getSectionHTML(this.sectionId, true, url).catch(() => {});
   }
 
   /**

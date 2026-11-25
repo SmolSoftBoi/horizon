@@ -149,7 +149,8 @@ class SectionRenderer {
       if (cachedHTML) return cachedHTML;
     }
 
-    pendingPromise = fetch(sectionUrl, { signal }).then((response) => {
+    pendingPromise = fetch(sectionUrl, { signal, cache: useCache ? 'default' : 'no-store' }).then((response) => {
+      if (!response.ok) throw new Error(`Section ${sectionId} request failed (${response.status})`);
       return response.text();
     });
 
