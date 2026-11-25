@@ -453,6 +453,7 @@
 }
 
 @media (max-width: 749px) {
+  .smelly-product-card--desktop-quick-add > :is(form.smelly-product-form, a.smelly-button) { display: none; }
   .smelly-bestsellers__heading { flex-direction: column; align-items: start; }
   .smelly-bestsellers__description { font-size: 14px; margin-top: 14px !important; }
   .smelly-bestsellers .smelly-button--small { font-size: 13px; padding-inline: 12px; }
