@@ -30,23 +30,9 @@
       {%- endif -%}
     {%- elsif cart.duties_included == false and cart.taxes_included -%}
       {%- if shop.shipping_policy.body == blank -%}
-        {%- if has_discounts_enabled -%}
-          {{ 'content.duties_and_taxes_included_shipping_at_checkout_without_policy_without_discounts_with_fees' | t }}
-        {%- else -%}
-          {{ 'content.taxes_included_shipping_at_checkout_without_policy_with_fees' | t }}
-        {%- endif -%}
+        {{ 'content.taxes_included_shipping_at_checkout_without_policy_with_fees' | t }}
       {%- else -%}
-        {%- if has_discounts_enabled -%}
-          {{
-            'content.duties_and_taxes_included_shipping_at_checkout_with_policy_without_discounts_with_fees_html'
-            | t: link: shop.shipping_policy.url
-          }}
-        {%- else -%}
-          {{
-            'content.taxes_included_shipping_at_checkout_with_policy_with_fees_html'
-            | t: link: shop.shipping_policy.url
-          }}
-        {%- endif -%}
+        {{ 'content.taxes_included_shipping_at_checkout_with_policy_with_fees_html' | t: link: shop.shipping_policy.url }}
       {%- endif -%}
     {%- elsif cart.duties_included and cart.taxes_included == false -%}
       {%- if shop.shipping_policy.body == blank -%}

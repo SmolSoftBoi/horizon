@@ -288,7 +288,7 @@
       </span>
     {% endif %}
     <div class="cart-totals__item cart-totals__tax-note cart-primary-typography">
-      {% if basket_settings %}
+      {% if basket_settings and cart.checkout_fees_enabled != true %}
         <small>
           {% if cart.taxes_included %}{{ 'smelly.basket.taxes_included' | t }}{% else %}{{ 'smelly.basket.taxes_at_checkout' | t }}{% endif %}
           {% if cart.duties_included %} {{ 'smelly.basket.duties_included' | t }}{% endif %}
