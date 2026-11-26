@@ -465,6 +465,21 @@
       "results_for": "Results for “{{ query }}”",
       "all": "All results",
       "articles": "Articles",
+      "result_count": {
+        "one": "Results found ({{ count }})",
+        "few": "Results found ({{ count }})",
+        "other": "Results found ({{ count }})"
+      },
+      "product_count": {
+        "one": "Products found ({{ count }})",
+        "few": "Products found ({{ count }})",
+        "other": "Products found ({{ count }})"
+      },
+      "article_count": {
+        "one": "Articles found ({{ count }})",
+        "few": "Articles found ({{ count }})",
+        "other": "Articles found ({{ count }})"
+      },
       "filter_results": "Filter results",
       "apply_filters": "Apply filters",
       "sort_by": "Sort by",
@@ -503,6 +518,11 @@
       "wishlist_unavailable": "Wishlist unavailable in this browser.",
       "customer_reviews": "Customer reviews",
       "rating": "{{ rating }} out of {{ scale }}",
+      "review_count": {
+        "one": "Reviews ({{ count }})",
+        "few": "Reviews ({{ count }})",
+        "other": "Reviews ({{ count }})"
+      },
       "related": "You might also like"
     },
     "brand_name": "Smelly A.F.",
