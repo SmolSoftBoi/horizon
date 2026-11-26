@@ -18,6 +18,11 @@
     assign uses_selling_plans = true
   endif
 
+  assign gift_card_requires_options = false
+  if product.gift_card? and product.variants_count > 1
+    assign gift_card_requires_options = true
+  endif
+
   if variant.available
     assign can_add_to_cart = true
   else
@@ -27,7 +32,7 @@
   # Both buttons are rendered together only for single-option swatch products - the one
   # case where a card swatch click resolves the variant, so JS can flip choose -> add
   # without navigating. Every other shape is fixed at render, so it gets just one button.
-  # Selling plans always go to the PDP, since subscription widgets only run there.
+  # Selling plans and gift card denominations use their product page purchase forms.
   assign initial_button = 'choose'
   assign render_add = false
   assign render_choose = false
@@ -49,7 +54,7 @@
     assign render_choose = true
   endif
 
-  if uses_selling_plans
+  if uses_selling_plans or gift_card_requires_options
     assign initial_button = 'choose'
     assign render_add = false
     assign render_choose = true
@@ -74,8 +79,8 @@
   that is the only shape whose data-quick-add-button can flip live (choose -> add) when a swatch is selected.
 
   The add-to-cart form (product-form-component + hidden inputs + live region) is only rendered when the
-  card can add to cart directly (render_add). The Choose button never submits a form - it opens the
-  quick-add modal via quick-add-component/handleClick - so it lives outside the form.
+  card can add to cart directly (render_add). The Choose button lives outside the form and opens the
+  product page or quick-add modal via quick-add-component/handleClick.
 {% endcomment %}
 <quick-add-component
   class="quick-add custom-color-quick-add"
@@ -86,6 +91,7 @@
   data-product-options-count="{{ product.options.size }}"
   data-product-variants-count="{{ product.variants_count }}"
   data-uses-selling-plans="{{ uses_selling_plans }}"
+  data-gift-card-requires-options="{{ gift_card_requires_options }}"
   data-renders-both-buttons="{% if render_add and render_choose %}true{% endif %}"
 >
   {% if render_add %}

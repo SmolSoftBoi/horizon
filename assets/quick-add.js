@@ -123,7 +123,7 @@ export class QuickAddComponent extends Component {
     if (!currentUrl) return;
     this.#abortController?.abort();
 
-    if (this.dataset.usesSellingPlans === 'true') {
+    if (this.dataset.usesSellingPlans === 'true' || this.dataset.giftCardRequiresOptions === 'true') {
       window.location.href = currentUrl;
       return;
     }
