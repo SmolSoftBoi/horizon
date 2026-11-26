@@ -2,23 +2,27 @@
   assign featured_collection = section.settings.collection
   assign shop_link = routes.all_products_collection_url
   assign shop_label = 'smelly.shop_all' | t
-  assign product_count = section.blocks.size | at_most: section.settings.product_count
+  assign card_count = section.blocks.size
   if featured_collection.products_count > 0
     assign shop_link = featured_collection.url | default: routes.all_products_collection_url
     if featured_collection.url != blank and featured_collection.handle != 'all'
       assign shop_label = section.settings.button_label | default: featured_collection.title
     endif
-    assign product_count = featured_collection.products_count | at_most: section.settings.product_count
+    assign card_count = featured_collection.products_count | at_most: section.settings.product_count
   endif
-  assign desktop_columns = product_count | at_most: 4 | at_least: 1
-  assign mobile_columns = product_count | at_most: 2 | at_least: 1
+  assign desktop_columns = card_count | at_most: 4 | at_least: 1
+  assign mobile_columns = card_count | at_most: 2 | at_least: 1
   assign desktop_gaps = desktop_columns | minus: 1 | times: 24
   assign maximum_image_width = 1320 | minus: desktop_gaps | divided_by: desktop_columns
   assign desktop_image_width = 100 | divided_by: desktop_columns
   assign mobile_image_width = 100 | divided_by: mobile_columns
 %}
 {% capture image_sizes %}(min-width: 1440px) {{ maximum_image_width }}px, (min-width: 990px) {{ desktop_image_width }}vw, (min-width: 375px) {{ mobile_image_width }}vw, 100vw{% endcapture %}
-{% if product_count > 0 or request.design_mode %}
+{% comment %}The landscape photos need up to 1.9 times the card width to fill the 4:5 crop at the requested pixel density.{% endcomment %}
+{%- capture fallback_sizes -%}
+  (min-width: 1440px) {{ maximum_image_width | times: 1.9 | ceil }}px, (min-width: 990px) {{ desktop_image_width | times: 1.9 | ceil }}vw, (min-width: 375px) {{ mobile_image_width | times: 1.9 | ceil }}vw, 190vw
+{%- endcapture -%}
+{% if card_count > 0 or request.design_mode %}
   <div
     id="SmellyBestSellers-{{ section.id }}"
     class="smelly-shell smelly-section-space smelly-bestsellers"
@@ -38,7 +42,7 @@
       </div>
       <a class="smelly-text-link" href="{{ shop_link | escape }}">{{ shop_label | escape }}<span aria-hidden="true">↗</span></a>
     </div>
-    {% if product_count > 0 %}
+    {% if card_count > 0 %}
       <ul
         class="smelly-product-grid smelly-bestsellers__grid"
         role="list"
@@ -49,7 +53,7 @@
             {% render 'smelly-product-card', card_product: card_product, section_id: section.id, image_sizes: image_sizes %}
           </li>
         {% else %}
-          {% for block in section.blocks limit: section.settings.product_count %}
+          {% for block in section.blocks %}
             {% liquid
               assign photo_key = block.settings.photo | replace: '-', '_'
               assign photo_translation_key = 'smelly.photos.' | append: photo_key
@@ -61,7 +65,7 @@
             <li class="smelly-bestsellers__item" {{ block.shopify_attributes }}>
               <article class="smelly-product-card smelly-product-card--editorial">
                 <a class="smelly-product-card__image" href="{{ scent_link }}" aria-label="{{ scent_name | escape }}">
-                  {% render 'smelly-photo', image: block.settings.image, fallback: fallback_photo, alt: photo_alt, sizes: image_sizes %}
+                  {% render 'smelly-photo', image: block.settings.image, fallback: fallback_photo, alt: photo_alt, sizes: image_sizes, fallback_sizes: fallback_sizes %}
                 </a>
                 <div class="smelly-product-card__details">
                   {% if block.settings.heading != blank %}
@@ -94,16 +98,23 @@
     { "type": "textarea", "id": "text", "label": "Description", "default": "A little sweet, a little seasonal. Find your next scent obsession." },
     { "type": "collection", "id": "collection", "label": "Best sellers collection", "info": "Choose a collection and set its sort order to Best selling in Shopify admin, or arrange it manually. Products use the collection’s order. Without products, the editorial photographs below appear without prices or basket buttons." },
     { "type": "text", "id": "button_label", "label": "Collection button label", "default": "Shop Best Sellers" },
-    { "type": "range", "id": "product_count", "label": "Products", "min": 2, "max": 8, "step": 1, "default": 4 }
+    { "type": "range", "id": "product_count", "label": "Products", "info": "Limits products from the selected collection.", "min": 2, "max": 8, "step": 1, "default": 4 }
   ],
-  "max_blocks": 4,
+  "max_blocks": 8,
   "blocks": [{ "type": "scent", "name": "Editorial photograph", "settings": [
     { "type": "text", "id": "heading", "label": "Scent name", "default": "Pink Bubblegum" },
     { "type": "text", "id": "note", "label": "Handwritten note", "default": "Sweet A.F." },
     { "type": "image_picker", "id": "image", "label": "Photograph" },
     { "type": "url", "id": "link", "label": "Scent link", "info": "Leave blank to link to all scents." },
     { "type": "select", "id": "photo", "label": "Bundled photograph", "options": [
-      { "value": "bubblegum", "label": "Pink Bubblegum" }, { "value": "pumpkin-spice", "label": "Pumpkin Spice" }, { "value": "candy-cane", "label": "Candy Cane" }, { "value": "parma-violets", "label": "Parma Violets" }, { "value": "christmas-spice", "label": "Christmas Spice" }
+      { "value": "bubblegum", "label": "Pink Bubblegum" },
+      { "value": "pumpkin-spice", "label": "Pumpkin Spice" },
+      { "value": "candy-cane", "label": "Candy Cane" },
+      { "value": "parma-violets", "label": "Parma Violets" },
+      { "value": "christmas-spice", "label": "Christmas Spice" },
+      { "value": "bakewell-tart", "label": "Bakewell Tart" },
+      { "value": "chocolate-orange", "label": "Chocolate Orange" },
+      { "value": "gingerbread", "label": "Gingerbread" }
     ], "default": "bubblegum" }
   ] }],
   "presets": [{ "name": "Smelly A.F. best sellers", "blocks": [

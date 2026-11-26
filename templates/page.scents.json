@@ -132,13 +132,49 @@
             "note": "Floral feels.",
             "photo": "parma-violets"
           }
+        },
+        "scent_5": {
+          "type": "scent",
+          "settings": {
+            "heading": "Bakewell Tart",
+            "note": "",
+            "photo": "bakewell-tart"
+          }
+        },
+        "scent_6": {
+          "type": "scent",
+          "settings": {
+            "heading": "Chocolate Orange",
+            "note": "",
+            "photo": "chocolate-orange"
+          }
+        },
+        "scent_7": {
+          "type": "scent",
+          "settings": {
+            "heading": "Gingerbread",
+            "note": "",
+            "photo": "gingerbread"
+          }
+        },
+        "scent_8": {
+          "type": "scent",
+          "settings": {
+            "heading": "Christmas Spice",
+            "note": "",
+            "photo": "christmas-spice"
+          }
         }
       },
       "block_order": [
         "scent_1",
         "scent_2",
         "scent_3",
-        "scent_4"
+        "scent_4",
+        "scent_5",
+        "scent_6",
+        "scent_7",
+        "scent_8"
       ]
     },
     "questions": {

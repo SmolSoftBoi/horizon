@@ -32,6 +32,8 @@ Use `--smelly-serif` for bold Georgia-led headings and the wordmark. Keep body c
 
 Use the supplied candle photographs as the reference for labels, wax colours, gold lids and jar proportions. Keep the bundled product scenes true to the unlit, lidded candles. The homepage hero uses separate desktop, tablet and mobile compositions. Leave clear space for editable HTML copy on the left of wide scenes and above the candles on mobile. Keep the product labels legible in tighter crops. [Hero section](sections/smelly-hero.liquid)
 
+Use the studio photographs on neutral backgrounds for individual candles in the editorial sections. Keep the full jar in view in square and portrait frames. The Scents guide shows the full set. [Scents template](templates/page.scents.json)
+
 | Range | Artwork and panel |
 | --- | --- |
 | Spooky A.F. | Pumpkin with a crescent on warm orange |

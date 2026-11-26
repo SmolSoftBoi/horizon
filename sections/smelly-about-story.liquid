@@ -36,7 +36,7 @@
               assign photo_alt = 'smelly.photos.bubblegum' | t
               if block.settings.default_photo == 'pumpkin'
                 assign fallback_photo = 'smelly-pumpkin-spice.jpg'
-                assign photo_alt = 'smelly.photos.pumpkin' | t
+                assign photo_alt = 'smelly.photos.pumpkin_spice' | t
               endif
               if block.settings.image != blank
                 assign photo_alt = block.settings.image_alt | default: block.settings.caption | default: shop.name

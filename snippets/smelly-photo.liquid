@@ -1,10 +1,11 @@
 {% doc %}
-  Renders an editable Shopify image or an unaltered bundled candle photograph.
+  Renders an editable Shopify image or a bundled candle photograph.
   @param {image} [image] - Merchant-selected image.
   @param {string} fallback - Bundled asset filename.
   @param {string} alt - Alternative text for the fallback photograph.
   @param {string} [loading] - Image loading strategy.
   @param {string} [sizes] - Responsive sizes for a merchant-selected image.
+  @param {string} [fallback_sizes] - Responsive source sizes for a cropped bundled photograph.
   @param {string} [priority] - Fetch priority.
 {% enddoc %}
 
@@ -18,13 +19,15 @@
   {{ image | image_url: width: 1600 | image_tag: widths: '320, 480, 640, 800, 1200, 1600', sizes: image_sizes, loading: image_loading, fetchpriority: image_priority, alt: photo_alt }}
 {% else %}
   {% liquid
-    assign fallback_width = 1536
-    assign fallback_height = 2048
+    assign fallback_width = 1440
+    assign fallback_height = 1080
     case fallback
       when 'smelly-pumpkin-spice.jpg'
-        assign fallback_width = 1152
+        assign fallback_height = 1081
       when 'smelly-candy-cane.jpg'
-        assign fallback_height = 2047
+        assign fallback_height = 957
+      when 'smelly-christmas-spice.jpg', 'smelly-parma-violets.jpg', 'smelly-pink-bubblegum.jpg'
+        assign fallback_height = 956
       when 'smelly-collection-hero.webp'
         assign fallback_width = 2000
         assign fallback_height = 667
@@ -32,6 +35,17 @@
   %}
   <img
     src="{{ fallback | asset_url }}"
+    {% if fallback_sizes != blank %}
+      {%- assign fallback_widths = '360,480,600,800,960,1200' | split: ',' -%}
+      srcset="
+        {%- for width in fallback_widths -%}
+          {%- assign rendition_size = width | append: 'x' -%}
+          {{ fallback | asset_img_url: rendition_size }} {{ width }}w,
+        {%- endfor -%}
+        {{ fallback | asset_url }} {{ fallback_width }}w
+      "
+      sizes="{{ fallback_sizes | escape }}"
+    {% endif %}
     alt="{{ alt | escape }}"
     width="{{ fallback_width }}"
     height="{{ fallback_height }}"
