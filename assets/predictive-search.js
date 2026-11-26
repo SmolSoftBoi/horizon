@@ -98,6 +98,7 @@ class PredictiveSearchComponent extends Component {
   disconnectedCallback() {
     super.disconnectedCallback();
     this.#controller.abort();
+    this.#activeFetch?.abort();
   }
 
   /**
@@ -335,7 +336,7 @@ class PredictiveSearchComponent extends Component {
 
     const { predictiveSearchResults } = this.refs;
 
-    const abortController = this.#createAbortController();
+    const { signal } = this.#createAbortController();
 
     const deferredPromise = SearchUpdateEvent.createPromise();
 
@@ -348,8 +349,9 @@ class PredictiveSearchComponent extends Component {
       })
     );
 
-    fetch(url)
+    fetch(url, { signal, cache: 'no-store' })
       .then((response) => {
+        if (signal.aborted) throw new DOMException('Search was superseded', 'AbortError');
         if (response.status === UNSUPPORTED_LOCALE_STATUS) {
           this.#predictiveSearchSupported = false;
           return '';
@@ -360,13 +362,9 @@ class PredictiveSearchComponent extends Component {
         return response.text();
       })
       .then((resultsMarkup) => {
+        if (signal.aborted) throw new DOMException('Search was superseded', 'AbortError');
         if (!resultsMarkup) {
           deferredPromise.resolve({ totalCount: 0 });
-          return;
-        }
-
-        if (abortController.signal.aborted) {
-          deferredPromise.reject(new Error('Fetch aborted by user'));
           return;
         }
 
@@ -380,7 +378,7 @@ class PredictiveSearchComponent extends Component {
       })
       .catch((error) => {
         deferredPromise.reject(error);
-        if (abortController.signal.aborted) return;
+        if (signal.aborted) return;
         throw error;
       });
   }
