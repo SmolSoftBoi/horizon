@@ -298,7 +298,11 @@
 
   {%- liquid
     assign store_availabilities = closest.product.selected_or_first_available_variant.store_availabilities
-    assign show_pickup_availability = block_settings.show_pickup_availability
+    # Pickup requires an online purchase. In-person availability uses the location's own stock.
+    assign show_pickup_availability = false
+    if can_add_to_cart
+      assign show_pickup_availability = block_settings.show_pickup_availability
+    endif
     assign show_physical_stores = block_settings.show_physical_stores
     assign listed_store_count = 0
     assign closest_available_pick_up = null
@@ -341,7 +345,7 @@
     "
     ref="localPickupButton"
   >
-    {% if can_add_to_cart %}
+    {% if listed_store_count > 0 %}
       <div class="pickup-availability__row">
         <div class="pickup-availability__column">
           <span class="svg-wrapper">
@@ -385,7 +389,7 @@
     {% endif %}
   </local-pickup>
 
-  {% if can_add_to_cart %}
+  {% if listed_store_count > 0 %}
     <theme-drawer
       id="pickup-drawer-{{ block.id }}"
       class="pickup-drawer"
