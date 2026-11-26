@@ -13,7 +13,7 @@
   <a
     href="{{ block.settings.link }}"
     {% if link_label != blank %}
-      aria-label="{{ link_label }}"
+      aria-label="{{ link_label | escape_once }}"
     {% endif %}
   >
 {%- enddoc -%}

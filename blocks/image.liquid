@@ -73,7 +73,7 @@
     class="{{ class }}"
     style="{{ style }}"
     {% if link_label != blank %}
-      aria-label="{{ link_label }}"
+      aria-label="{{ link_label | escape_once }}"
     {% endif %}
     {{ block.shopify_attributes }}
   >

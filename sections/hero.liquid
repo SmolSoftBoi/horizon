@@ -514,7 +514,7 @@
         href="{{ section.settings.link }}"
         class="hero__link"
         {% if link_label != blank %}
-          aria-label="{{ link_label }}"
+          aria-label="{{ link_label | escape_once }}"
         {% endif %}
         {% if section.settings.open_in_new_tab %}
           target="_blank" rel="noopener"
