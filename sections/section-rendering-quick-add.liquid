@@ -40,8 +40,8 @@
         style="--flex-direction: column; --flex-wrap: nowrap; {% render 'gap-style', value: 12 %}"
       >
         <div class="view-product-title">
-          <a href="{{ product_resource.selected_or_first_available_variant.url }}">
-            {{- product_resource.title -}}
+          <a href="{{ product_resource.selected_or_first_available_variant.url | escape }}">
+            {{- product_resource.title | escape -}}
           </a>
         </div>
         {% content_for 'block', type: 'price', id: 'price', closest.product: product_resource %}

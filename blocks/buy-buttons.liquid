@@ -358,15 +358,17 @@
         </div>
         <div class="pickup-availability__column">
           {% if closest_available_pick_up %}
+            {% assign location_name = closest_available_pick_up.location.name | escape %}
             <p class="pickup-location__text-sm">
-              {{ 'content.pickup_available_at_html' | t: location: closest_available_pick_up.location.name }}
+              {{ 'content.pickup_available_at_html' | t: location: location_name }}
             </p>
             <p class="pickup-location__text-xs">
               {{ 'content.pickup_ready_in' | t: pickup_time: closest_available_pick_up.pick_up_time }}
             </p>
           {% elsif closest_in_store %}
+            {% assign location_name = closest_in_store.location.name | escape %}
             <p class="pickup-location__text-sm">
-              {{ 'content.in_store_available_at_html' | t: location: closest_in_store.location.name }}
+              {{ 'content.in_store_available_at_html' | t: location: location_name }}
             </p>
             {% if show_pickup_availability %}
               <p class="pickup-location__text-xs">
@@ -410,10 +412,10 @@
         </h2>
         <div class="theme-drawer__header pickup-availability__header-container">
           <div class="pickup-availability__column">
-            <h4 class="pickup-location__h4">{{ closest.product.title }}</h4>
+            <h4 class="pickup-location__h4">{{ closest.product.title | escape }}</h4>
             {% unless closest.product.has_only_default_variant %}
               <p class="pickup-location__text-sm">
-                {{ closest.product.selected_or_first_available_variant.title }}
+                {{ closest.product.selected_or_first_available_variant.title | escape }}
               </p>
             {% endunless %}
           </div>
@@ -443,7 +445,7 @@
             endunless
           %}
           <div class="pickup-location__wrapper">
-            <p class="pickup-location__text-bold">{{ store_availability.location.name }}</p>
+            <p class="pickup-location__text-bold">{{ store_availability.location.name | escape }}</p>
             <div class="pickup-location__address-wrapper">
               <span class="pickup-location__availability-wrapper">
                 {% if is_in_store_only %}
