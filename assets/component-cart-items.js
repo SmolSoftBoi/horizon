@@ -36,6 +36,9 @@ export class CartItemsComponent extends createViewEventElement(Component) {
   /** @type {Set<Promise<boolean>>} */
   static #pendingQuantityUpdates = new Set();
 
+  /** @type {Set<CartItemsComponent>} */
+  static #queuedQuantityUpdates = new Set();
+
   /** The number of Check out submits that wait for quantity saves, across all cart instances. */
   static #checkoutHolds = 0;
 
@@ -49,9 +52,14 @@ export class CartItemsComponent extends createViewEventElement(Component) {
   }
 
   #debouncedOnChange = debounce(
-    /** @param {Event} event */
+    /** @param {QuantitySelectorUpdateEvent} event */
     (event) => {
-      if (event instanceof QuantitySelectorUpdateEvent) this.#onQuantityChange(event);
+      CartItemsComponent.#queuedQuantityUpdates.delete(this);
+      try {
+        this.#onQuantityChange(event);
+      } finally {
+        CartItemsComponent.#syncAcceleratedCheckout();
+      }
     },
     300
   );
@@ -145,24 +153,68 @@ export class CartItemsComponent extends createViewEventElement(Component) {
       });
   };
 
+  /**
+   * Keep Shopify's wallet controls inert while quantities are edited, queued, or saving.
+   * The wallet buttons bypass the cart form and need a fresh user activation once enabled.
+   */
+  static #syncAcceleratedCheckout() {
+    const wallets = document.querySelectorAll('cart-items-component .additional-checkout-buttons');
+    if (!wallets.length) return;
+
+    const blocked =
+      CartItemsComponent.#queuedQuantityUpdates.size > 0 ||
+      CartItemsComponent.#pendingQuantityUpdates.size > 0 ||
+      Array.from(document.querySelectorAll('cart-items-component input[name="updates[]"]:enabled')).some(
+        (input) => input instanceof HTMLInputElement && input.value !== input.defaultValue
+      );
+
+    for (const wallet of wallets) {
+      // Section morphs preserve Shopify's wallet element and its payment methods.
+      const controls = wallet.querySelector('shopify-accelerated-checkout-cart') ?? wallet;
+      controls.toggleAttribute('inert', blocked);
+    }
+  }
+
+  /** @param {Event} event */
+  #handleQuantityInput = (event) => {
+    if (event.target instanceof HTMLInputElement && event.target.name === 'updates[]') {
+      CartItemsComponent.#syncAcceleratedCheckout();
+    }
+  };
+
+  /** @param {Event} event */
+  #queueQuantityUpdate = (event) => {
+    if (!(event instanceof QuantitySelectorUpdateEvent) || !event.detail.cartLine || this.#clearingBasket) return;
+
+    CartItemsComponent.#queuedQuantityUpdates.add(this);
+    this.#debouncedOnChange(event);
+    CartItemsComponent.#syncAcceleratedCheckout();
+  };
+
   connectedCallback() {
     super.connectedCallback();
 
     document.addEventListener(StandardEvents.cartLinesUpdate, this.#handleCartUpdate);
-    document.addEventListener(ThemeEvents.quantitySelectorUpdate, this.#debouncedOnChange);
+    this.addEventListener(ThemeEvents.quantitySelectorUpdate, this.#queueQuantityUpdate);
+    this.addEventListener('input', this.#handleQuantityInput);
     document.addEventListener(StandardEvents.cartDiscountUpdate, this.#handleDiscountUpdate);
     document.addEventListener(StandardEvents.cartNoteUpdate, this.#handleNoteUpdate);
     window.addEventListener('pageshow', this.#handlePageShow);
+    CartItemsComponent.#syncAcceleratedCheckout();
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
 
     document.removeEventListener(StandardEvents.cartLinesUpdate, this.#handleCartUpdate);
-    document.removeEventListener(ThemeEvents.quantitySelectorUpdate, this.#debouncedOnChange);
+    this.removeEventListener(ThemeEvents.quantitySelectorUpdate, this.#queueQuantityUpdate);
+    this.removeEventListener('input', this.#handleQuantityInput);
     document.removeEventListener(StandardEvents.cartDiscountUpdate, this.#handleDiscountUpdate);
     document.removeEventListener(StandardEvents.cartNoteUpdate, this.#handleNoteUpdate);
     window.removeEventListener('pageshow', this.#handlePageShow);
+    this.#debouncedOnChange.cancel();
+    CartItemsComponent.#queuedQuantityUpdates.delete(this);
+    CartItemsComponent.#syncAcceleratedCheckout();
   }
 
   /**
@@ -354,6 +406,7 @@ export class CartItemsComponent extends createViewEventElement(Component) {
     CartItemsComponent.#pendingQuantityUpdates.add(quantityUpdate);
 
     try {
+      CartItemsComponent.#syncAcceleratedCheckout();
       this.#disableCartItems();
 
       const { line, quantity, removeKeys } = config;
@@ -478,6 +531,7 @@ export class CartItemsComponent extends createViewEventElement(Component) {
       } finally {
         CartItemsComponent.#pendingQuantityUpdates.delete(quantityUpdate);
         completeQuantityUpdate();
+        CartItemsComponent.#syncAcceleratedCheckout();
       }
     }
   }
@@ -604,8 +658,9 @@ export class CartItemsComponent extends createViewEventElement(Component) {
           const existingKeys = new Set(this.refs.cartItemRows?.map((row) => row.dataset.key) ?? []);
 
           if (wasEmptyCartDrawer) {
-            startViewTransition(() => {
-              morphSection(this.sectionId, cartItemsHtml, morphOptions);
+            startViewTransition(async () => {
+              await morphSection(this.sectionId, cartItemsHtml, morphOptions);
+              CartItemsComponent.#syncAcceleratedCheckout();
             }, ['fill-cart-drawer']);
           } else {
             await morphSection(this.sectionId, cartItemsHtml, morphOptions);
@@ -686,6 +741,7 @@ export class CartItemsComponent extends createViewEventElement(Component) {
     for (const selector of document.querySelectorAll('cart-quantity-selector-component')) {
       /** @type {any} */ (selector).updateButtonStates?.();
     }
+    CartItemsComponent.#syncAcceleratedCheckout();
   }
 
   async fetchCartData() {
