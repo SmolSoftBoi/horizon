@@ -33,21 +33,33 @@ import {
  * @extends {Component<Refs>}
  */
 export class CartItemsComponent extends createViewEventElement(Component) {
-  /** @type {Set<Promise<void>>} */
+  /** @type {Set<Promise<boolean>>} */
   static #pendingQuantityUpdates = new Set();
+
+  /** @type {Set<CartItemsComponent>} */
+  static #queuedQuantityUpdates = new Set();
+
+  /** The number of Check out submits that wait for quantity saves, across all cart instances. */
+  static #checkoutHolds = 0;
 
   /**
    * Includes quantity mutations, their section renders, and control cleanup across all cart instances.
-   * @returns {ReadonlyArray<Promise<void>>} A snapshot that cannot modify the shared pending set.
+   * Each promise resolves to true when the store rejected the quantity and the line shows the error.
+   * @returns {ReadonlyArray<Promise<boolean>>} A snapshot that cannot modify the shared pending set.
    */
   static get pendingQuantityUpdates() {
     return Array.from(CartItemsComponent.#pendingQuantityUpdates);
   }
 
   #debouncedOnChange = debounce(
-    /** @param {Event} event */
+    /** @param {QuantitySelectorUpdateEvent} event */
     (event) => {
-      if (event instanceof QuantitySelectorUpdateEvent) this.#onQuantityChange(event);
+      CartItemsComponent.#queuedQuantityUpdates.delete(this);
+      try {
+        this.#onQuantityChange(event);
+      } finally {
+        CartItemsComponent.#syncAcceleratedCheckout();
+      }
     },
     300
   );
@@ -71,6 +83,7 @@ export class CartItemsComponent extends createViewEventElement(Component) {
    * Refreshes this section when a cart AJAX response cannot include rendered section HTML.
    * @param {Object} [options] - Additional section morph options.
    * @param {boolean} [options.injectStylesheet]
+   * @param {(html: string) => boolean} [options.shouldRender] - Return false to keep the current section.
    */
   async #refreshCartSection(options = {}) {
     try {
@@ -140,24 +153,68 @@ export class CartItemsComponent extends createViewEventElement(Component) {
       });
   };
 
+  /**
+   * Keep Shopify's wallet controls inert while quantities are edited, queued, or saving.
+   * The wallet buttons bypass the cart form and need a fresh user activation once enabled.
+   */
+  static #syncAcceleratedCheckout() {
+    const wallets = document.querySelectorAll('cart-items-component .additional-checkout-buttons');
+    if (!wallets.length) return;
+
+    const blocked =
+      CartItemsComponent.#queuedQuantityUpdates.size > 0 ||
+      CartItemsComponent.#pendingQuantityUpdates.size > 0 ||
+      Array.from(document.querySelectorAll('cart-items-component input[name="updates[]"]:enabled')).some(
+        (input) => input instanceof HTMLInputElement && input.value !== input.defaultValue
+      );
+
+    for (const wallet of wallets) {
+      // Section morphs preserve Shopify's wallet element and its payment methods.
+      const controls = wallet.querySelector('shopify-accelerated-checkout-cart') ?? wallet;
+      controls.toggleAttribute('inert', blocked);
+    }
+  }
+
+  /** @param {Event} event */
+  #handleQuantityInput = (event) => {
+    if (event.target instanceof HTMLInputElement && event.target.name === 'updates[]') {
+      CartItemsComponent.#syncAcceleratedCheckout();
+    }
+  };
+
+  /** @param {Event} event */
+  #queueQuantityUpdate = (event) => {
+    if (!(event instanceof QuantitySelectorUpdateEvent) || !event.detail.cartLine || this.#clearingBasket) return;
+
+    CartItemsComponent.#queuedQuantityUpdates.add(this);
+    this.#debouncedOnChange(event);
+    CartItemsComponent.#syncAcceleratedCheckout();
+  };
+
   connectedCallback() {
     super.connectedCallback();
 
     document.addEventListener(StandardEvents.cartLinesUpdate, this.#handleCartUpdate);
-    document.addEventListener(ThemeEvents.quantitySelectorUpdate, this.#debouncedOnChange);
+    this.addEventListener(ThemeEvents.quantitySelectorUpdate, this.#queueQuantityUpdate);
+    this.addEventListener('input', this.#handleQuantityInput);
     document.addEventListener(StandardEvents.cartDiscountUpdate, this.#handleDiscountUpdate);
     document.addEventListener(StandardEvents.cartNoteUpdate, this.#handleNoteUpdate);
     window.addEventListener('pageshow', this.#handlePageShow);
+    CartItemsComponent.#syncAcceleratedCheckout();
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
 
     document.removeEventListener(StandardEvents.cartLinesUpdate, this.#handleCartUpdate);
-    document.removeEventListener(ThemeEvents.quantitySelectorUpdate, this.#debouncedOnChange);
+    this.removeEventListener(ThemeEvents.quantitySelectorUpdate, this.#queueQuantityUpdate);
+    this.removeEventListener('input', this.#handleQuantityInput);
     document.removeEventListener(StandardEvents.cartDiscountUpdate, this.#handleDiscountUpdate);
     document.removeEventListener(StandardEvents.cartNoteUpdate, this.#handleNoteUpdate);
     window.removeEventListener('pageshow', this.#handlePageShow);
+    this.#debouncedOnChange.cancel();
+    CartItemsComponent.#queuedQuantityUpdates.delete(this);
+    CartItemsComponent.#syncAcceleratedCheckout();
   }
 
   /**
@@ -340,14 +397,16 @@ export class CartItemsComponent extends createViewEventElement(Component) {
   async updateQuantity(config) {
     const cartPerformaceUpdateMarker = cartPerformance.createStartingMarker(`${config.action}:user-action`);
     const deferredUpdatePromise = CartLinesUpdateEvent.createPromise();
+    let rejected = false;
     let completeQuantityUpdate = () => {};
-    /** @type {Promise<void>} */
+    /** @type {Promise<boolean>} */
     const quantityUpdate = new Promise((resolve) => {
-      completeQuantityUpdate = () => resolve();
+      completeQuantityUpdate = () => resolve(rejected);
     });
     CartItemsComponent.#pendingQuantityUpdates.add(quantityUpdate);
 
     try {
+      CartItemsComponent.#syncAcceleratedCheckout();
       this.#disableCartItems();
 
       const { line, quantity, removeKeys } = config;
@@ -400,6 +459,7 @@ export class CartItemsComponent extends createViewEventElement(Component) {
 
       if (line && parsedResponseText.errors) {
         this.#handleCartError(line, parsedResponseText);
+        rejected = true;
         deferredUpdatePromise.reject(new Error(parsedResponseText.errors));
         return false;
       }
@@ -424,7 +484,9 @@ export class CartItemsComponent extends createViewEventElement(Component) {
           },
         });
 
-        return await this.#refreshCartSection();
+        // Keep the typed quantity for the form submission when checkout waits on a failed save.
+        const failedEdit = !response.ok && quantity > 0;
+        return await this.#refreshCartSection({ shouldRender: () => !failedEdit || !CartItemsComponent.#checkoutHolds });
       }
 
       const newSectionHTML = new DOMParser().parseFromString(sectionHTML, 'text/html');
@@ -469,9 +531,73 @@ export class CartItemsComponent extends createViewEventElement(Component) {
       } finally {
         CartItemsComponent.#pendingQuantityUpdates.delete(quantityUpdate);
         completeQuantityUpdate();
+        CartItemsComponent.#syncAcceleratedCheckout();
       }
     }
   }
+
+  /**
+   * Check out waits for a pending quantity save. A quantity edit saves through Ajax after a short wait. A form post
+   * at the same time makes iOS Safari cancel the save, and the store answers the post with no page and no message.
+   * This flushes the wait, cancels the post, and awaits the save. A rejected quantity shows its error on the line
+   * (updateQuantity), and the buyer stays on the cart. Any other result resumes the post. A failed save keeps the
+   * typed quantity in its field (updateQuantity), so the store checks it on the post.
+   * The wait saves only the latest edit. With unsaved edits on two or more lines, the post goes at once, as before,
+   * so that it carries every typed quantity.
+   * While Check out waits, this cancels a new submit, so the wait resumes the post once. After a rejection, a keyboard
+   * submit gets the focus back in its field.
+   * @param {SubmitEvent} event - The submit event on the cart form.
+   */
+  holdCheckoutForQuantitySave = async (event) => {
+    const { submitter } = event;
+    if (!(event.target instanceof HTMLFormElement) || !(submitter instanceof HTMLElement)) return;
+    if (event.defaultPrevented) return;
+    // The wait in progress resumes the post. Cancel this submit, so that only one post goes out.
+    if (CartItemsComponent.#checkoutHolds) {
+      event.preventDefault();
+      return;
+    }
+
+    let edited = 0;
+    for (const input of event.target.querySelectorAll('input[name="updates[]"]')) {
+      if (input instanceof HTMLInputElement && input.value !== input.defaultValue) edited++;
+    }
+    if (edited > 1) return;
+
+    // A keyboard submit leaves the focus in an edited field. The blur queues its save.
+    const active = document.activeElement;
+    const blurred =
+      active instanceof HTMLInputElement && event.target.contains(active) && active.value !== active.defaultValue
+        ? active
+        : null;
+    blurred?.blur();
+    this.#debouncedOnChange.flush();
+
+    let pending = CartItemsComponent.pendingQuantityUpdates;
+    if (!pending.length) return;
+    event.preventDefault();
+
+    let rejected = false;
+    CartItemsComponent.#checkoutHolds++;
+    try {
+      while (pending.length) {
+        rejected = (await Promise.all(pending)).some(Boolean) || rejected;
+        this.#debouncedOnChange.flush();
+        pending = CartItemsComponent.pendingQuantityUpdates;
+      }
+    } finally {
+      CartItemsComponent.#checkoutHolds--;
+    }
+    if (rejected) {
+      // The blur moved the focus to the page. Put it back in the field, unless the buyer moved it during the wait.
+      if (document.activeElement === document.body) blurred?.focus();
+      return;
+    }
+
+    // The save re-rendered the section, so the submitter can be a detached element.
+    const button = submitter.isConnected ? submitter : document.getElementById(submitter.id);
+    button?.click();
+  };
 
   /**
    * Handles the cart error.
@@ -532,8 +658,9 @@ export class CartItemsComponent extends createViewEventElement(Component) {
           const existingKeys = new Set(this.refs.cartItemRows?.map((row) => row.dataset.key) ?? []);
 
           if (wasEmptyCartDrawer) {
-            startViewTransition(() => {
-              morphSection(this.sectionId, cartItemsHtml, morphOptions);
+            startViewTransition(async () => {
+              await morphSection(this.sectionId, cartItemsHtml, morphOptions);
+              CartItemsComponent.#syncAcceleratedCheckout();
             }, ['fill-cart-drawer']);
           } else {
             await morphSection(this.sectionId, cartItemsHtml, morphOptions);
@@ -614,6 +741,7 @@ export class CartItemsComponent extends createViewEventElement(Component) {
     for (const selector of document.querySelectorAll('cart-quantity-selector-component')) {
       /** @type {any} */ (selector).updateButtonStates?.();
     }
+    CartItemsComponent.#syncAcceleratedCheckout();
   }
 
   async fetchCartData() {

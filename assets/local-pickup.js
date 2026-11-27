@@ -10,6 +10,9 @@ class LocalPickup extends Component {
   /** @type {HTMLElement | null} */
   #pickupDrawer = null;
 
+  /** @type {Element | null} */
+  #productSection = null;
+
   connectedCallback() {
     super.connectedCallback();
 
@@ -24,44 +27,64 @@ class LocalPickup extends Component {
       document.body.appendChild(drawer);
     }
 
-    const closestSection = this.closest(`.shopify-section, dialog`);
+    this.#productSection = this.closest('.shopify-section, dialog');
+    this.#productSection?.addEventListener(StandardEvents.productSelect, this.#handleProductSelect);
+  }
 
-    /** @type {(event: ProductSelectEvent) => void} */
-    const handleProductSelect = (event) => {
-      if (!(event.target instanceof Element) || event.target.closest('product-card')) return;
+  disconnectedCallback() {
+    super.disconnectedCallback();
 
-      event.promise
-        .then(({ detail }) => {
-          if (!detail) return;
+    this.#productSection?.removeEventListener(StandardEvents.productSelect, this.#handleProductSelect);
+    this.#productSection = null;
+    this.#activeFetch?.abort();
+    this.#removeDrawer();
+  }
 
-          const { newProduct, resource } = detail;
-          if (newProduct) {
-            this.dataset.productUrl = newProduct.url;
-          }
-          const variantId = resource ? resource.id : null;
-          const variantAvailable = resource ? resource.available : null;
-          if (variantId !== this.dataset.variantId) {
-            if (variantId && variantAvailable) {
-              this.removeAttribute('hidden');
-              this.dataset.variantId = variantId;
-              this.#fetchAvailability(variantId);
-            } else {
-              this.setAttribute('hidden', '');
-            }
-          }
-        })
-        .catch((error) => {
-          if (error?.name !== 'AbortError') console.warn('[local-pickup] Event promise rejected:', error);
-        });
-    };
+  /** @param {ProductSelectEvent} event */
+  #handleProductSelect = (event) => {
+    if (!(event.target instanceof Element) || event.target.closest('product-card')) return;
 
-    closestSection?.addEventListener(StandardEvents.productSelect, handleProductSelect);
+    event.promise
+      .then(({ detail }) => {
+        if (!detail || !this.isConnected) return;
 
-    this.disconnectedCallback = () => {
-      closestSection?.removeEventListener(StandardEvents.productSelect, handleProductSelect);
-      this.#pickupDrawer?.remove();
-      this.#pickupDrawer = null;
-    };
+        const { newProduct, resource } = detail;
+        if (newProduct) {
+          this.dataset.productUrl = newProduct.url;
+        }
+        if (!resource?.id) {
+          this.#activeFetch?.abort();
+          delete this.dataset.variantId;
+          this.#hideAvailability();
+          return;
+        }
+
+        // A valid variant can have in-person stock even when Shopify marks it as unavailable online.
+        const variantId = String(resource.id);
+        // Combined listings may have already moved the widget's markup into the page.
+        const morphedFromPage = variantId === this.dataset.variantId;
+        this.dataset.variantId = variantId;
+        const widget = detail.html && !morphedFromPage ? this.#findWidget(detail.html, variantId) : null;
+        if (widget) {
+          this.#activeFetch?.abort();
+          this.#update(widget);
+        } else {
+          this.#fetchAvailability(variantId);
+        }
+      })
+      .catch((error) => {
+        if (error?.name !== 'AbortError') console.warn('[local-pickup] Event promise rejected:', error);
+      });
+  };
+
+  #hideAvailability() {
+    this.setAttribute('hidden', '');
+    this.#removeDrawer();
+  }
+
+  #removeDrawer() {
+    this.#pickupDrawer?.remove();
+    this.#pickupDrawer = null;
   }
 
   #createAbortController() {
@@ -71,7 +94,45 @@ class LocalPickup extends Component {
   }
 
   /**
-   * Fetches the availability of a variant.
+   * Finds the widget of this block for a variant. Each buy-buttons block in the section renders its own
+   * widget from its own settings, so the widget is matched to this block as well as the variant.
+   * @param {ParentNode} html - The rendered page or section.
+   * @param {string} variantId - The ID of the variant.
+   * @returns {Element | null}
+   */
+  #findWidget(html, variantId) {
+    return html.querySelector(`local-pickup[data-block-id="${this.dataset.blockId}"][data-variant-id="${variantId}"]`);
+  }
+
+  /**
+   * Updates the widget and its drawer from a rendered widget.
+   * @param {Element} wrapper - The rendered widget of this block.
+   */
+  #update(wrapper) {
+    morph(this, wrapper);
+    this.toggleAttribute('hidden', wrapper.hasAttribute('hidden'));
+
+    // The sibling belongs to this buy-buttons block and is present when the variant has locations to display.
+    const newDrawer =
+      wrapper.nextElementSibling instanceof HTMLElement &&
+      wrapper.nextElementSibling.matches('theme-drawer.pickup-drawer')
+        ? wrapper.nextElementSibling
+        : null;
+    if (!newDrawer) {
+      this.#removeDrawer();
+      return;
+    }
+
+    if (this.#pickupDrawer) {
+      morph(this.#pickupDrawer, newDrawer);
+    } else {
+      this.#pickupDrawer = newDrawer;
+      document.body.appendChild(this.#pickupDrawer);
+    }
+  }
+
+  /**
+   * Fetches the section for a variant and updates the widget from it.
    * @param {string} variantId - The ID of the variant to fetch availability for.
    */
   #fetchAvailability = (variantId) => {
@@ -88,36 +149,16 @@ class LocalPickup extends Component {
         if (abortController.signal.aborted) return;
 
         const html = new DOMParser().parseFromString(text, 'text/html');
-        const wrapper = html.querySelector(`local-pickup[data-variant-id="${variantId}"]`);
+        const wrapper = this.#findWidget(html, variantId);
         if (wrapper) {
-          this.removeAttribute('hidden');
-          morph(this, wrapper);
-
-          // Update the portaled drawer with fresh content from the server.
-          // If the page originally loaded on an unavailable variant the drawer
-          // wasn't rendered (can_add_to_cart was false), so portal it now.
-          // Resolve via the sibling relationship to avoid colliding with
-          // other buy-buttons blocks on the same page.
-          const newDrawer =
-            wrapper.nextElementSibling instanceof HTMLElement &&
-            wrapper.nextElementSibling.matches('theme-drawer.pickup-drawer')
-              ? wrapper.nextElementSibling
-              : null;
-          if (newDrawer) {
-            if (this.#pickupDrawer) {
-              morph(this.#pickupDrawer, newDrawer);
-            } else {
-              this.#pickupDrawer = newDrawer;
-              document.body.appendChild(this.#pickupDrawer);
-            }
-          }
+          this.#update(wrapper);
         } else {
-          this.setAttribute('hidden', '');
+          this.#hideAvailability();
         }
       })
       .catch((_e) => {
         if (abortController.signal.aborted) return;
-        this.setAttribute('hidden', '');
+        this.#hideAvailability();
       });
   };
 }
